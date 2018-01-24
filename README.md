@@ -4,7 +4,7 @@
   所谓采蜜就是帮助用户采出想要的“蜜”
   
 # 技术栈
-<p>1.分布式爬虫t<br>
+<p>1.分布式爬虫<br>
 2.spring后端框架+Hebernate<br>
 3.redis<br>
 4.vue<br>
