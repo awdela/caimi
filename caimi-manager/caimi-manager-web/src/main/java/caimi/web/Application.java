@@ -15,6 +15,10 @@ public class Application {
 		logger.info("caimi web is startting...");
 		
 		SpringApplication.run(Application.class, args);
+		initServices();
+	}
+
+	private static void initServices() {
 		
 	}
 }

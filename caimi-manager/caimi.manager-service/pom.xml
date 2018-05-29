@@ -3,7 +3,56 @@
   <parent>
     <groupId>com.caimi</groupId>
     <artifactId>caimi-manager</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
   </parent>
+  
   <artifactId>caimi.manager-service</artifactId>
+  
+  <properties>
+  	<caimi.common.version>1.0.0</caimi.common.version>
+  	<mysql.jdbc.version>8.0.7-dmr</mysql.jdbc.version>
+  	<hibernate.version>5.2.12.Final</hibernate.version>
+  	<elasticsearch.version>5.6.4</elasticsearch.version>
+  	<spring.boot.version>1.5.8.RELEASE</spring.boot.version>
+  </properties>
+  
+  <dependencies>
+  	<dependency>
+  		<groupId>org.json</groupId>
+		<artifactId>json</artifactId>
+	    <version>20160810</version>
+  	</dependency>
+  	<dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-web</artifactId>
+        <version>${spring.boot.version}</version>
+        <exclusions>
+        	<exclusion>
+       		     <groupId>org.springframework.boot</groupId>
+                 <artifactId>spring-boot-starter-tomcat</artifactId>
+            </exclusion>
+            <exclusion>
+       		     <groupId>org.springframework.boot</groupId>
+                 <artifactId>tomcat-jdbc</artifactId>
+            </exclusion>
+        </exclusions>
+    </dependency>
+    <dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-data-jpa</artifactId>
+		    <version>${spring.boot.version}</version>
+		    <exclusions>
+		        <exclusion>
+		            <groupId>org.apache.tomcat</groupId>
+		            <artifactId>tomcat-jdbc</artifactId>
+		        </exclusion>
+		    </exclusions>
+	</dependency>
+  	<dependency>
+  		<groupId>com.caimi</groupId>
+  		<artifactId>caimi-interfaces</artifactId>
+  		<version>${caimi.common.version}</version>
+  	</dependency>
+  </dependencies>
+  
 </project>

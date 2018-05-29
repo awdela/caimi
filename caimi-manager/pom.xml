@@ -3,13 +3,12 @@
   <parent>
     <groupId>com.caimi</groupId>
     <artifactId>caimi-parent</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <relativePath>../caimi-parent/pom.xml</relativePath>
   </parent>
-  <groupId>com.caimi</groupId>
-  <artifactId>caimi-manager</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <packaging>pom</packaging>
+  
+  	<artifactId>caimi-manager</artifactId>
+  	<packaging>pom</packaging>
   <modules>
   	<module>caimi-manager-web</module>
   	<module>caimi.manager-service</module>

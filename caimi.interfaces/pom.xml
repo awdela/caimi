@@ -1,0 +1,49 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  
+  <parent>
+  	<groupId>com.caimi</groupId>
+  	<artifactId>caimi-parent</artifactId>
+  	<version>1.0.0</version>
+  	<relativePath>../caimi-parent/pom.xml</relativePath>
+  </parent>
+  
+  <artifactId>caimi-interfaces</artifactId>
+  <packaging>jar</packaging>
+  
+  <dependencies>
+  	<dependency>
+  		<groupId>com.caimi</groupId>
+  		<artifactId>caimi.common</artifactId>
+  		<version>${caimi.common.version}</version>
+  	</dependency>
+  	<dependency>
+    	<groupId>org.apache.zookeeper</groupId>
+    	<artifactId>zookeeper</artifactId>
+    	<version>3.4.6.2.6.1.0-129</version>
+    	<!-- <type>pom</type> -->
+    	<exclusions>
+    		<exclusion>
+    			 <groupId>log4j</groupId>
+                 <artifactId>log4j</artifactId>
+    		</exclusion>
+    	</exclusions>
+	</dependency>
+  	<dependency>
+    	<groupId>org.apache.ignite</groupId>
+    	<artifactId>ignite-core</artifactId>
+    	<version>${ignite.version}</version>
+	</dependency>
+	<dependency>
+   	 	<groupId>org.apache.ignite</groupId>
+    	<artifactId>ignite-indexing</artifactId>
+    	<version>${ignite.version}</version>
+	</dependency>
+	<dependency>
+   	 	<groupId>org.apache.ignite</groupId>
+    	<artifactId>ignite-zookeeper</artifactId>
+    	<version>${ignite.version}</version>
+	</dependency>
+  </dependencies>
+  
+</project>

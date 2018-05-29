@@ -1,6 +1,5 @@
 package caimi.web.service.auth;
 
-import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,8 +8,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import caimi.web.beans.User;
+import caimi.common.util.StringUtil;
 import caimi.web.mapper.UserMapper;
+import caimi.web.repository.entity.UserEntity;
 
 @Service
 @Transactional
@@ -28,14 +28,14 @@ public class UserService implements UserDetailsService{
 	 * @return 1 repeat username
 	 * @return 2 failed
 	 */
-	public int register(User user) {
-		User repeatUserName = userMapper.loadUserByUserNmae(user.getUsername());
+	public int reg(UserEntity user) {
+		UserEntity repeatUserName = userMapper.loadUserByUserNmae(user.getUsername());
 		if(repeatUserName!=null) {
 			return 1;
 		}
 		//Digest the passwd
 		user.setEnable(true);
-		user.setPassword(DigestUtils.md5(user.getPassword().getBytes()).toString());
+		user.setPassword(StringUtil.md5(user.getPassword()));
 		long result = userMapper.reg(user);
 		if(result == 1) {
 			return 0;
@@ -48,15 +48,15 @@ public class UserService implements UserDetailsService{
 	 * select
 	 */
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		User user = userMapper.loadUserByUserNmae(username);
+		UserEntity user = userMapper.loadUserByUserNmae(username);
 		if(null != user) {
 			return user;
 		}else {
-			return new User();
+			return new UserEntity();
 		}
 	}
 	
-	public int updateUserEmail(String email, Long id) {
+	public int updateUserEmail(String email, String id) {
 		return userMapper.updateUserEmail(email, id);
 	}
 	
@@ -68,12 +68,8 @@ public class UserService implements UserDetailsService{
 		return userMapper.deleteUserById(uid);
 	}
 	
-	public User getUserById(@Param("id") Long id) {
+	public UserEntity getUserById(@Param("id") String id) {
 		return userMapper.getUserById(id);
 	}
 	
-	public long reg(User user) {
-		return userMapper.reg(user);
-	}
-
 }
