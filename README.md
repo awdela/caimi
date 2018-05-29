@@ -5,11 +5,10 @@
   
 # 技术栈
 <p>1.分布式爬虫<br>
-2.spring后端框架+Hebernate<br>
+2.spring后端框架+Hebernate+ignite<br>
 3.redis<br>
 4.vue<br>
-5.flume<br>
-6.kafka<br>
-7.elasticsearch<br>
-8.spark<br>
-9.kabana</p>
+5.kafka<br>
+6.elasticsearch<br>
+7.spark<br>
+8.kabana</p>
