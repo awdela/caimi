@@ -1,12 +1,10 @@
-caimi\web\controller\LoginTestController.class
+caimi\web\api\v1\LoginRegController.class
 caimi\web\mapper\RoleMapper.class
 caimi\web\mapper\UserMapper.class
 caimi\web\Application.class
 caimi\web\CaimiConfiguration.class
-caimi\web\controller\LoginRegController.class
 caimi\web\repository\entity\UserEntity.class
-caimi\web\service\data\Redis.class
-caimi\web\controller\FileExcuteController.class
-caimi\web\service\event\DataProcessAdapter.class
+caimi\web\api\v1\LoginTestController.class
 caimi\web\beans\RespBean.class
+caimi\web\api\v1\FileExcuteController.class
 caimi\web\service\auth\UserService.class

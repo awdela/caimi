@@ -6,6 +6,7 @@ caimi\common\util\Base58.class
 caimi\common\util\concurrent\DefaultThreadFactory.class
 caimi\common\util\HttpUtils.class
 caimi\common\util\UUIDUtil.class
+caimi\common\util\FileUtil.class
 caimi\common\util\concurrent\SequentialThreadedProcessor.class
 caimi\common\util\concurrent\DataProcessor.class
 caimi\common\util\json\GsonUtil.class
