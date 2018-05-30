@@ -1,5 +1,3 @@
-//package caimi.common.exception;
-//
 //@SuppressWarnings("serial")
 //public class AppException extends Exception implements AppThrowable{
 //
