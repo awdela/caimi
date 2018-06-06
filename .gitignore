@@ -34,4 +34,5 @@ hs_err_pid*
 *.classpath
 *.project
 *.xml
+caimi.common\target\surefire-reports\caimi.common.HttpUtilsTest.txt
 

@@ -19,6 +19,6 @@ public class Application {
 	}
 
 	private static void initServices() {
-		
+		logger.info("caimi web is startting...");
 	}
 }
