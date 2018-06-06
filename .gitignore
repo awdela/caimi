@@ -33,4 +33,5 @@ hs_err_pid*
 *target\
 *.classpath
 *.project
+*.xml
 
