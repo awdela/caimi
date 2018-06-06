@@ -10,6 +10,7 @@
 # BlueJ files
 *.ctxt
 *.jar
+*.original
 *.properties
 
 # Mobile Tools for Java (J2ME)
