@@ -30,6 +30,7 @@ hs_err_pid*
 /.metadata/
 *.recommenders
 *.settings
-*target/
+*target\
 *.classpath
 *.project
+
