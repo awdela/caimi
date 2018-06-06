@@ -6,5 +6,6 @@ caimi\web\CaimiConfiguration.class
 caimi\web\repository\entity\UserEntity.class
 caimi\web\api\v1\LoginTestController.class
 caimi\web\beans\RespBean.class
+caimi\web\WebSecurityConfig.class
 caimi\web\api\v1\FileExcuteController.class
 caimi\web\service\auth\UserService.class

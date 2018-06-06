@@ -18,6 +18,7 @@
   	<slf4.version>1.7.25</slf4.version>
   	<logback.version>1.1.7</logback.version>
   </properties>
+  
   <!-- jar包的依赖 -->
 	<dependencies>
 		<!-- 时间操作组件 -->

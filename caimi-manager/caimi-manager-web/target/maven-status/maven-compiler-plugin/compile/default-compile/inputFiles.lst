@@ -3,6 +3,7 @@ D:\caimi\caimi\caimi-manager\caimi-manager-web\src\main\java\caimi\web\Applicati
 D:\caimi\caimi\caimi-manager\caimi-manager-web\src\main\java\caimi\web\api\v1\LoginTestController.java
 D:\caimi\caimi\caimi-manager\caimi-manager-web\src\main\java\caimi\web\mapper\RoleMapper.java
 D:\caimi\caimi\caimi-manager\caimi-manager-web\src\main\java\caimi\web\CaimiConfiguration.java
+D:\caimi\caimi\caimi-manager\caimi-manager-web\src\main\java\caimi\web\WebSecurityConfig.java
 D:\caimi\caimi\caimi-manager\caimi-manager-web\src\main\java\caimi\web\api\v1\LoginRegController.java
 D:\caimi\caimi\caimi-manager\caimi-manager-web\src\main\java\caimi\web\repository\entity\UserEntity.java
 D:\caimi\caimi\caimi-manager\caimi-manager-web\src\main\java\caimi\web\beans\RespBean.java
