@@ -23,7 +23,7 @@
 hs_err_pid*
 /.metadata/
 .recommenders
-caimi.common/.settings
-caimi.common/target
-caimi.common/target/.classpath/
-caimi.common/target/.project/
+*.settings
+*target
+*.classpath/
+*.project/
