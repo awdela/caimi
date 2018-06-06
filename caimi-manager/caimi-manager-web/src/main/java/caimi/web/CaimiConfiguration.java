@@ -18,6 +18,7 @@ import org.eclipse.jetty.util.thread.ExecutorThreadPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.context.embedded.jetty.JettyEmbeddedServletContainerFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -27,6 +28,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableLoadTimeWeaving;
 import org.springframework.context.annotation.Primary;
+import org.springframework.core.env.Environment;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.format.FormatterRegistry;
@@ -74,7 +76,7 @@ import caimi.common.util.concurrent.SequentialThreadedProcessorImpl;
 @ServletComponentScan
 @ComponentScan(value = { "caimi.web.service" })
 public class CaimiConfiguration implements WebMvcConfigurer, SchedulingConfigurer, AsyncConfigurer, AsyncUncaughtExceptionHandler{
-
+	
 	private static final Logger logger = LoggerFactory.getLogger(CaimiConfiguration.class);
 
 	private ScheduledThreadPoolExecutor taskScheduler;
@@ -122,7 +124,8 @@ public class CaimiConfiguration implements WebMvcConfigurer, SchedulingConfigure
 		em.setJpaProperties(properties);
 
 		return em;
-	}@Bean(name = "transactionManager")
+	}
+	@Bean(name = "transactionManager")
 	public PlatformTransactionManager getTransactionManager(EntityManagerFactory emf) throws Exception {
 		JpaTransactionManager transactionManager = new JpaTransactionManager(emf);
 		return transactionManager;
@@ -161,7 +164,7 @@ public class CaimiConfiguration implements WebMvcConfigurer, SchedulingConfigure
 	// --------------------------WebMvc Configuration----------------------------
 	
 	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-		// ÏûÏ¢×ª»»Æ÷
+		// ï¿½ï¿½Ï¢×ªï¿½ï¿½ï¿½ï¿½
 		// http
 		HttpMessageConverter converter = new StringHttpMessageConverter();
 		converters.add(converter);

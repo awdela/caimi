@@ -9,6 +9,9 @@
   <artifactId>caimi.manager-service</artifactId>
   
   <properties>
+    <project.build.sourceEncoding>utf-8</project.build.sourceEncoding>  
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
   	<caimi.common.version>1.0.0</caimi.common.version>
   	<mysql.jdbc.version>8.0.7-dmr</mysql.jdbc.version>
   	<hibernate.version>5.2.12.Final</hibernate.version>

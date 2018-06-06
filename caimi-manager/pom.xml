@@ -6,7 +6,9 @@
     <version>1.0.0</version>
     <relativePath>../caimi-parent/pom.xml</relativePath>
   </parent>
-  
+  <properties>
+    <project.build.sourceEncoding>utf-8</project.build.sourceEncoding>  
+  </properties>
   	<artifactId>caimi-manager</artifactId>
   	<packaging>pom</packaging>
   <modules>

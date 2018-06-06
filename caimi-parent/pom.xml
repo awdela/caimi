@@ -7,6 +7,7 @@
 <!-- 集中定义依赖版本号 -->
 	<properties>
 	
+		<project.build.sourceEncoding>utf-8</project.build.sourceEncoding>  
 		<caimi.common.version>1.0.0</caimi.common.version>	
 	
 		<junit.version>4.12</junit.version>
