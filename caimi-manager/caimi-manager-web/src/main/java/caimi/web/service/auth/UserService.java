@@ -1,6 +1,5 @@
 package caimi.web.service.auth;
 
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -9,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import caimi.common.util.StringUtil;
-import caimi.web.mapper.UserMapper;
 import caimi.web.repository.entity.UserEntity;
 
 @Service
@@ -19,8 +17,6 @@ public class UserService implements UserDetailsService{
 	/*
 	 * spring boot security
 	 */
-	@Autowired
-	private UserMapper userMapper;
 	
 	/**
 	 * @param user
