@@ -5,7 +5,7 @@ import java.nio.charset.Charset;
 import java.security.MessageDigest;
 
 public class StringUtil {
-	//字符集-设置编码方式
+	
 	public static final Charset GBK = Charset.forName("GBK");
 	public static final Charset UTF8 = Charset.forName("UTF-8");
 	public static final Charset UTF16 = Charset.forName("UTF-16");

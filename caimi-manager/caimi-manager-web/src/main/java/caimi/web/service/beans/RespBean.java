@@ -1,4 +1,4 @@
-package caimi.web.beans;
+package caimi.web.service.beans;
 
 public class RespBean {
 	

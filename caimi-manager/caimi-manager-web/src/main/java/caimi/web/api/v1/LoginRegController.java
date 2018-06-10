@@ -5,9 +5,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import caimi.web.beans.RespBean;
-import caimi.web.repository.entity.UserEntity;
 import caimi.web.service.auth.UserService;
+import caimi.web.service.beans.RespBean;
+import caimi.web.service.repository.entity.UserEntity;
 
 @RestController
 public class LoginRegController {
@@ -31,7 +31,7 @@ public class LoginRegController {
 	}
 	
 	/*
-	 * ×¢²áÊ±´«ÈëÒ»¸ö±íµ¥
+	 * ×¢ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½
 	 */
 	@RequestMapping("/regist")
 	public RespBean regist(UserEntity user) {

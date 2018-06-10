@@ -1,4 +1,4 @@
-package caimi.web.repository.entity;
+package caimi.web.service.repository.entity;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -14,6 +14,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class UserEntity implements User, UserDetails{
 
+	private static final long serialVersionUID = 1L;
 	private String id;
 	private String username;
 	private String password;

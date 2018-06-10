@@ -27,7 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * http¹¤¾ß°ü£ºget¡¢post¡¢ÉÏ´«ÏÂÔØ
+ * 
  */
 public class HttpUtils {
 	private static final Logger logger = LoggerFactory.getLogger(HttpUtils.class);
@@ -46,7 +46,7 @@ public class HttpUtils {
 	}
 	private static int execute(HttpUriRequest request,OutputStream os) throws IOException {	
 		CloseableHttpClient httpclient = HttpClients.createDefault();
-		//ÉèÖÃÓÃ»§ÈÏÖ¤
+		//ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½Ö¤
 		httpclient = createCloseableHttpClientWithBasicAuth(httpclient);
 		CloseableHttpResponse response = null;
 		HttpEntity entity=  null;
@@ -86,7 +86,7 @@ public class HttpUtils {
 		}
 	}
 	public static CloseableHttpClient createCloseableHttpClientWithBasicAuth(CloseableHttpClient closeableHttpClient){  
-        // ´´½¨HttpClientBuilder  
+        // ï¿½ï¿½ï¿½ï¿½HttpClientBuilder  
         HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();  
         CredentialsProvider provider = new BasicCredentialsProvider();  
         AuthScope scope = new AuthScope(AuthScope.ANY_HOST, AuthScope.ANY_PORT, AuthScope.ANY_REALM);  
@@ -96,7 +96,7 @@ public class HttpUtils {
         closeableHttpClient = httpClientBuilder.build();
         return closeableHttpClient;
     }  
-//ÉèÖÃhttpµÄHead
+//ï¿½ï¿½ï¿½ï¿½httpï¿½ï¿½Head
 //	private static void setGetHead(HttpGet httpGet, Map<String,String> headMap) {
 //		if(headMap!=null && headMap.size()!=0) {
 //			Set<String> sets = headMap.keySet();
