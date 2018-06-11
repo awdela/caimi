@@ -1,0 +1,10 @@
+caimi\web\api\v1\LoginRegController.class
+caimi\web\api\v1\LoginTestController.class
+caimi\web\service\repository\entity\UserEntity.class
+caimi\web\Application.class
+caimi\web\WebSecurityConfig.class
+caimi\web\CaimiConfiguration.class
+caimi\web\service\beans\RespBean.class
+caimi\web\api\v1\FileExcuteController.class
+caimi\web\service\auth\UserService.class
+caimi\web\service\dao\UserDaoImpl.class

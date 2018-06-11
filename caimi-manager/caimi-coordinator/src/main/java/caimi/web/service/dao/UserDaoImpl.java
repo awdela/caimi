@@ -8,7 +8,7 @@ import com.caimi.service.dao.UserDao;
 import com.caimi.service.repository.entity.User;
 
 @Service
-public class UserDaoImpl  implements UserDao{
+public class UserDaoImpl implements UserDao{
 
 	@Autowired
 	private BORepository repository;

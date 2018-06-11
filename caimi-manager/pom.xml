@@ -12,7 +12,7 @@
   	<artifactId>caimi-manager</artifactId>
   	<packaging>pom</packaging>
   <modules>
+    <module>caimi-services</module>
   	<module>caimi-coordinator</module>
-  	<module>caimi-services</module>
   </modules>
 </project>

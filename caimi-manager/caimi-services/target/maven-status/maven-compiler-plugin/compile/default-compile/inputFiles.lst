@@ -1,0 +1,13 @@
+D:\caimi\caimi\caimi-manager\caimi-services\src\main\java\caimi\service\data\DataProcessService.java
+D:\caimi\caimi\caimi-manager\caimi-services\src\main\java\caimi\service\repository\entity\AbstarctBussinessEntity.java
+D:\caimi\caimi\caimi-manager\caimi-services\src\main\java\caimi\service\repository\HibernateBORepository.java
+D:\caimi\caimi\caimi-manager\caimi-services\src\main\java\caimi\service\repository\AbstractBORepository.java
+D:\caimi\caimi\caimi-manager\caimi-services\src\main\java\caimi\service\data\DataProcessImpl.java
+D:\caimi\caimi\caimi-manager\caimi-services\src\main\java\caimi\service\cache\RedisImpl.java
+D:\caimi\caimi\caimi-manager\caimi-services\src\main\java\caimi\service\analyse\SegmenterService.java
+D:\caimi\caimi\caimi-manager\caimi-services\src\main\java\caimi\service\repository\AbstractEntity.java
+D:\caimi\caimi\caimi-manager\caimi-services\src\main\java\caimi\service\event\DataProcessAdapter.java
+D:\caimi\caimi\caimi-manager\caimi-services\src\main\java\caimi\service\cache\IgniteCacheKeeper.java
+D:\caimi\caimi\caimi-manager\caimi-services\src\main\java\caimi\service\cluster\ZKServiceImpl.java
+D:\caimi\caimi\caimi-manager\caimi-services\src\main\java\caimi\service\repository\entity\AbstarctEntity.java
+D:\caimi\caimi\caimi-manager\caimi-services\src\main\java\caimi\service\beans\BeansContainerImpl.java
