@@ -1,4 +1,4 @@
-package caimi.service.cache;
+package com.caimi.service.cahce;
 
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -10,10 +10,9 @@ import org.slf4j.LoggerFactory;
 
 import com.caimi.service.BORepository;
 import com.caimi.service.cluster.IgniteClusterMgr;
+import com.caimi.service.repository.AbstractEntity;
 import com.caimi.service.repository.BOCacheContainer;
 import com.caimi.service.repository.BOCacheKeeper;
-
-import caimi.service.repository.AbstractEntity;
 
 public abstract class IgniteCacheKeeper<T extends AbstractEntity> implements BOCacheKeeper<T>{
 	

@@ -1,4 +1,4 @@
-package caimi.service.repository;
+package com.caimi.service.repository;
 
 /**
  * 基於Hibernate的BORepository

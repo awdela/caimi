@@ -1,4 +1,4 @@
-package caimi.service.data;
+package com.caimi.service.data;
 
 import org.springframework.stereotype.Service;
 

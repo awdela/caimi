@@ -1,4 +1,4 @@
-package caimi.service.repository.entity;
+package com.caimi.service.repository.entity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;

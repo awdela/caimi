@@ -1,4 +1,4 @@
-package caimi.service.cluster;
+package com.caimi.service.cluster;
 
 import java.io.IOException;
 import java.util.ArrayList;

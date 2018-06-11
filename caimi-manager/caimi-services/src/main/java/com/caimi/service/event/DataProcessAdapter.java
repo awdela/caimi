@@ -1,4 +1,4 @@
-package caimi.service.event;
+package com.caimi.service.event;
 
 import javax.annotation.PostConstruct;
 

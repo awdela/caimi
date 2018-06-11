@@ -1,4 +1,4 @@
-package caimi.service.analyse;
+package com.caimi.service.analyse;
 
 public class SegmenterService {
 
