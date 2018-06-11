@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import caimi.common.util.HttpUtils;
+import com.caimi.util.HttpUtils;
 
 public class HttpUtilsTest {
 	@Test
