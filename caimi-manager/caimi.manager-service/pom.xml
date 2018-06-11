@@ -6,7 +6,7 @@
     <version>1.0.0</version>
   </parent>
   
-  <artifactId>caimi.manager-service</artifactId>
+  <artifactId>caimi-services</artifactId>
   
   <properties>
     <project.build.sourceEncoding>utf-8</project.build.sourceEncoding>  

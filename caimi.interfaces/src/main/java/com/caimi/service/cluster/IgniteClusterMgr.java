@@ -3,16 +3,16 @@ package com.caimi.service.cluster;
 import org.apache.ignite.Ignite;
 
 /**
- * Ignite ¼¯Èº¹ÜÀí½Úµã
- * <BR>·ÖÖ÷½Úµã(masterNode)ºÍ¹¤×÷½Úµã(DataNode)
- * <BR>Ö÷½ÚµãÆô¶¯Ê±½«MaintenanceModeÉèÖÃÎªtrue,Æô¶¯Íê±ÏºóÉèÖÃfalse
+ * Ignite é›†ç¾¤ç®¡ç†èŠ‚ç‚¹
+ * <BR>åˆ†ä¸ºä¸»èŠ‚ç‚¹(Coordinator)å’Œå·¥ä½œèŠ‚ç‚¹(DataNode)
+ * <BR>ä¸»èŠ‚ç‚¹å¯åŠ¨æ—¶å°†MaintenanceModeè®¾ç½®ä¸ºtrueï¼Œå¯åŠ¨å®Œæ¯•åè®¾ç½®ä¸ºfalse
  */
 public interface IgniteClusterMgr {
 	
 	public Ignite getIgnite();
 	
 	/**
-	 * ´ÓÒ»¸ö·Ö²¼Ê½MapÖĞ»ñÈ¡Êı¾İ
+	 * ä»ä¸€ä¸ªåˆ†å¸ƒå¼Mapä¸­è·å–æ•°æ®
 	 * 
 	 * @param key
 	 * @return
@@ -20,7 +20,7 @@ public interface IgniteClusterMgr {
 	public String dget(String key);
 
 	/**
-	 * ±£´æÊı¾İµ½·Ö²¼Ê½Map
+	 * ä¿å­˜æ•°æ®åˆ°åˆ†å¸ƒå¼Map
 	 * 
 	 * @param key
 	 * @param value

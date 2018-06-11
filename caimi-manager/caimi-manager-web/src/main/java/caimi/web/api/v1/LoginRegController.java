@@ -33,25 +33,25 @@ public class LoginRegController {
 	/*
 	 * ע��ʱ����һ����
 	 */
-	@RequestMapping("/regist")
-	public RespBean regist(UserEntity user) {
-		int result = userService.reg(user);
-		if(result == 0) {
-			//success
-			return new RespBean("success","welcome to caimi!");
-		}else if (result == 1) {
-			return new RespBean("error","change your username!");
-		}else {
-			return new RespBean("error","need to regist or login!");
-		}
-	}
-	
-	/**
-	 * test
-	 */
-    @RequestMapping(value = "/getUserName",method = RequestMethod.GET)
-    public UserEntity getUserName(String id) {
-    	UserEntity userEntity = userService.getUserById(id);
-        return userEntity;
-    }
+//	@RequestMapping("/regist")
+//	public RespBean regist(UserEntity user) {
+//		int result = userService.reg(user);
+//		if(result == 0) {
+//			//success
+//			return new RespBean("success","welcome to caimi!");
+//		}else if (result == 1) {
+//			return new RespBean("error","change your username!");
+//		}else {
+//			return new RespBean("error","need to regist or login!");
+//		}
+//	}
+//	
+//	/**
+//	 * test
+//	 */
+//    @RequestMapping(value = "/getUserName",method = RequestMethod.GET)
+//    public UserEntity getUserName(String id) {
+//    	UserEntity userEntity = userService.getUserById(id);
+//        return userEntity;
+//    }
 }

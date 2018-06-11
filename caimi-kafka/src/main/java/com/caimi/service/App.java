@@ -1,4 +1,4 @@
-package com.caimi.caimi_kafka;
+package com.caimi.service;
 
 /**
  * Hello world!

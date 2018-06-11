@@ -8,7 +8,7 @@
   </parent>
   
   <groupId>com.caimi</groupId>
-  <artifactId>caimi-web</artifactId>
+  <artifactId>caimi-coordinator</artifactId>
   <version>1.0.0</version>
   <!--  <packaging>war</packaging>-->
   

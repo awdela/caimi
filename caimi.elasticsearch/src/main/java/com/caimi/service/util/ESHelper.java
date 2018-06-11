@@ -1,4 +1,4 @@
-package com.caimi.service.elasticsearch.util;
+package com.caimi.service.util;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
