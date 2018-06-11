@@ -69,7 +69,7 @@
 		  -->
         <dependency>
         	<groupId>com.caimi</groupId>
-        	<artifactId>caimi.elasticsearch</artifactId>
+        	<artifactId>caimi-elasticsearch</artifactId>
         	<version>${com.caimi.version}</version>
         </dependency>
         <dependency>
@@ -90,7 +90,7 @@
         </dependency>
         <dependency>
         	<groupId>com.caimi</groupId>
-        	<artifactId>caimi.common</artifactId>
+        	<artifactId>caimi-common</artifactId>
         	<version>${com.caimi.version}</version>
         </dependency>
 		<dependency>

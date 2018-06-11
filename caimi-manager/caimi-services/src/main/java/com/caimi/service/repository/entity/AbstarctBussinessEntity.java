@@ -16,7 +16,7 @@ import org.apache.ignite.cache.query.annotations.QuerySqlField;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import caimi.common.util.StringUtil;
+import com.caimi.util.StringUtil;
 
 @MappedSuperclass
 public abstract class AbstarctBussinessEntity extends AbstarctEntity implements Binarylizable{
@@ -90,13 +90,11 @@ public abstract class AbstarctBussinessEntity extends AbstarctEntity implements 
         writer.writeObject("lastActivityTime", lastActivityTime);
 	}
 
-	@Override
 	@Transient
 	public String getIdAsString() {
 		return id;
 	}
 
-	@Override
 	public void setId(Serializable id) {
 		this.id = id.toString();
 	}
@@ -203,9 +201,4 @@ public abstract class AbstarctBussinessEntity extends AbstarctEntity implements 
 		this.lastActivityTime = lastActivityTime;
 	}
 	
-	@Override
-	public String toString() {
-		return toJSON().toString();
-	}
-
 }

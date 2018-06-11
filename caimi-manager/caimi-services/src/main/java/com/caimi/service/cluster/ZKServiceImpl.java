@@ -21,8 +21,8 @@ import org.springframework.stereotype.Service;
 
 import com.caimi.service.cluster.ZKListener;
 import com.caimi.service.cluster.ZKService;
+import com.caimi.util.StringUtil;
 
-import caimi.common.util.StringUtil;
 
 @Service
 public class ZKServiceImpl implements ZKService{

@@ -63,9 +63,9 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import caimi.common.util.concurrent.DefaultThreadFactory;
-import caimi.common.util.concurrent.SequentialThreadedProcessor;
-import caimi.common.util.concurrent.SequentialThreadedProcessorImpl;
+import com.caimi.util.concurrent.DefaultThreadFactory;
+import com.caimi.util.concurrent.SequentialThreadedProcessor;
+import com.caimi.util.concurrent.SequentialThreadedProcessorImpl;
 
 @Configuration
 @EnableScheduling

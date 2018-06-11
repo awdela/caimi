@@ -17,8 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.caimi.service.util.ESHelper;
-
-import caimi.common.util.StringUtil;
+import com.caimi.util.StringUtil;
 
 /**
  * 实现创建索引

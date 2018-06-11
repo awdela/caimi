@@ -9,7 +9,7 @@ import org.elasticsearch.common.settings.Settings.Builder;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.transport.client.PreBuiltTransportClient;
 
-import caimi.common.util.StringUtil;
+import com.caimi.util.StringUtil;
 
 /**
  * 设置ES连接

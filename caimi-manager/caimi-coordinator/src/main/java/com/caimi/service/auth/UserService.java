@@ -8,8 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.caimi.service.repository.entity.UserEntity;
 
-import caimi.common.util.StringUtil;
-
 @Service
 @Transactional
 public class UserService implements UserDetailsService{
