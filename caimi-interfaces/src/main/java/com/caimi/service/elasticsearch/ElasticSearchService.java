@@ -3,39 +3,39 @@ package com.caimi.service.elasticsearch;
 import com.caimi.service.event.EventConsumer;
 
 /**
- * Elastic Search´æ´¢·şÎñ 
+ * Elastic Searchï¿½æ´¢ï¿½ï¿½ï¿½ï¿½ 
  */
 public interface ElasticSearchService extends EventConsumer{
 
 	/**
-	 * ÉèÖÃESÁ¬½Ó²ÎÊıµÄÏµÍ³ÊôĞÔ£ºclustername
+	 * ï¿½ï¿½ï¿½ï¿½ESï¿½ï¿½ï¿½Ó²ï¿½ï¿½ï¿½ï¿½ï¿½ÏµÍ³ï¿½ï¿½ï¿½Ô£ï¿½clustername
 	 */
 	public static final String PROP_CLUSTER_NAME = ElasticSearchService.class.getName() + ".clusterName";
 
-	/**
-	 * ÉèÖÃESÁ¬½Ó²ÎÊıµÄÏµÍ³ÊôĞÔ£ºaddrs£¬²»ÉèÖÃÔò±íÊ¾¸ÃserviceÒÑ±»½ûÓÃ
-	 * <BR>¸ñÊ½£ºhost1:9300,host2:9300
-	 */
+	 /**
+     * è®¾ç½®ESè¿æ¥å‚æ•°çš„ç³»ç»Ÿå±æ€§: addrs, ä¸è®¾ç½®åˆ™è¡¨ç¤ºè¯¥Serviceå·²è¢«ç¦ç”¨
+     * <BR>æ ¼å¼: host1:9300,host2:9300
+     */
 	public static final String PROP_ADDRS = ElasticSearchService.class.getName() + ".addrs";
 
 	/**
-	 * ÉèÖÃES singleTypeÔËĞĞÄ£Ê½
+	 * ï¿½ï¿½ï¿½ï¿½ES singleTypeï¿½ï¿½ï¿½ï¿½Ä£Ê½
 	 * <BR>È±Ê¡Îªtrue
 	 */
 	public static final String PROP_SINGLE_TYPE_MODE = ElasticSearchService.class.getName() + ".singleTypeMode";
 
 	/**
-	 * ES index settings ÅäÖÃÎÄ¼şURL,json¸ñÊ½
+	 * ES index settings ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½URL,jsonï¿½ï¿½Ê½
 	 */
 	public static final String PROP_SETTINGS_URL = ElasticSearchService.class.getName()+".settingsURL";
 	
 	/**
-	 * ES Á¬½Ó½ÚµãÊı
+	 * ES ï¿½ï¿½ï¿½Ó½Úµï¿½ï¿½ï¿½
 	 */
 	public int getConnectedNodeCount();
 	
 	/**
-	 * ÊÇ·ñ¿ÉÒÔ½ÓÊÜÊÂ¼ş
+	 * ï¿½Ç·ï¿½ï¿½ï¿½Ô½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½
 	 */
 	public boolean canConsumeEvent();
 	

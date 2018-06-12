@@ -1,7 +1,7 @@
-package com.caimi.service.conf;
+package com.caimi.conf;
 
 public interface ClusterConstants {
-	
+
 	public static final String ZK_PATH_CAIMI = "/caimi";
 	public static final String ZK_PATH_CAIMI_APPS = "/caimi/apps";
 	public static final String ZK_PATH_CAIMI_ROUTERS = "/caimi/routers";

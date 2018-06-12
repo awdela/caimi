@@ -51,4 +51,16 @@ public class FileUtil {
 		}
 		return result;
 	}
+	
+	public static void save(File file, String text) throws IOException
+    {
+    	save(file, text, false);
+    }
+	
+	public static void save(File file, String content, boolean ifAppend) throws IOException
+    {
+    	try(BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, ifAppend),"UTF-8"));){
+    		writer.write(content);
+    	}
+    }
 }

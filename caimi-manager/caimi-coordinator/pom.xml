@@ -73,6 +73,11 @@
         	<version>${com.caimi.version}</version>
         </dependency>
         <dependency>
+        	<groupId>com.caimi</groupId>
+            <artifactId>caimi-conf</artifactId>
+            <version>${com.caimi.version}</version>
+        </dependency>
+        <dependency>
         	<groupId>org.webjars</groupId>
         	<artifactId>bootstrap</artifactId>
         	<version>${bootstrap.version}</version>
