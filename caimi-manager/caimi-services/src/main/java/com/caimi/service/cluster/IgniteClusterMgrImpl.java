@@ -17,10 +17,12 @@ import org.apache.ignite.spi.discovery.tcp.ipfinder.zk.TcpDiscoveryZookeeperIpFi
 import org.apache.ignite.spi.eventstorage.memory.MemoryEventStorageSpi;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import com.caimi.conf.ConfigConstants;
 import com.caimi.util.SystemUtil;
 
+@Service
 public class IgniteClusterMgrImpl implements IgniteClusterMgr{
 
 	private static final Logger logger = LoggerFactory.getLogger(IgniteClusterMgrImpl.class);
