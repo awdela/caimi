@@ -1,15 +1,20 @@
 package com.caimi.service.cahce;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 
 import javax.cache.Cache;
+import javax.cache.Cache.Entry;
 
 import org.apache.ignite.Ignite;
 import org.apache.ignite.IgniteCache;
 import org.apache.ignite.IgniteLock;
 import org.apache.ignite.cache.CachePeekMode;
+import org.apache.ignite.cache.query.FieldsQueryCursor;
+import org.apache.ignite.cache.query.QueryCursor;
+import org.apache.ignite.cache.query.SqlFieldsQuery;
+import org.apache.ignite.cache.query.SqlQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,11 +31,6 @@ public abstract class IgniteCacheKeeper<T extends AbstractEntity> implements BOC
 	private static final Logger logger = LoggerFactory.getLogger(IgniteCacheKeeper.class);
 	
 	protected static final String INIT_LOCK_NAME = "caimi.repository.cache.initLock";
-	
-	/**
-	 * 当前活动的Ignite线程,key:thread id,value:thread enter time
-	 */
-	private static ConcurrentHashMap<Long,Long> igniteThreads = new ConcurrentHashMap<>();
 	
 	protected BOCacheContainer container;
 	
@@ -53,6 +53,10 @@ public abstract class IgniteCacheKeeper<T extends AbstractEntity> implements BOC
 	protected abstract T get0(int key, Object keyId);
 	
 	protected abstract Object getId0(int key, Object keyId);
+	
+	protected abstract void put0(T t);
+
+	protected abstract T remove0(Object boId);
 	
 	public IgniteCacheKeeper(Class<T> mainClasses, String keyCacheLoadNode, String igniteLockName) {
 		this.mainCacheClass = mainClasses;
@@ -107,79 +111,98 @@ public abstract class IgniteCacheKeeper<T extends AbstractEntity> implements BOC
 
 	@Override
 	public T get(int key, Object keyId) {
-		
 		cacheStateCheck();
-		
-		long tid = Thread.currentThread().getId();
-		igniteThreads.put(tid, System.currentTimeMillis());
 		try{
 			return get0(key, keyId);
 		}catch(java.lang.IllegalStateException ise) {
 			initAndLoadData();
 			return get0(key, keyId);
-		}finally {
-			igniteThreads.remove(tid);
 		}
 	}
 
 	@Override
 	public Object getId(int key, Object keyId) {
-		
 		cacheStateCheck();
-
-        long tid = Thread.currentThread().getId();
-        igniteThreads.put(tid, System.currentTimeMillis());
         try {
             return getId0(key, keyId);
         }catch(java.lang.IllegalStateException ise) {
             initAndLoadData();
             return getId0(key, keyId);
-        }finally {
-            igniteThreads.remove(tid);
         }
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
-	public List<T> search(Class<T> boClass, String searchExpr) {
-		
+	public List<T> search(Class boClass, String searchExpr) {
 		cacheStateCheck();
-		
-        long tid = Thread.currentThread().getId();
-        igniteThreads.put(tid, System.currentTimeMillis());
-        try {
-            return search0(boClass, searchExpr);
-        }finally {
-            igniteThreads.remove(tid);
-        }
-	}
-
-	private List<T> search0(Class<T> boClass, String searchExpr) {
-		return null;
+		if (StringUtil.isEmpty(searchExpr)) {
+			searchExpr = "1=1";
+		}
+		SqlQuery<Object, T> sqlQuery = new SqlQuery<>(mainCacheClass, searchExpr);
+		List<T> result = new ArrayList<>();
+		try(QueryCursor<Entry<Object, T>> cursor = getMainCache().query(sqlQuery)){
+			for (Entry<Object, T> entry:cursor) {
+				result.add(entry.getValue());
+			}
+		}
+		return result;
 	}
 
 	@Override
 	public List<Object[]> search(Class<T> boClass, String searchExpr, String[] fields) {
-		return null;
+		cacheStateCheck();
+		if (StringUtil.isEmpty(searchExpr)) {
+			searchExpr = "1=1";
+		}
+		StringBuilder query = new StringBuilder(128);
+		boolean appendComma = true;
+		query.append("SELECT ");
+		for (int i=0;i<fields.length;i++) {
+        	query.append(fields[i]).append(" ");
+            if (appendComma) {
+                query.append(", ");
+            }
+            if(i == fields.length-2) {
+            	appendComma =false;
+            }
+        }
+		query.append(mainCacheClass.getSimpleName()).append(" WHERE ").append(searchExpr);
+		List<Object[]> result = new ArrayList<>();
+		try(FieldsQueryCursor<List<?>> cursor = getMainCache().query(new SqlFieldsQuery(query.toString()))){
+			for (Object entry:cursor) {
+				result.add((Object[])entry);
+			}
+		}
+		return result;
 	}
 
 	@Override
 	public void put(T t) {
-		
+		if (t == null) {
+			return;
+		}
+		cacheStateCheck();
+		put0(t);
 	}
 
 	@Override
 	public void putAll(List<T> list) {
-		
+		cacheStateCheck();
+		for(T t:list) {
+			put(t);
+		}
 	}
 
 	@Override
 	public T remove(Object boId) {
-		return null;
+		cacheStateCheck();
+		return remove0(boId);
 	}
 
 	@Override
 	public int reload(List<T> list) {
-		return 0;
+		putAll(list);
+		return list.size();
 	}
 
 	@Override
@@ -200,7 +223,5 @@ public abstract class IgniteCacheKeeper<T extends AbstractEntity> implements BOC
 		}
 		return igniteLock;
 	}
-	
-	
 	
 }
