@@ -1,11 +1,13 @@
 package com.caimi.service.cluster;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.zookeeper.CreateMode;
-import org.apache.zookeeper.Watcher;
 
 public interface ZKService {
+	
+	public boolean isConnected();
 	
 	public void addListener(ZKListener listener);
 
@@ -13,15 +15,23 @@ public interface ZKService {
 	
 	public String get(String path) throws Exception;
 	
-	public List<String> getChildren(String path) throws Exception;
-	
-	public List<String> getChildren(String path, Watcher watcher) throws Exception;
+	/**
+	 * @param watcher æ˜¯CuratorWatcherå®ä¾‹
+	 */
+	public List<String> getChildren(String path, Object watcher) throws Exception;
 	
 	/**
-	 * ½«Êı¾İ±£´æµ½½ÚµãÏÂ
+	 * å°†æ•°æ®ä¿å­˜åˆ°èŠ‚ç‚¹ä¸‹
 	 * 
-	 * @return Êµ¼ÊµÄnode pathÂ·¾¶
+	 * @return å®é™…çš„node pathè·¯å¾„
 	 */
 	public String put(CreateMode mode, String path, String data) throws Exception;
+	
+	/**
+	 * åˆ†å¸ƒå¼é”
+	 */
+	public boolean tryLock(String lockPath, long timeout, TimeUnit unit) throws InterruptedException;
+	
+	public boolean unLock();
 	
 }

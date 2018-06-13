@@ -1,10 +1,10 @@
 package com.caimi.service.cluster;
 
 /**
- * zookeeper连接断开/重连
+ * zookeeper杩炴帴鏂紑/閲嶈繛
  */
 public interface ZKListener {
 
-	public void onReconnected(ZKService zkService);
+	public void onStateChanged(ZKService zkService, ZKConnectionState newState);
 	
 }
