@@ -155,16 +155,14 @@ public abstract class IgniteCacheKeeper<T extends AbstractEntity> implements BOC
 			searchExpr = "1=1";
 		}
 		StringBuilder query = new StringBuilder(128);
-		boolean appendComma = true;
 		query.append("SELECT ");
-		for (int i=0;i<fields.length;i++) {
-        	query.append(fields[i]).append(" ");
-            if (appendComma) {
+		boolean appendComma = false;
+        for(String field: fields) {
+        	if (appendComma) {
                 query.append(", ");
             }
-            if(i == fields.length-2) {
-            	appendComma =false;
-            }
+            query.append(field).append(" ");
+            appendComma = true;
         }
 		query.append(mainCacheClass.getSimpleName()).append(" WHERE ").append(searchExpr);
 		List<Object[]> result = new ArrayList<>();
