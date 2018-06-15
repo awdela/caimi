@@ -9,6 +9,7 @@ import javax.cache.Cache.Entry;
 
 import org.apache.ignite.Ignite;
 import org.apache.ignite.IgniteCache;
+import org.apache.ignite.IgniteCluster;
 import org.apache.ignite.IgniteLock;
 import org.apache.ignite.cache.CachePeekMode;
 import org.apache.ignite.cache.query.FieldsQueryCursor;
@@ -203,6 +204,25 @@ public abstract class IgniteCacheKeeper<T extends AbstractEntity> implements BOC
 		return list.size();
 	}
 
+	/**
+	 * 同步Ignite集群数据
+	 */
+	protected void updateCacheLoadNodeName() {
+		Ignite ignite = clusterMgr.getIgnite();
+		IgniteCluster cluster = ignite.cluster();
+		
+		List<String> hostNames = new ArrayList<String>(cluster.localNode().hostNames());
+		String cacheLoadNodeName = hostNames.get(0);
+		for(String hostName: hostNames) {
+			if (hostName.equals("localhost") || hostName.equals("127.0.0.1")) {
+				continue;
+			}
+			cacheLoadNodeName = hostName;
+			break;
+		}
+		clusterMgr.dput(keyCacheLoadNode, cacheLoadNodeName);
+	}
+	
 	@Override
 	public Lock getLock() {
 		if (igniteLock!=null) {

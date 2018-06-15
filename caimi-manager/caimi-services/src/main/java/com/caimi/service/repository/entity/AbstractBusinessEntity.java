@@ -20,7 +20,7 @@ import com.caimi.service.repository.AbstractEntity;
 import com.caimi.util.StringUtil;
 
 @MappedSuperclass
-public abstract class AbstractBussinessEntity extends AbstractEntity implements Binarylizable{
+public abstract class AbstractBusinessEntity extends AbstractEntity implements BusinessEntity, Binarylizable{
 
 	@Id
 	@Column(name="entity_id",nullable=false)

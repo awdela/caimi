@@ -1,5 +1,7 @@
 package com.caimi.service.cahce;
 
+import java.util.List;
+
 import org.apache.ignite.Ignite;
 import org.apache.ignite.IgniteCache;
 import org.apache.ignite.cache.CacheAtomicityMode;
@@ -8,7 +10,7 @@ import org.apache.ignite.configuration.CacheConfiguration;
 
 import com.caimi.service.repository.entity.cache.UserEntity;
 
-public class UserCacheKeeper extends IgniteCacheKeeper<UserEntity>{
+public class UserCacheKeeper extends IgniteBusinessEntityCacheKeeper<UserEntity>{
 
 	private static final String LOCK_NAME = "caimi.repository.user.lock";
 	
@@ -20,6 +22,10 @@ public class UserCacheKeeper extends IgniteCacheKeeper<UserEntity>{
 		super(UserEntity.class, KEY_REPOSITORY_USER_CACHE_LOADNODE, LOCK_NAME);
 	}
 
+	/**
+	 * User Id -> Object
+	 */
+	private IgniteCache<String, UserEntity> users;
 	@Override
 	protected void initIgniteCache() {
 		Ignite ignite = clusterMgr.getIgnite();
@@ -29,7 +35,7 @@ public class UserCacheKeeper extends IgniteCacheKeeper<UserEntity>{
 			cacheCfg.setCacheMode(CacheMode.REPLICATED);
 			cacheCfg.setName(KEY_REPOSITORY_USER_CACHE_BYID);
 			cacheCfg.setIndexedTypes(String.class, UserEntity.class);
-			
+			users = ignite.getOrCreateCache(cacheCfg);
 		}
 	}
 
@@ -40,38 +46,35 @@ public class UserCacheKeeper extends IgniteCacheKeeper<UserEntity>{
 
 	@Override
 	public int reloadAll() {
-		// TODO Auto-generated method stub
-		return 0;
+		initIgniteCache();
+		users.clear();
+		/*
+		 * 同步数据库
+		 * container在initIgnite的时候就初始化了
+		 */
+		List<UserEntity> list = container.getAccessor(UserEntity.class).loadAllEntities(UserEntity.class, null);
+		putAll(list);
+		updateCacheLoadNodeName();
+		return list.size();
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	protected IgniteCache<Object, UserEntity> getMainCache() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	protected UserEntity get0(int key, Object keyId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	protected Object getId0(int key, Object keyId) {
-		// TODO Auto-generated method stub
-		return null;
+		return (IgniteCache)users;
 	}
 
 	@Override
 	protected void put0(UserEntity t) {
 		String UserId = t.getId();
-		
+		users.put(UserId, t);
 	}
 
 	@Override
 	protected UserEntity remove0(Object boId) {
-		// TODO Auto-generated method stub
-		return null;
+		String userId = boId.toString();
+		UserEntity entity = users.getAndRemove(userId);
+		return entity;
 	}
 
 }

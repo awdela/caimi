@@ -13,7 +13,7 @@ public interface BOEntityAccessor {
 	
 	public<T> T loadEntity(Class<T> entityClass, Object boId);
 	
-	public<T> T loadAllEntities(Class<T> entityClass, List boIds);
+	public<T> List<T> loadAllEntities(Class<T> entityClass, List boIds);
 	
 	public<T> T saveEntity(T t);
 	

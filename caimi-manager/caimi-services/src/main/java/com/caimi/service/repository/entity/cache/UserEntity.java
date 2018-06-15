@@ -1,7 +1,14 @@
 package com.caimi.service.repository.entity.cache;
 
-import com.caimi.service.repository.entity.AbstractBussinessEntity;
+import java.time.LocalDateTime;
 
-public class UserEntity extends AbstractBussinessEntity{
+import com.caimi.service.repository.entity.AbstractBusinessEntity;
+
+public class UserEntity extends AbstractBusinessEntity{
+
+	@Override
+	public LocalDateTime touchActivityTime() {
+		return null;
+	}
 
 }
