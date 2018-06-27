@@ -202,4 +202,11 @@ public abstract class AbstractBusinessEntity extends AbstractEntity implements B
 		this.lastActivityTime = lastActivityTime;
 	}
 	
+	@Override
+    public LocalDateTime touchActivityTime() {
+        LocalDateTime now = LocalDateTime.now();
+        lastActivityTime = now;
+        return now;
+    }
+	
 }

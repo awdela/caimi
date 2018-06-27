@@ -1,20 +1,28 @@
 package com.caimi.service.auth;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.caimi.service.repository.entity.UserEntity;
+import com.caimi.service.dao.UserDao;
+import com.caimi.service.repository.entity.User;
+import com.caimi.service.repository.entity.cache.UserEntity;
+import com.caimi.util.StringUtil;
 
 @Service
 @Transactional
 public class UserService implements UserDetailsService{
 
+	@Autowired
+	private UserDao userDao;
+	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 	
@@ -28,48 +36,28 @@ public class UserService implements UserDetailsService{
 	 * @return 1 repeat username
 	 * @return 2 failed
 	 */
-//	public int reg(UserEntity user) {
-//		UserEntity repeatUserName = userMapper.loadUserByUserNmae(user.getUsername());
-//		if(repeatUserName!=null) {
-//			return 1;
-//		}
-//		//Digest the passwd
-//		user.setEnable(true);
-//		user.setPassword(StringUtil.md5(user.getPassword()));
-//		long result = userMapper.reg(user);
-//		if(result == 1) {
-//			return 0;
-//		}else {
-//			return 2;
-//		}
-//	}
-//
-//	/**
-//	 * select
-//	 */
-//	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//		UserEntity user = userMapper.loadUserByUserNmae(username);
-//		if(null != user) {
-//			return user;
-//		}else {
-//			return new UserEntity();
-//		}
-//	}
-//	
-//	public int updateUserEmail(String email, String id) {
-//		return userMapper.updateUserEmail(email, id);
-//	}
-//	
-//	public int updateUserEnabled(Boolean enabled, Long uid) {
-//		return userMapper.updateUserEnabled(enabled, uid);
-//	}
-//	
-//	public int deleteUserById(long uid) {
-//		return userMapper.deleteUserById(uid);
-//	}
-//	
-//	public UserEntity getUserById(@Param("id") String id) {
-//		return userMapper.getUserById(id);
-//	}
-//	
+	public int reg(UserEntity user) {
+		UserEntity repeatUserName = (UserEntity) userDao.getByName(user.getName());
+		if(repeatUserName!=null) {
+			return 1;
+		}
+		//Digest the passwd
+		user.setPassWord(StringUtil.md5(user.getPassword()));
+		userDao.save(user);
+		return 0;
+	}
+
+	public int deleteUserById(String uid) {
+		userDao.delete(uid);
+		return 0;
+	}
+	
+	public User getUserById(@Param("id") String id) {
+		return userDao.getById(id);
+	}
+	
+	public User getUserByName(@Param("name") String name) {
+		return userDao.getByName(name);
+	}
+	
 }

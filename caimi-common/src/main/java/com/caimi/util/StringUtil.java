@@ -46,5 +46,20 @@ public class StringUtil {
         return result;
     }
 	
+    /**
+     * 大小写敏感
+     */
+    public static boolean equals(String str1, String str2) {
+    	boolean str1e = isEmpty(str1);
+    	boolean str2e = isEmpty(str2);
+    	//both empty
+    	if (str1e && str2e) {
+    		return true;
+    	}
+    	if (str1e != str2e) {
+    		return false;
+    	}
+    	return str1.equals(str2);
+    }
 
 }

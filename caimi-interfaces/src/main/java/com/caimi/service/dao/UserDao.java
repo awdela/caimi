@@ -8,8 +8,8 @@ public interface UserDao {
 	
 	User getByName(String userName);
 	
-	Integer save(User user);
+	void save(User user);
 	
-	Integer delete(String id);
+	void delete(String id);
 	
 }

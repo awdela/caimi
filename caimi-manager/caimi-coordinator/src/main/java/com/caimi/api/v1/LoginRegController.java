@@ -2,12 +2,10 @@ package com.caimi.api.v1;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.caimi.service.auth.UserService;
 import com.caimi.service.beans.RespBean;
-import com.caimi.service.repository.entity.UserEntity;
 
 @RestController
 public class LoginRegController {
