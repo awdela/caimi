@@ -2,44 +2,29 @@ package com.caimi.service.repository;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.locks.Lock;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Service;
 
 import com.caimi.service.BORepository;
 import com.caimi.service.beans.BeansContainer;
 
-@SuppressWarnings("rawtypes") 
-public class AbstractBORepository implements BORepository, BOCacheContainer{
+@Service
+public class SpringJPABORepository extends AbstractBORepository implements BORepository, BOEntityAccessor{
 
-	private static final Logger logger = LoggerFactory.getLogger(AbstractBORepository.class);
+	@Autowired
+	private ApplicationContext appContext;
+	private Executor asyncExecutor;
 	
-	private BeansContainer beansContainer;
-	private Executor executor;
+	@Override
+	public void init(BOCacheContainer container) {
+		setBeansContainer(appContext.getBean(BeansContainer.class));
+		setExecutor(asyncExecutor);
+	}
 	
-	@Override
-	public <T> T getBean(Class<T> clazz) {
-		return null;
-	}
-
-	@Override
-	public <T> T getBean(Class<T> clazz, String urposeOrId) {
-		return null;
-	}
-
-	@Override
-	public <T> Map<String, T> getBeansOfType(Class<T> clazz) {
-		return null;
-	}
-
-	@Override
-	public BORepository getRepository() {
-		return null;
-	}
-
 	@Override
 	public BOEntityAccessor getAccessor(Class entityClass) {
 		return null;
@@ -53,14 +38,6 @@ public class AbstractBORepository implements BORepository, BOCacheContainer{
 	@Override
 	public Collection<Class> getBOClass() {
 		return null;
-	}
-
-	public void setBeansContainer(BeansContainer beansContainer) {
-		this.beansContainer = beansContainer;
-	}
-	
-	public void setExecutor(Executor asyncExecutor) {
-		this.executor = asyncExecutor;
 	}
 
 	@Override
@@ -121,6 +98,46 @@ public class AbstractBORepository implements BORepository, BOCacheContainer{
 	@Override
 	public <T> List<T> reloadAll(Class<T> boClass, List<Object> boIds) {
 		return null;
+	}
+
+	@Override
+	public <T> T loadEntity(Class<T> entityClass, Object boId) {
+		return null;
+	}
+
+	@Override
+	public <T> List<T> loadAllEntities(Class<T> entityClass, List boIds) {
+		return null;
+	}
+
+	@Override
+	public <T> T saveEntity(T t) {
+		return null;
+	}
+
+	@Override
+	public <T> List<T> saveAllEntites(List<T> t) {
+		return null;
+	}
+
+	@Override
+	public <T> List<T> searchEntity(Class<T> entityClass, String searcgExpr) {
+		return null;
+	}
+
+	@Override
+	public <T> List<Object[]> searchEntity(Class<T> entityClass, String searchExpr, String[] fields) {
+		return null;
+	}
+
+	@Override
+	public boolean removeEntity(Object o) {
+		return false;
+	}
+
+	@Override
+	public int removeAllEntites(Collection entityInstances) {
+		return 0;
 	}
 
 }

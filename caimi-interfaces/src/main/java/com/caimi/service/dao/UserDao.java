@@ -1,5 +1,6 @@
 package com.caimi.service.dao;
 
+import com.caimi.service.repository.entity.Role;
 import com.caimi.service.repository.entity.User;
 
 public interface UserDao {
@@ -11,5 +12,7 @@ public interface UserDao {
 	void save(User user);
 	
 	void delete(String id);
+	
+	Role getRole(String id);
 	
 }

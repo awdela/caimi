@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import com.caimi.service.BORepository;
 import com.caimi.service.repository.BOEntity;
 import com.caimi.service.repository.entity.AbstractBusinessEntity;
+import com.caimi.service.repository.entity.Role;
 import com.caimi.service.repository.entity.User;
 import com.caimi.service.repository.entity.cache.UserEntity;
 
@@ -14,6 +15,8 @@ public class UserDaoImpl implements UserDao{
 
 	@Autowired
 	private BORepository repository;
+	@Autowired
+	private RoleUserDao roleUserDao;
 	
 	@Override
 	public User getById(String id) {
@@ -37,4 +40,9 @@ public class UserDaoImpl implements UserDao{
 		repository.detectBOClassById(id);
 	}
 
+	@Override
+	public Role getRole(String id) {
+		return roleUserDao.getRole(id);
+	}
+	
 }

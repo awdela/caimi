@@ -26,7 +26,7 @@ import com.caimi.util.StringUtil;
  * <LI>启动时自动检查或创建当天的所有的index
  * <LI>每日23：50自动创建下一天的index，并在24：00时切换
  */
-@Service
+//@Service
 public class ElasticSearchServiceImpl implements ElasticSearchService , Listener{
 
 	private static final Logger logger = LoggerFactory.getLogger(ElasticSearchService.class);

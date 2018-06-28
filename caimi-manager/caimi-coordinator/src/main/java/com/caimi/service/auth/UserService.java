@@ -1,7 +1,11 @@
 package com.caimi.service.auth;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,20 +20,21 @@ import com.caimi.util.StringUtil;
 @Service
 @Transactional
 public class UserService implements UserDetailsService{
-
+	
 	@Autowired
 	private UserDao userDao;
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		
+		User user = userDao.getByName(username);
+		if (user == null) {
+			throw new UsernameNotFoundException("用户名不存在");
+		}
+		List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+		//用于添加用户的权限,只要把用户权限添加到authorities
+		//待完善
 		return null;
 	}
-	
-	/*
-	 * spring boot security
-	 */
-	
 	/**
 	 * @param user
 	 * @return 0 success
