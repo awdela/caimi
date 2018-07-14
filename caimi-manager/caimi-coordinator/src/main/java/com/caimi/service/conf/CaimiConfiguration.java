@@ -18,9 +18,7 @@ import org.eclipse.jetty.util.thread.ExecutorThreadPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.context.embedded.jetty.JettyEmbeddedServletContainerFactory;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -65,6 +63,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import com.caimi.util.concurrent.DefaultThreadFactory;
 import com.caimi.util.concurrent.SequentialThreadedProcessor;
 import com.caimi.util.concurrent.SequentialThreadedProcessorImpl;
+import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 @Configuration
 @EnableScheduling
@@ -74,7 +73,7 @@ import com.caimi.util.concurrent.SequentialThreadedProcessorImpl;
 @EnableAsync
 @ServletComponentScan
 @ComponentScan(value = { "caimi.web.service" })
-@EnableAspectJAutoProxy(proxyTargetClass = true)
+//@EnableAspectJAutoProxy(proxyTargetClass = true)
 public class CaimiConfiguration implements WebMvcConfigurer, SchedulingConfigurer, AsyncConfigurer, AsyncUncaughtExceptionHandler{
 	
 	private static final Logger logger = LoggerFactory.getLogger(CaimiConfiguration.class);
@@ -100,9 +99,16 @@ public class CaimiConfiguration implements WebMvcConfigurer, SchedulingConfigure
 	}
 
 	@Bean(name = "dataSource")
-	@ConfigurationProperties("caimi.datasource")
 	public DataSource dataSource() throws Exception {
-		return DataSourceBuilder.create().type(com.mchange.v2.c3p0.ComboPooledDataSource.class).build();
+		ComboPooledDataSource ds = new ComboPooledDataSource();
+		ds.setDriverClass("com.mysql.cj.jdbc.Driver");
+		ds.setJdbcUrl("jdbc:mysql://127.0.0.1:3306/caimi?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=GMT%2b08%3a00");
+		ds.setUser("root");
+		ds.setPassword("Admin@123");
+		ds.setMinPoolSize(3);
+		ds.setMaxPoolSize(10);
+        ds.setMaxIdleTime(120);
+        return ds;
 	}
 
 	@Bean
@@ -125,6 +131,7 @@ public class CaimiConfiguration implements WebMvcConfigurer, SchedulingConfigure
 
 		return em;
 	}
+	
 	@Bean(name = "transactionManager")
 	public PlatformTransactionManager getTransactionManager(EntityManagerFactory emf) throws Exception {
 		JpaTransactionManager transactionManager = new JpaTransactionManager(emf);
@@ -136,19 +143,17 @@ public class CaimiConfiguration implements WebMvcConfigurer, SchedulingConfigure
 		return new PersistenceExceptionTranslationPostProcessor();
 	}
 
-	@Primary
 	@Bean
-	public ScheduledThreadPoolExecutor scheduledExecutorService() {
+	public java.util.concurrent.ScheduledThreadPoolExecutor scheduledExecutorService() {
 		return taskScheduler;
 	}
 
 	@Primary
 	@Bean
-	public ExecutorService executorService() {
+	public java.util.concurrent.ExecutorService executorService() {
 		return asyncExecutor;
 	}
 
-	@Primary
 	@Bean
 	public SequentialThreadedProcessor threadedProcessor() {
 		return threadedProcessor;

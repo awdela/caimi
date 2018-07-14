@@ -4,14 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.caimi.service.auth.UserService;
 import com.caimi.service.beans.RespBean;
 
 @RestController
 public class LoginRegController {
 
-	@Autowired
-	private UserService userService;
+//	@Autowired
+//	private UserService userService;
 	
 	@RequestMapping("/login_error")
 	public RespBean loginError() {

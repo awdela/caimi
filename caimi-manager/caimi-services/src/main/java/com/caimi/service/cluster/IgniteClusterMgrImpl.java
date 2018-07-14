@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.caimi.conf.ConfigConstants;
+import com.caimi.service.CaimiContants;
 import com.caimi.util.SystemUtil;
 
 @Service
@@ -32,10 +33,6 @@ public class IgniteClusterMgrImpl implements IgniteClusterMgr{
 	private volatile boolean stop;
 	private volatile Cache<String,String> dmap;
 	
-	public IgniteClusterMgrImpl() {
-		
-	}
-	
 	@PostConstruct
 	public void init() {
 		if (stop) {
@@ -43,9 +40,8 @@ public class IgniteClusterMgrImpl implements IgniteClusterMgr{
 		}
 		IgniteConfiguration cfg = new IgniteConfiguration();
 		//get zookeeper conn
-		String zookeeperConnectStr = "192.168.3.67:2181,192.168.3.68:2181,192.168.3.69:2181";
 		TcpDiscoveryZookeeperIpFinder ipFinder = new TcpDiscoveryZookeeperIpFinder ();
-		ipFinder.setZkConnectionString(zookeeperConnectStr);
+		ipFinder.setZkConnectionString(CaimiContants.ZOOKEEPER_CLUSTER);
 		
 		TcpDiscoverySpi spi = new TcpDiscoverySpi();
 		String localAddr = System.getProperty(ConfigConstants.SYSPROP_IGNITE_LOCAL_ADDRESS);
@@ -54,7 +50,7 @@ public class IgniteClusterMgrImpl implements IgniteClusterMgr{
 		}
 		spi.setIpFinder(ipFinder);
 		spi.setLocalAddress(localAddr);
-		logger.info("Ignite init with local address: "+localAddr+", zkConnectionStr: "+zookeeperConnectStr);
+		logger.info("Ignite init with local address: "+localAddr+", zkConnectionStr: "+CaimiContants.ZOOKEEPER_CLUSTER);
 		//Ignite Server Mode：True
 		//String igniteClientMode = System.getProperty(ConfigConstants.SYSPROP_IGNITE_CLIENT_MODE);
 		cfg.setClientMode(true);
@@ -70,7 +66,7 @@ public class IgniteClusterMgrImpl implements IgniteClusterMgr{
             binaryCfg.setCompactFooter(false);
             cfg.setBinaryConfiguration(binaryCfg);
         }
-        ignite = Ignition.getOrStart(cfg);
+        ignite = Ignition.start(cfg);
         if (ignite== null) {
         	logger.error("Ignite node is not started");
         }else {

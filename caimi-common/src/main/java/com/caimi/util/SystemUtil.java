@@ -18,6 +18,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class SystemUtil {
     private static final int DEFAULT_PROCESS_TIMEOUT = 30;
 
@@ -36,6 +39,8 @@ public class SystemUtil {
     private static String appInstanceName;
 
     private static Mode mode;
+    
+    private final static Logger logger = LoggerFactory.getLogger(SystemUtil.class);
 
     /**
      * 返回 "主机名+applicationName"
@@ -162,6 +167,7 @@ public class SystemUtil {
         if (hostnameFile.exists() ) {
             try {
                 hostName = FileUtil.read(hostnameFile).trim();
+                logger.info("find hostname: "+hostName);
             }catch(Exception e) {}
 	        }
         }
