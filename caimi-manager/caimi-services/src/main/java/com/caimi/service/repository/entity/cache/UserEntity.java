@@ -1,10 +1,14 @@
 package com.caimi.service.repository.entity.cache;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import org.apache.ignite.binary.BinaryObjectException;
@@ -13,9 +17,11 @@ import org.apache.ignite.binary.BinaryWriter;
 import org.apache.ignite.binary.Binarylizable;
 import org.json.JSONObject;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.caimi.service.repository.entity.AbstractBusinessEntity;
+import com.caimi.service.repository.entity.Role;
 import com.caimi.service.repository.entity.User;
 import com.caimi.util.StringUtil;
 
@@ -43,9 +49,18 @@ public class UserEntity extends AbstractBusinessEntity implements User, UserDeta
     @Column(name = "user_phone")
     private String phone;
     
-    private List<? extends GrantedAuthority> authorities;
+    @ManyToMany(cascade = {CascadeType.REFRESH},fetch = FetchType.EAGER)
+    private List<Role> roles;
     
-    public void setPassWord(String passwd) {
+    public List<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
+	}
+
+	public void setPassWord(String passwd) {
     	this.passwd = passwd;
     }
     
@@ -97,7 +112,6 @@ public class UserEntity extends AbstractBusinessEntity implements User, UserDeta
 	 @Override
 	 public JSONObject toJSON() {
 		 JSONObject json = super.toJSON();
-		 
 		 json
 		 .put("departmentId", getDepartmentId())
 		 .put("title", title)
@@ -127,13 +141,14 @@ public class UserEntity extends AbstractBusinessEntity implements User, UserDeta
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
+		List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+		List<Role> roles = this.getRoles();
+		for (Role role:roles) {
+			authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
+		}
 		return authorities;
 	}
 	
-	public void getAuthorities(List<? extends GrantedAuthority> authorities) {
-		this.authorities = authorities;
-	}
-
 	@Override
 	public String getPassword() {
 		return passwd;

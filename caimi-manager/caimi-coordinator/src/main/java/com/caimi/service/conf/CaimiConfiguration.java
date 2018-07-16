@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -23,7 +22,6 @@ import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.EnableLoadTimeWeaving;
 import org.springframework.context.annotation.Primary;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
@@ -171,6 +169,7 @@ public class CaimiConfiguration implements WebMvcConfigurer, SchedulingConfigure
 	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
 		// ��Ϣת����
 		// http
+		@SuppressWarnings("rawtypes")
 		HttpMessageConverter converter = new StringHttpMessageConverter();
 		converters.add(converter);
 		logger.info("HttpMessageCoverter added");
