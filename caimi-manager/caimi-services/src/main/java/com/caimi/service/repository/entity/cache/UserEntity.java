@@ -60,7 +60,7 @@ public class UserEntity extends AbstractBusinessEntity implements User, UserDeta
 		this.roles = roles;
 	}
 
-	public void setPassWord(String passwd) {
+	public void setPassword(String passwd) {
     	this.passwd = passwd;
     }
     
@@ -177,6 +177,48 @@ public class UserEntity extends AbstractBusinessEntity implements User, UserDeta
 	@Override
 	public boolean isEnabled() {
 		return true;
+	}
+
+	@Override
+	public String getLables() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setLables(String lables) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getGroup() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setGroup(String group) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getAttrs() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getAttr(String attr) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setAttr(String attr, String value) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

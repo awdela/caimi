@@ -42,7 +42,7 @@ public class LoginRegController {
 	 */
 	@RequestMapping(path=URL_PREFIX+"/regist")
 	public RespBean regist(UserEntity user) {
-		int result = userService.reg(user);
+		int result = userService.regist(user);
 		if(result == 0) {
 			//success
 			return new RespBean("success","welcome to caimi!");
@@ -58,8 +58,16 @@ public class LoginRegController {
             method=RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public RespBean login() {
-		userService.
+	public RespBean login(UserEntity user) {
+		int result = userService.login(user);
+		if(result == 0) {
+			//success
+			return new RespBean("success","welcome to caimi!");
+		}else if (result == 1) {
+			return new RespBean("error","change your username!");
+		}else {
+			return new RespBean("error","need to regist or login!");
+		}
 	}
 	
 	

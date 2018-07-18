@@ -1,12 +1,14 @@
 package com.caimi.service.event;
 
+import java.util.Collection;
+
 /**
- * 事件消费接口：kafka、es
+ * 鏃堕棿娑堣垂鎺ュ彛
  */
 public interface EventConsumer {
 
-	public void consume();
+	public void consume(Event event);
 	
-	public void consume(String str);
+	public void consume(Collection<Event> events);
 	
 }

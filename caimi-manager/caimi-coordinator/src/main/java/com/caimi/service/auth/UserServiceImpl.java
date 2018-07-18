@@ -37,6 +37,26 @@ public class UserServiceImpl implements UserService, UserDetailsService{
 		authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
 		return user;
 	}
+	
+	/**
+	 * @param user
+	 * @return 0 success
+	 * @return 1 username not exist
+	 * @return 2 failed
+	 */
+	@SuppressWarnings("null")
+	@Override
+	public int login(User user) {
+		User userEntity = userDao.getByName(user.getName());
+		if(userEntity!=null) {
+			return 1;
+		}
+		if (userEntity.getPassword().equals(user.getPassword())) {
+			return 0;
+		}
+		return 2;
+	}
+	
 	/**
 	 * @param user
 	 * @return 0 success
@@ -44,17 +64,18 @@ public class UserServiceImpl implements UserService, UserDetailsService{
 	 * @return 2 failed
 	 */
 	@Override
-	public int reg(User user) {
-		UserEntity repeatUserName = (UserEntity) userDao.getByName((UserEntity)user.getName());
+	public int regist(User user) {
+		User repeatUserName = userDao.getByName(user.getName());
 		if(repeatUserName!=null) {
 			return 1;
 		}
 		//Digest the passwd
-		user.setPassWord(StringUtil.md5(user.getPassword()));
+		user.setPassword(StringUtil.md5(user.getPassword()));
 		userDao.save(user);
 		return 0;
 	}
 
+	@Override
 	public int deleteUserById(String uid) {
 		userDao.delete(uid);
 		return 0;

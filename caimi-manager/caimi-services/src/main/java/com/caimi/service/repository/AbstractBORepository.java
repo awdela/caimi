@@ -1,5 +1,7 @@
 package com.caimi.service.repository;
 
+import java.lang.reflect.Field;
+import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -17,8 +19,49 @@ public class AbstractBORepository implements BORepository, BOCacheContainer{
 
 	private static final Logger logger = LoggerFactory.getLogger(AbstractBORepository.class);
 	
+	protected static class EntityInfo{
+//		public Class[] interfacesClasses;
+//		public Class idType;
+		public Field idField;
+//		public String idPrefix;
+		public Class<? extends AbstractEntity> entityClass;
+		public BOCacheKeeper cahceKeeper;
+		public BOEntityAccessor accessor;
+		private Instant lastUpdateTime;
+		
+		EntityInfo(){
+			lastUpdateTime = Instant.now();
+		}
+		
+		public Object getEntityId(Object entityInstance) {
+			try {
+				return idField.get(entityInstance);
+			} catch (Throwable e) {
+				logger.error("Get id for "+entityInstance+" failed", e);
+			}
+			return null;
+		}
+		
+		public void touchLastUpdateTime(){
+            lastUpdateTime = Instant.now();
+        }
+		
+	}
+	
 	private BeansContainer beansContainer;
 	private Executor executor;
+	
+	public void setBeansContainer(BeansContainer beansContainer) {
+		this.beansContainer = beansContainer;
+	}
+	
+	public void setExecutor(Executor asyncExecutor) {
+		this.executor = asyncExecutor;
+	}
+	
+	protected void init() {
+		
+	}
 	
 	@Override
 	public <T> T getBean(Class<T> clazz) {
@@ -55,14 +98,6 @@ public class AbstractBORepository implements BORepository, BOCacheContainer{
 		return null;
 	}
 
-	public void setBeansContainer(BeansContainer beansContainer) {
-		this.beansContainer = beansContainer;
-	}
-	
-	public void setExecutor(Executor asyncExecutor) {
-		this.executor = asyncExecutor;
-	}
-
 	@Override
 	public Class detectBOClassById(String idOrPrefix) {
 		return null;
@@ -80,7 +115,9 @@ public class AbstractBORepository implements BORepository, BOCacheContainer{
 
 	@Override
 	public void save(Object entity) {
-		
+		if ( logger.isDebugEnabled() ) {
+            logger.debug("save : "+entity);
+        }
 	}
 
 	@Override
