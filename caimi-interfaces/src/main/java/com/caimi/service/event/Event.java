@@ -1,7 +1,7 @@
 package com.caimi.service.event;
 
 /**
- * 所以可以消费的字段
+ * 所有可以消费的字段
  */
 public interface Event {
 

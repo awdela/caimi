@@ -39,6 +39,7 @@
 		<flume.version>1.5.2.2.4.3.0-227</flume.version>
 		<elasticsearch.version>5.6.4</elasticsearch.version>
 		<ignite.version>2.3.0</ignite.version>
+		<kafka.version>0.10.1.2.6.1.0-129</kafka.version>
 		<springboot.data.hadoop.version>2.5.0.RELEASE</springboot.data.hadoop.version>
 	</properties>
 	<!-- 只定义依赖的版本，并不实际依赖 -->

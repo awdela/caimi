@@ -22,9 +22,15 @@
   		<version>${caimi.common.version}</version>
   	</dependency>
   	<dependency>
-    <groupId>org.apache.kafka</groupId>
-    	<artifactId>kafka_2.12</artifactId>
-    	<version>1.0.0</version>
+    	<groupId>org.apache.kafka</groupId>
+    	<artifactId>kafka_2.10</artifactId>
+    	<version>${kafka.version}</version>
+    	<exclusions>
+    		<exclusion>
+    			 <groupId>log4j</groupId>
+                 <artifactId>log4j</artifactId>
+    		</exclusion>
+    	</exclusions>
 	</dependency>
   </dependencies>
 </project>

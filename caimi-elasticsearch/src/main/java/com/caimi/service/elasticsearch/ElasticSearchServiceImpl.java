@@ -1,6 +1,7 @@
 package com.caimi.service.elasticsearch;
 
 import java.net.URL;
+import java.util.Collection;
 
 import javax.annotation.PostConstruct;
 
@@ -16,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.caimi.service.event.Event;
 import com.caimi.service.util.ESHelper;
 import com.caimi.util.StringUtil;
 
@@ -26,7 +28,7 @@ import com.caimi.util.StringUtil;
  * <LI>启动时自动检查或创建当天的所有的index
  * <LI>每日23：50自动创建下一天的index，并在24：00时切换
  */
-//@Service
+@Service
 public class ElasticSearchServiceImpl implements ElasticSearchService , Listener{
 
 	private static final Logger logger = LoggerFactory.getLogger(ElasticSearchService.class);
@@ -91,13 +93,13 @@ public class ElasticSearchServiceImpl implements ElasticSearchService , Listener
 	}
 
 	@Override
-	public void consume() {
+	public void consume(Event event) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void consume(String str) {
+	public void consume(Collection<Event> events) {
 		// TODO Auto-generated method stub
 		
 	}
