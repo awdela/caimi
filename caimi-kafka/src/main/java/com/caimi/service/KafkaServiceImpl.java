@@ -1,7 +1,12 @@
 package com.caimi.service;
 
+import java.net.InetAddress;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.ExecutorService;
 
 import javax.annotation.PostConstruct;
 
@@ -23,6 +28,16 @@ import com.caimi.util.StringUtil;
 import com.caimi.util.SystemUtil;
 
 import kafka.Kafka;
+import kafka.api.OffsetRequest;
+import kafka.api.PartitionOffsetRequestInfo;
+import kafka.cluster.BrokerEndPoint;
+import kafka.common.TopicAndPartition;
+import kafka.javaapi.OffsetResponse;
+import kafka.javaapi.PartitionMetadata;
+import kafka.javaapi.TopicMetadata;
+import kafka.javaapi.TopicMetadataRequest;
+import kafka.javaapi.TopicMetadataResponse;
+import kafka.javaapi.consumer.SimpleConsumer;
 
 @Service
 public class KafkaServiceImpl implements KafkaService, Callback{
@@ -31,14 +46,20 @@ public class KafkaServiceImpl implements KafkaService, Callback{
 	
 	private final static String KAFKA_IDS_PATH = "/brokers/ids";
 	private String kafkaBrokers;
-	private final static int producerCount = 1;
+	private String kafakHost;
+	private int kafkaPort = 0;
 	private final static int kafkaBrokerCount = 1;
+	
+	private Map<String, KafkaGroupEntry> groupEntries = new HashMap<>();
 	
 	private Producer<String, String> producer;
 	private String defaultGroup;
 	
 	@Autowired
 	private ZKService zkServer;
+	
+	@Autowired
+	private ExecutorService asyncExecutor;
 	
 	@PostConstruct
 	public void init() throws Exception {
@@ -65,13 +86,15 @@ public class KafkaServiceImpl implements KafkaService, Callback{
 				brokerList.append(",");
 			}
 			brokerList.append(host).append(":").append(port);
-			kafkaBrokers = brokerList.toString();
-			
-			String caimiApp = SystemUtil.getApplicationName();
-			defaultGroup = SystemUtil.getHostName()+"-"+caimiApp;
-			//目前只支持单节点
-			producer = createProducer();
+			kafakHost = host;
+			kafkaPort = port;
 		}
+		kafkaBrokers = brokerList.toString();
+		
+		String caimiApp = SystemUtil.getApplicationName();
+		defaultGroup = SystemUtil.getHostName()+"-"+caimiApp;
+		//目前只支持单节点
+		producer = createProducer();
 	}
 	
 	private KafkaProducer<String, String> createProducer() {
@@ -115,10 +138,21 @@ public class KafkaServiceImpl implements KafkaService, Callback{
 		producer.send(new ProducerRecord<String, String>(topic, message), this);
 	}
 
+	//多线程消费
 	@Override
 	public synchronized void consumeTopic(String group, String topic, KafkaTopicListener listener) {
 		if (StringUtil.isEmpty(group)) {
 			group = defaultGroup;
+		}
+		KafkaGroupEntry groupEntry = groupEntries.get(group);
+		if (groupEntry == null) {
+			groupEntry = new KafkaGroupEntry(group);
+			groupEntries.put(group, groupEntry);
+			final KafkaGroupEntry groupEntry2 = groupEntry;
+			groupEntry.consumeNewTopic(topic, listener);
+			asyncExecutor.execute(()->groupEntry2.runConsumerTopic(kafkaBrokers));
+		}else {
+			groupEntry.consumeNewTopic(topic, listener);
 		}
 	}
 
@@ -126,8 +160,79 @@ public class KafkaServiceImpl implements KafkaService, Callback{
 	 * 获取kafka某个topic的堆积值
 	 */
 	@Override
-	public void getLag(String topic, int partitionId) {
-		
+	public long getLag(String topic, int partitionId) {
+		BrokerEndPoint leaderBroker = getLeaderBroker(kafakHost, topic, partitionId);
+		String leaderHost;
+		if (leaderBroker != null) {
+			leaderHost = leaderBroker.host();
+		}else{
+			leaderHost = "node1";
+		}
+		long offset = getLastOffset(leaderHost, OffsetRequest.EarliestTime(),topic,partitionId);
+        long logsize = getLastOffset(leaderHost,OffsetRequest.LatestTime(),topic,partitionId);
+        if (logger.isDebugEnabled())
+        {
+            InetAddress address = null;
+            try{
+                address = InetAddress.getByName(leaderHost);
+                logger.debug("Got Host name:"+address.getHostName() + "=" + address.getHostAddress());
+            }catch(Exception e){
+                logger.debug("not found host"+leaderHost);
+            }
+        }
+
+        logger.info("LogSize is:"+logsize+ ",offset is:" + offset+",lag is:"+(logsize-offset));
+        return (logsize-offset);
+	}
+
+	private long getLastOffset(String leaderHost, long whichTime, String topic, int partitionId) {
+		String clientName = "Client_" + topic + "_" + partitionId;
+        try{
+            SimpleConsumer consumer = new SimpleConsumer(leaderHost, kafkaPort, 10000, 64*1024, clientName);
+            TopicAndPartition topicAndPartition = new TopicAndPartition(topic, partitionId);
+            Map<TopicAndPartition, PartitionOffsetRequestInfo> requestInfo = new HashMap<>();
+            requestInfo.put(topicAndPartition, new PartitionOffsetRequestInfo(whichTime, 1));
+            kafka.javaapi.OffsetRequest request = new kafka.javaapi.OffsetRequest(requestInfo, OffsetRequest.CurrentVersion(), clientName);
+            OffsetResponse response = consumer.getOffsetsBefore(request);
+            if (response.hasError()) {
+                logger.error("Error fetching data Offset , Reason: " + response.errorCode(topic, partitionId) );
+                return 0;
+            }
+            long[] offsets = response.offsets(topic, partitionId);
+            return offsets[0];
+        }catch(Exception ex)
+        {
+            logger.error("Error kafka fetching data offset :", ex);
+        }
+        return 0;
+	}
+
+	private BrokerEndPoint getLeaderBroker(String kafakHost2, String topic, int partitionId) {
+		String clientName = "Client_Leader_LookUp";
+		PartitionMetadata partitionMetaData = null;
+		try {
+			SimpleConsumer consumer = new SimpleConsumer(kafakHost2, kafkaPort, 10000, 64*1024, clientName);
+			List<String> topics = new ArrayList<>();
+			topics.add(topic);
+			TopicMetadataRequest request = new TopicMetadataRequest(topics);
+            TopicMetadataResponse reponse = consumer.send(request);
+            List<TopicMetadata> topicMetadataList = reponse.topicsMetadata();
+            for(TopicMetadata topicMetadata : topicMetadataList){
+                for(PartitionMetadata metadata : topicMetadata.partitionsMetadata()){
+                    if (metadata.partitionId() == partitionId) {
+                    	partitionMetaData = metadata;
+                        break;
+                    }
+                }
+            }
+            if (partitionMetaData != null) {
+                consumer.close();
+                return partitionMetaData.leader();
+            }
+		}catch(Exception e) {
+			logger.error("Error kafka consumer:",e);
+		}
+		return null;
 	}
 
 	@Override

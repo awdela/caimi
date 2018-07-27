@@ -15,6 +15,6 @@ public interface KafkaService {
 	
 	public void publish(String topic, String message, String parallelkey);
 	
-	public void getLag(String topic, int partitionId);
+	public long getLag(String topic, int partitionId);
 
 }
