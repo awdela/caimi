@@ -1,4 +1,5 @@
 com\caimi\Application.class
+com\caimi\service\auth\UserServiceImpl.class
 com\caimi\service\conf\WebSecurityConfig.class
 com\caimi\api\v1\FileExcuteController.class
 com\caimi\service\conf\CaimiConfiguration.class
@@ -6,3 +7,4 @@ com\caimi\api\v1\LoginRegController.class
 com\caimi\api\v1\LoginTestController.class
 com\caimi\Application$1.class
 com\caimi\service\beans\RespBean.class
+com\caimi\service\SpringTest.class

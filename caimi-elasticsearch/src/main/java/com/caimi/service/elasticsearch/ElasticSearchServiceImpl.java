@@ -1,10 +1,12 @@
 package com.caimi.service.elasticsearch;
 
-import java.net.URL;
 import java.util.Collection;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 
+import org.elasticsearch.action.admin.cluster.node.info.NodesInfoRequest;
+import org.elasticsearch.action.admin.cluster.node.info.NodesInfoResponse;
 import org.elasticsearch.action.bulk.BulkProcessor;
 import org.elasticsearch.action.bulk.BulkProcessor.Listener;
 import org.elasticsearch.action.bulk.BulkRequest;
@@ -18,90 +20,98 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.caimi.service.event.Event;
-import com.caimi.service.util.ESHelper;
+import com.caimi.service.util.ESConnector;
 import com.caimi.util.StringUtil;
 
 /**
- * 实现创建索引
- * 采用Async Bulk Insert方式保存
- * <BR>Index创建方式
+ * 实现创建索引 采用Async Bulk Insert方式保存 <BR>
+ * Index创建方式
  * <LI>启动时自动检查或创建当天的所有的index
  * <LI>每日23：50自动创建下一天的index，并在24：00时切换
  */
 @Service
-public class ElasticSearchServiceImpl implements ElasticSearchService , Listener{
+public class ElasticSearchServiceImpl implements ElasticSearchService, Listener {
 
-	private static final Logger logger = LoggerFactory.getLogger(ElasticSearchService.class);
-	
-	private final static int MAX_CONCURRENT_REQUESTS = 10;
-	
-	private TransportClient client;
-	
-	private BulkProcessor bulkProcessor;
-	
-	public ElasticSearchServiceImpl() 
-	{
-		
-	}
-	
-	@PostConstruct
-	public void init() throws Exception{
+    private static final Logger logger = LoggerFactory.getLogger(ElasticSearchService.class);
+
+    private final static int MAX_CONCURRENT_REQUESTS = 10;
+
+    private TransportClient client;
+
+    private BulkProcessor bulkProcessor;
+
+    public ElasticSearchServiceImpl() {
+
+    }
+
+    @PostConstruct
+    public void init() throws Exception {
         String clusterName = System.getProperty(PROP_CLUSTER_NAME);
         String hosts = System.getProperty(PROP_ADDRS);
-        if ( StringUtil.isEmpty(hosts) ) {
+        if (StringUtil.isEmpty(hosts)) {
             logger.warn("Elastich search service is disabled because of no hosts");
             return;
         }
-        logger.info("Elastic search connection starting ... "+hosts+(StringUtil.isEmpty(clusterName)?"":" cluster "+clusterName));
-        client = ESHelper.connect(clusterName, hosts);
-        bulkProcessor = BulkProcessor.builder(client, this)
-        		.setBulkActions(10000)
-        		.setFlushInterval(TimeValue.timeValueSeconds(10)) //最大十秒刷新
-        		.setConcurrentRequests(MAX_CONCURRENT_REQUESTS)  //并行多请求
-        		.setBulkSize(new ByteSizeValue(10, ByteSizeUnit.MB))
-        		.build();
-        URL settingsURL = null;
-        if( System.getProperty(PROP_SETTINGS_URL)!=null) {
-            settingsURL = new URL(System.getProperty(PROP_SETTINGS_URL));
+        logger.info("Elastic search connection starting ... " + hosts
+                + (StringUtil.isEmpty(clusterName) ? "" : " cluster " + clusterName));
+        client = ESConnector.connect(clusterName, hosts);
+        bulkProcessor = BulkProcessor.builder(client, this).setBulkActions(10000)
+                .setFlushInterval(TimeValue.timeValueSeconds(10)) // 最大十秒刷新
+                .setConcurrentRequests(MAX_CONCURRENT_REQUESTS) // 并行多请求
+                .setBulkSize(new ByteSizeValue(10, ByteSizeUnit.MB)).build();
+    }
+
+    @PreDestroy
+    public void destroy() {
+        if (client != null) {
+            client.close();
         }
-        
-	}
-	
-	@Override
-	public int getConnectedNodeCount() {
-		return 0;
-	}
+    }
 
-	@Override
-	public boolean canConsumeEvent() {
-		return false;
-	}
+    @Override
+    public int getConnectedNodeCount() {
+        if (client != null) {
+            return client.connectedNodes().size();
+        }
+        return 0;
+    }
 
-	@Override
-	public void afterBulk(long arg0, BulkRequest arg1, BulkResponse arg2) {
-		
-	}
+    @Override
+    public String getNodesInfo() throws Exception {
+        if (client == null) {
+            return null;
+        }
+        NodesInfoRequest nodesInfoReq = new NodesInfoRequest();
+        nodesInfoReq.clear().settings(true);
+        NodesInfoResponse response = client.admin().cluster().nodesInfo(nodesInfoReq).get();
+        return response.toString();
+    }
 
-	@Override
-	public void afterBulk(long arg0, BulkRequest arg1, Throwable arg2) {
-		
-	}
+    @Override
+    public void afterBulk(long arg0, BulkRequest arg1, BulkResponse arg2) {
 
-	@Override
-	public void beforeBulk(long arg0, BulkRequest arg1) {
-		
-	}
+    }
 
-	@Override
-	public void consume(Event event) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void afterBulk(long arg0, BulkRequest arg1, Throwable arg2) {
 
-	@Override
-	public void consume(Collection<Event> events) {
-		// TODO Auto-generated method stub
-		
-	}
+    }
+
+    @Override
+    public void beforeBulk(long arg0, BulkRequest arg1) {
+
+    }
+
+    @Override
+    public void consume(Event event) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void consume(Collection<Event> events) {
+        // TODO Auto-generated method stub
+
+    }
 
 }

@@ -67,195 +67,219 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 @EnableScheduling
 @EnableTransactionManagement
 @EnableLoadTimeWeaving
-@EnableJpaRepositories(basePackages= {"caimi.web.repository.entity"})
+@EnableJpaRepositories(basePackages = { "caimi.web.repository.entity" })
 @EnableAsync
 @ServletComponentScan
-@ComponentScan(value = { "caimi.web.service" })
-//@EnableAspectJAutoProxy(proxyTargetClass = true)
-public class CaimiConfiguration implements WebMvcConfigurer, SchedulingConfigurer, AsyncConfigurer, AsyncUncaughtExceptionHandler{
-	
-	private static final Logger logger = LoggerFactory.getLogger(CaimiConfiguration.class);
+@ComponentScan(value = { "com.caimi.api.v1", "caimi.web.service", "com.caimi.service.elasticsearch" })
+// @EnableAspectJAutoProxy(proxyTargetClass = true)
+public class CaimiConfiguration
+        implements WebMvcConfigurer, SchedulingConfigurer, AsyncConfigurer, AsyncUncaughtExceptionHandler {
 
-	private ScheduledThreadPoolExecutor taskScheduler;
-	private ThreadPoolExecutor asyncExecutor;
-	private SequentialThreadedProcessorImpl threadedProcessor;
+    private static final Logger logger = LoggerFactory.getLogger(CaimiConfiguration.class);
 
-	public CaimiConfiguration() {
-		creatThreadPools();
-	}
+    private ScheduledThreadPoolExecutor taskScheduler;
+    private ThreadPoolExecutor asyncExecutor;
+    private SequentialThreadedProcessorImpl threadedProcessor;
 
-	// ---------------------------Beans----------------------------------
+    public CaimiConfiguration() {
+        creatThreadPools();
+    }
 
-	@Bean
-	public JettyEmbeddedServletContainerFactory jettyEmbeddedServletContainerFactory() {
-		JettyEmbeddedServletContainerFactory jettyContainer = new JettyEmbeddedServletContainerFactory();
-		jettyContainer.setPort(10081);
-		jettyContainer.setSelectors(2);
-		jettyContainer.setAcceptors(1);
-		jettyContainer.setThreadPool(new ExecutorThreadPool(executorService()));
-		return jettyContainer;
-	}
+    // ---------------------------Beans----------------------------------
 
-	@Bean(name = "dataSource")
-	public DataSource dataSource() throws Exception {
-		ComboPooledDataSource ds = new ComboPooledDataSource();
-		ds.setDriverClass("com.mysql.cj.jdbc.Driver");
-		ds.setJdbcUrl("jdbc:mysql://127.0.0.1:3306/caimi?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=GMT%2b08%3a00");
-		ds.setUser("root");
-		ds.setPassword("Admin@123");
-		ds.setMinPoolSize(3);
-		ds.setMaxPoolSize(10);
+    @Bean
+    public JettyEmbeddedServletContainerFactory jettyEmbeddedServletContainerFactory() {
+        JettyEmbeddedServletContainerFactory jettyContainer = new JettyEmbeddedServletContainerFactory();
+        jettyContainer.setPort(10080);
+        jettyContainer.setSelectors(2);
+        jettyContainer.setAcceptors(1);
+        jettyContainer.setThreadPool(new ExecutorThreadPool(executorService()));
+        return jettyContainer;
+    }
+
+    @Bean(name = "dataSource")
+    public DataSource dataSource() throws Exception {
+        ComboPooledDataSource ds = new ComboPooledDataSource();
+        ds.setDriverClass("com.mysql.cj.jdbc.Driver");
+        ds.setJdbcUrl(
+                "jdbc:mysql://127.0.0.1:3306/caimi?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=GMT%2b08%3a00");
+        ds.setUser("root");
+        ds.setPassword("Admin@123");
+        ds.setMinPoolSize(3);
+        ds.setMaxPoolSize(10);
         ds.setMaxIdleTime(120);
         return ds;
-	}
+    }
 
-	@Bean
-	public LocalContainerEntityManagerFactoryBean entityManagerFactory() throws Exception {
-		LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
-		em.setDataSource(dataSource());
-		em.setPackagesToScan(new String[] { "caimi.web.repository.entity" });
+    @Bean
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory() throws Exception {
+        LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+        em.setDataSource(dataSource());
+        em.setPackagesToScan(new String[] { "caimi.web.repository.entity" });
 
-		JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-		em.setJpaVendorAdapter(vendorAdapter);
+        JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+        em.setJpaVendorAdapter(vendorAdapter);
 
-		Properties properties = new Properties();
-		properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
-		properties.setProperty("hibernate.default_schema", "caimi");
-		properties.setProperty("hibernate.connection.autoReconnect", "true");
+        Properties properties = new Properties();
+        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
+        properties.setProperty("hibernate.default_schema", "caimi");
+        properties.setProperty("hibernate.connection.autoReconnect", "true");
 
-		String value = System.getProperty("hibernate.show_sql", "false");
-		properties.setProperty("hibernate.show_sql", value);
-		em.setJpaProperties(properties);
+        String value = System.getProperty("hibernate.show_sql", "false");
+        properties.setProperty("hibernate.show_sql", value);
+        em.setJpaProperties(properties);
 
-		return em;
-	}
-	
-	@Bean(name = "transactionManager")
-	public PlatformTransactionManager getTransactionManager(EntityManagerFactory emf) throws Exception {
-		JpaTransactionManager transactionManager = new JpaTransactionManager(emf);
-		return transactionManager;
-	}
+        return em;
+    }
 
-	@Bean
-	public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
-		return new PersistenceExceptionTranslationPostProcessor();
-	}
+    @Bean(name = "transactionManager")
+    public PlatformTransactionManager getTransactionManager(EntityManagerFactory emf) throws Exception {
+        JpaTransactionManager transactionManager = new JpaTransactionManager(emf);
+        return transactionManager;
+    }
 
-	@Bean
-	public java.util.concurrent.ScheduledThreadPoolExecutor scheduledExecutorService() {
-		return taskScheduler;
-	}
+    @Bean
+    public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
+        return new PersistenceExceptionTranslationPostProcessor();
+    }
 
-	@Primary
-	@Bean
-	public java.util.concurrent.ExecutorService executorService() {
-		return asyncExecutor;
-	}
+    @Bean
+    public java.util.concurrent.ScheduledThreadPoolExecutor scheduledExecutorService() {
+        return taskScheduler;
+    }
 
-	@Bean
-	public SequentialThreadedProcessor threadedProcessor() {
-		return threadedProcessor;
-	}
+    @Primary
+    @Bean
+    public java.util.concurrent.ExecutorService executorService() {
+        return asyncExecutor;
+    }
 
-	private void creatThreadPools() {
-		taskScheduler = new ScheduledThreadPoolExecutor(5, new DefaultThreadFactory("scheduler"));
-		asyncExecutor = new ThreadPoolExecutor(1000, Integer.MAX_VALUE, 60, TimeUnit.SECONDS,
-				new LinkedBlockingQueue<Runnable>(), new DefaultThreadFactory("async"));
-		asyncExecutor.allowCoreThreadTimeOut(true);
-	}
+    @Bean
+    public SequentialThreadedProcessor threadedProcessor() {
+        return threadedProcessor;
+    }
 
-	// --------------------------WebMvc Configuration----------------------------
-	
-	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-		// ��Ϣת����
-		// http
-		@SuppressWarnings("rawtypes")
-		HttpMessageConverter converter = new StringHttpMessageConverter();
-		converters.add(converter);
-		logger.info("HttpMessageCoverter added");
-		// string
-		converter = new FormHttpMessageConverter();
-		converters.add(converter);
-		logger.info("FormHttpMessageConverter added");
-		// json
-		converter = new GsonHttpMessageConverter();
-		converters.add(converter);
-		logger.info("GsonHttpMessageConverter added");
-	}
+    private void creatThreadPools() {
+        taskScheduler = new ScheduledThreadPoolExecutor(5, new DefaultThreadFactory("scheduler"));
+        asyncExecutor = new ThreadPoolExecutor(1000, Integer.MAX_VALUE, 60, TimeUnit.SECONDS,
+                new LinkedBlockingQueue<Runnable>(), new DefaultThreadFactory("async"));
+        asyncExecutor.allowCoreThreadTimeOut(true);
+    }
 
-	//-----------------------------SchedulingConfigurer---------------------------
-	
-	public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
-		taskRegistrar.setScheduler(taskScheduler);
-	}
-	
-	//-------------------------------AsyncConfigurer-------------------------------
+    // --------------------------WebMvc Configuration----------------------------
 
-	public void handleUncaughtException(Throwable ex, Method method, Object... params) {
-		logger.error("Async invocation on "+method+" "+Arrays.asList(params)+"failed: "+ex.toString(), ex);
-	}
+    @Override
+    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+        // ��Ϣת����
+        // http
+        @SuppressWarnings("rawtypes")
+        HttpMessageConverter converter = new StringHttpMessageConverter();
+        converters.add(converter);
+        logger.info("HttpMessageCoverter added");
+        // string
+        converter = new FormHttpMessageConverter();
+        converters.add(converter);
+        logger.info("FormHttpMessageConverter added");
+        // json
+        converter = new GsonHttpMessageConverter();
+        converters.add(converter);
+        logger.info("GsonHttpMessageConverter added");
+    }
 
-	public Executor getAsyncExecutor() {
-		return asyncExecutor;
-	}
+    // -----------------------------SchedulingConfigurer---------------------------
 
-	public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {
-		return this;
-	}
-	
-	// ---------------------------Not Implement Method------------------------------
-	
-	public void configurePathMatch(PathMatchConfigurer configurer) {
-	}
+    @Override
+    public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
+        taskRegistrar.setScheduler(taskScheduler);
+    }
 
-	public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
-	}
+    // -------------------------------AsyncConfigurer-------------------------------
 
-	public void configureAsyncSupport(AsyncSupportConfigurer configurer) {
-	}
+    @Override
+    public void handleUncaughtException(Throwable ex, Method method, Object... params) {
+        logger.error("Async invocation on " + method + " " + Arrays.asList(params) + "failed: " + ex.toString(), ex);
+    }
 
-	public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
-	}
+    @Override
+    public Executor getAsyncExecutor() {
+        return asyncExecutor;
+    }
 
-	public void addFormatters(FormatterRegistry registry) {
-	}
+    @Override
+    public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {
+        return this;
+    }
 
-	public void addInterceptors(InterceptorRegistry registry) {
-	}
+    // ---------------------------Not Implement Method------------------------------
 
-	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-	}
+    @Override
+    public void configurePathMatch(PathMatchConfigurer configurer) {
+    }
 
-	public void addCorsMappings(CorsRegistry registry) {
-	}
+    @Override
+    public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
+    }
 
-	public void addViewControllers(ViewControllerRegistry registry) {
-	}
+    @Override
+    public void configureAsyncSupport(AsyncSupportConfigurer configurer) {
+    }
 
-	public void configureViewResolvers(ViewResolverRegistry registry) {
-	}
+    @Override
+    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
+    }
 
-	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-	}
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+    }
 
-	public void addReturnValueHandlers(List<HandlerMethodReturnValueHandler> returnValueHandlers) {
-	}
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+    }
 
-	public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
-	}
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+    }
 
-	public void configureHandlerExceptionResolvers(List<HandlerExceptionResolver> exceptionResolvers) {
-	}
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+    }
 
-	public void extendHandlerExceptionResolvers(List<HandlerExceptionResolver> exceptionResolvers) {
-	}
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+    }
 
-	public Validator getValidator() {
-		return null;
-	}
+    @Override
+    public void configureViewResolvers(ViewResolverRegistry registry) {
+    }
 
-	public MessageCodesResolver getMessageCodesResolver() {
-		return null;
-	}
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+    }
+
+    @Override
+    public void addReturnValueHandlers(List<HandlerMethodReturnValueHandler> returnValueHandlers) {
+    }
+
+    @Override
+    public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
+    }
+
+    @Override
+    public void configureHandlerExceptionResolvers(List<HandlerExceptionResolver> exceptionResolvers) {
+    }
+
+    @Override
+    public void extendHandlerExceptionResolvers(List<HandlerExceptionResolver> exceptionResolvers) {
+    }
+
+    @Override
+    public Validator getValidator() {
+        return null;
+    }
+
+    @Override
+    public MessageCodesResolver getMessageCodesResolver() {
+        return null;
+    }
 
 }

@@ -14,63 +14,58 @@ import com.caimi.service.repository.entity.cache.UserEntity;
 
 @RestController
 public class LoginRegController {
-	
-	private static final Logger logger = LoggerFactory.getLogger(LoginRegController.class);
 
-	private static final String URL_PREFIX = RestControllerConstants.URL_AUTH;
-	
-	@Autowired
-	private UserService userService;
-	
-	@RequestMapping("/login_error")
-	public RespBean loginError() {
-		return new RespBean("error","login failed!");
-	}
-	
-	@RequestMapping("/login_success")
-	public RespBean loginSuccesss() {
-		return new RespBean("success","welcome to caimi!!");
-	}
-	
-	@RequestMapping("/login_page")
-	public RespBean loginPage() {
-		return new RespBean("error","need to regist or login!");
-	}
-	
-	/*
-	 * regist user
-	 */
-	@RequestMapping(path=URL_PREFIX+"/regist")
-	public RespBean regist(UserEntity user) {
-		int result = userService.regist(user);
-		if(result == 0) {
-			//success
-			return new RespBean("success","welcome to caimi!");
-		}else if (result == 1) {
-			return new RespBean("error","change your username!");
-		}else {
-			return new RespBean("error","need to regist or login!");
-		}
-	}
-	
-	//login
-	@RequestMapping(path=URL_PREFIX+"/save",
-            method=RequestMethod.POST,
-            consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
-            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public RespBean login(UserEntity user) {
-		int result = userService.login(user);
-		if(result == 0) {
-			//success
-			return new RespBean("success","welcome to caimi!");
-		}else if (result == 1) {
-			return new RespBean("error","change your username!");
-		}else {
-			return new RespBean("error","need to regist or login!");
-		}
-	}
-	
-	
-	
+    private static final Logger logger = LoggerFactory.getLogger(LoginRegController.class);
+
+    private static final String URL_PREFIX = RestControllerConstants.URI_AUTH;
+
+    @Autowired
+    private UserService userService;
+
+    @RequestMapping("/login_error")
+    public RespBean loginError() {
+        return new RespBean("error", "login failed!");
+    }
+
+    @RequestMapping("/login_success")
+    public RespBean loginSuccesss() {
+        return new RespBean("success", "welcome to caimi!!");
+    }
+
+    @RequestMapping("/login_page")
+    public RespBean loginPage() {
+        return new RespBean("error", "need to regist or login!");
+    }
+
+    /*
+     * regist user
+     */
+    @RequestMapping(path = URL_PREFIX + "/regist")
+    public RespBean regist(UserEntity user) {
+        int result = userService.regist(user);
+        if (result == 0) {
+            // success
+            return new RespBean("success", "welcome to caimi!");
+        } else if (result == 1) {
+            return new RespBean("error", "change your username!");
+        } else {
+            return new RespBean("error", "need to regist or login!");
+        }
+    }
+
+    // login
+    @RequestMapping(path = URL_PREFIX
+            + "/save", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public RespBean login(UserEntity user) {
+        int result = userService.login(user);
+        if (result == 0) {
+            // success
+            return new RespBean("success", "welcome to caimi!");
+        } else if (result == 1) {
+            return new RespBean("error", "change your username!");
+        } else {
+            return new RespBean("error", "need to regist or login!");
+        }
+    }
 
 }
