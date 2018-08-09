@@ -23,7 +23,6 @@ public class ElasticSearchController {
     @RequestMapping(path = URL_PREFIX
             + "/nodes", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public String getNodes() throws Exception {
-        logger.info("dispatcher end and run here");
         return esService.getNodesInfo();
     }
 

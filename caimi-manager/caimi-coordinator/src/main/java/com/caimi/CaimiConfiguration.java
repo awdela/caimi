@@ -1,4 +1,4 @@
-package com.caimi.service.conf;
+package com.caimi;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -69,7 +69,7 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 @EnableLoadTimeWeaving
 @EnableJpaRepositories(basePackages = { "caimi.web.repository.entity" })
 @EnableAsync
-@ServletComponentScan
+@ServletComponentScan(value = { "com.caimi.api.v1" })
 @ComponentScan(value = { "com.caimi.api.v1", "caimi.web.service", "com.caimi.service.elasticsearch" })
 // @EnableAspectJAutoProxy(proxyTargetClass = true)
 public class CaimiConfiguration
