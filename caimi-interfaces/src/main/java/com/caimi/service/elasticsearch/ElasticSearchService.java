@@ -1,5 +1,9 @@
 package com.caimi.service.elasticsearch;
 
+import java.io.IOException;
+
+import org.json.JSONObject;
+
 import com.caimi.service.event.EventConsumer;
 
 /**
@@ -21,11 +25,19 @@ public interface ElasticSearchService extends EventConsumer {
     /**
      * ES 连接节点数
      */
-    public int getConnectedNodeCount();
+    int getConnectedNodeCount();
 
     /**
      * 返回节点配置信息
      */
-    public String getNodesInfo() throws Exception;
+    String getNodesInfo() throws Exception;
+
+    void creat(JSONObject json) throws IOException;
+
+    public long delete(JSONObject json);
+
+    public long update(JSONObject json) throws Exception;
+
+    public String search(JSONObject json);
 
 }

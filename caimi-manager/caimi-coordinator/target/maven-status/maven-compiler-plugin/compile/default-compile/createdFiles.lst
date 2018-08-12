@@ -6,4 +6,3 @@ com\caimi\api\v1\LoginRegController.class
 com\caimi\api\v1\LoginTestController.class
 com\caimi\Application$1.class
 com\caimi\service\beans\RespBean.class
-com\caimi\WebSecurityConfig.class

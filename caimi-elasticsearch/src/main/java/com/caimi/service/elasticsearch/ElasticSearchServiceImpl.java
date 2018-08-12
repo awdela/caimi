@@ -60,9 +60,10 @@ public class ElasticSearchServiceImpl implements ElasticSearchService, Listener 
      *
      * @throws IOException
      */
-    public void creat(JSONObject json, String content) throws IOException {
+    @Override
+    public void creat(JSONObject json) throws IOException {
         XContentBuilder source = XContentFactory.jsonBuilder().startObject().field("user", "caimi")
-                .field("date", new Date()).field("message", content).endArray();
+                .field("date", new Date()).field("message", json.getString("content")).endObject();
         IndexResponse response = client
                 .prepareIndex(json.getString("index"), json.getString("type"), json.getString("id")).setSource(source)
                 .get();
@@ -70,6 +71,7 @@ public class ElasticSearchServiceImpl implements ElasticSearchService, Listener 
                 "creat index: " + response.getIndex() + " type: " + response.getType() + " id: " + response.getId());
     }
 
+    @Override
     public long delete(JSONObject json) {
         DeleteResponse response = client
                 .prepareDelete(json.getString("index"), json.getString("type"), json.getString("id")).get();
@@ -77,6 +79,7 @@ public class ElasticSearchServiceImpl implements ElasticSearchService, Listener 
         return version;
     }
 
+    @Override
     public long update(JSONObject json) throws Exception {
         String index = json.getString("index");
         String type = json.getString("type");
@@ -87,6 +90,7 @@ public class ElasticSearchServiceImpl implements ElasticSearchService, Listener 
         return response.getVersion();
     }
 
+    @Override
     public String search(JSONObject json) {
         GetResponse response = client.prepareGet(json.getString("index"), json.getString("type"), json.getString("id"))
                 .setOperationThreaded(false)// 线程安全
