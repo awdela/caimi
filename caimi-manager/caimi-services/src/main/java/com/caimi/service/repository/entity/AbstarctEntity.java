@@ -7,34 +7,38 @@ import javax.persistence.Transient;
 import com.caimi.service.BORepository;
 import com.caimi.service.repository.BOEntity;
 
-public abstract class AbstarctEntity implements BOEntity{
+/**
+ * 该抽象类为了给ignite使用
+ */
+public abstract class AbstarctEntity implements BOEntity {
 
-	@Transient
-	protected BORepository repository;
-	
-	public AbstarctEntity() {
-		
-	}
-	
-	public AbstarctEntity(BORepository repository) {
-		this.repository = repository;
-	}
+    @Transient
+    protected BORepository repository;
 
-	@Override
-	@Transient
-	public abstract String getIdAsString();
+    public AbstarctEntity() {
 
-	@Override
-	public BORepository getRepository() {
-		return repository;
-	}
+    }
 
-	public void setRepository(BORepository repository) {
-		this.repository = repository;
-	}
-	
-	public abstract void setId(Serializable id);
+    public AbstarctEntity(BORepository repository) {
+        this.repository = repository;
+    }
 
-	public void onRemove() {};
-	
+    @Override
+    @Transient
+    public abstract String getIdAsString();
+
+    @Override
+    public BORepository getRepository() {
+        return repository;
+    }
+
+    public void setRepository(BORepository repository) {
+        this.repository = repository;
+    }
+
+    public abstract void setId(Serializable id);
+
+    public void onRemove() {
+    };
+
 }
