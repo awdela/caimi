@@ -3,8 +3,8 @@ package com.caimi.service.dao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.caimi.service.BORepository;
 import com.caimi.service.repository.BOEntity;
+import com.caimi.service.repository.BORepository;
 import com.caimi.service.repository.entity.AbstractBusinessEntity;
 import com.caimi.service.repository.entity.Role;
 import com.caimi.service.repository.entity.User;

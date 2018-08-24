@@ -8,7 +8,7 @@ import org.hibernate.SessionFactory;
 /**
  * 基於Hibernate的BORepository
  */
-public class HibernateBORepository implements BOEntityAccessor {
+public class HibernateBORepository extends AbstractBORepository implements BOEntityAccessor {
 
     private SessionFactory factory;
     private BOCacheContainer container;

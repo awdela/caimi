@@ -1,8 +1,11 @@
 package com.caimi.service.repository;
 
 import java.lang.reflect.Field;
+import java.net.URL;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executor;
@@ -11,14 +14,18 @@ import java.util.concurrent.locks.Lock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.caimi.service.BORepository;
 import com.caimi.service.beans.BeansContainer;
 
-@SuppressWarnings("rawtypes") 
+@SuppressWarnings("rawtypes")
 public class AbstractBORepository implements BORepository, BOCacheContainer{
 
 	private static final Logger logger = LoggerFactory.getLogger(AbstractBORepository.class);
-	
+
+    protected final Map<Class, EntityInfo> entityInfos = new HashMap<>();
+
+    /**
+     * 对每一个实体类的操作进行封装 后续通过类名在map中直接查找
+     */
 	protected static class EntityInfo{
 //		public Class[] interfacesClasses;
 //		public Class idType;
@@ -27,12 +34,13 @@ public class AbstractBORepository implements BORepository, BOCacheContainer{
 		public Class<? extends AbstractEntity> entityClass;
 		public BOCacheKeeper cahceKeeper;
 		public BOEntityAccessor accessor;
+        List<BORepositoryChangeListener> changeListeners = new ArrayList<>();
 		private Instant lastUpdateTime;
-		
+
 		EntityInfo(){
 			lastUpdateTime = Instant.now();
 		}
-		
+
 		public Object getEntityId(Object entityInstance) {
 			try {
 				return idField.get(entityInstance);
@@ -41,29 +49,35 @@ public class AbstractBORepository implements BORepository, BOCacheContainer{
 			}
 			return null;
 		}
-		
+
 		public void touchLastUpdateTime(){
             lastUpdateTime = Instant.now();
         }
-		
+
 	}
-	
+
 	private BeansContainer beansContainer;
 	private Executor executor;
-	
+
 	public void setBeansContainer(BeansContainer beansContainer) {
 		this.beansContainer = beansContainer;
 	}
-	
+
 	public void setExecutor(Executor asyncExecutor) {
 		this.executor = asyncExecutor;
 	}
-	
+
 	protected void init() {
-		
+        // 初始化所有的实体类,并将所有实体类放入entityInfos中
+        initEntityClasses();
 	}
-	
-	@Override
+
+    private void initEntityClasses() {
+        Map<URL, ClassLoader> entityURLS = new HashMap<>();
+
+    }
+
+    @Override
 	public <T> T getBean(Class<T> clazz) {
 		return null;
 	}
@@ -122,12 +136,12 @@ public class AbstractBORepository implements BORepository, BOCacheContainer{
 
 	@Override
 	public void saveAll(List<Object> entities) {
-		
+
 	}
 
 	@Override
 	public void remove(Object entity) {
-		
+        // publishChangeEvent(BORepositoryChangeListener.Operation.Remove, );
 	}
 
 	@Override
@@ -142,22 +156,27 @@ public class AbstractBORepository implements BORepository, BOCacheContainer{
 
 	@Override
 	public void beginTransaction(boolean readOnly) {
-		
+
 	}
 
 	@Override
 	public void endTransaction(boolean commit) {
-		
+
 	}
 
 	@Override
 	public void asyncUpdate(Runnable asyncTask) {
-		
+
 	}
 
 	@Override
 	public <T> List<T> reloadAll(Class<T> boClass, List<Object> boIds) {
 		return null;
 	}
+
+    @Override
+    public <T> void registerChangeListener(Class<T> boClass, BORepositoryChangeListener<T> listener) {
+
+    }
 
 }

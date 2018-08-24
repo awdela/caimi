@@ -19,11 +19,11 @@ import org.apache.ignite.cache.query.SqlQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.caimi.service.BORepository;
 import com.caimi.service.cluster.IgniteClusterMgr;
 import com.caimi.service.repository.AbstractEntity;
 import com.caimi.service.repository.BOCacheContainer;
 import com.caimi.service.repository.BOCacheKeeper;
+import com.caimi.service.repository.BORepository;
 import com.caimi.util.StringUtil;
 import com.caimi.util.SystemUtil;
 

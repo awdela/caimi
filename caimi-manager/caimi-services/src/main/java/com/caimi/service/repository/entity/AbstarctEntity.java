@@ -4,8 +4,8 @@ import java.io.Serializable;
 
 import javax.persistence.Transient;
 
-import com.caimi.service.BORepository;
 import com.caimi.service.repository.BOEntity;
+import com.caimi.service.repository.BORepository;
 
 /**
  * 该抽象类为了给ignite使用

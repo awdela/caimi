@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import javax.persistence.Transient;
 
-import com.caimi.service.BORepository;
 import com.caimi.service.repository.BOEntity;
 
 public abstract class AbstractEntity implements BOEntity{

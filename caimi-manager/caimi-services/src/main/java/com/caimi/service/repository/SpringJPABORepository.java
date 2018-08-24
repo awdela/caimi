@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
-import com.caimi.service.BORepository;
 import com.caimi.service.beans.BeansContainer;
 
 @Service
@@ -17,14 +16,15 @@ public class SpringJPABORepository extends AbstractBORepository implements BORep
 
 	@Autowired
 	private ApplicationContext appContext;
+
 	private Executor asyncExecutor;
-	
+
 	@Override
 	public void init(BOCacheContainer container) {
 		setBeansContainer(appContext.getBean(BeansContainer.class));
 		setExecutor(asyncExecutor);
 	}
-	
+
 	@Override
 	public BOEntityAccessor getAccessor(Class entityClass) {
 		return null;
@@ -57,17 +57,17 @@ public class SpringJPABORepository extends AbstractBORepository implements BORep
 
 	@Override
 	public void save(Object entity) {
-		
+
 	}
 
 	@Override
 	public void saveAll(List<Object> entities) {
-		
+
 	}
 
 	@Override
 	public void remove(Object entity) {
-		
+
 	}
 
 	@Override
@@ -82,17 +82,17 @@ public class SpringJPABORepository extends AbstractBORepository implements BORep
 
 	@Override
 	public void beginTransaction(boolean readOnly) {
-		
+
 	}
 
 	@Override
 	public void endTransaction(boolean commit) {
-		
+
 	}
 
 	@Override
 	public void asyncUpdate(Runnable asyncTask) {
-		
+
 	}
 
 	@Override

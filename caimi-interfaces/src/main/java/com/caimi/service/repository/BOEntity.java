@@ -1,7 +1,5 @@
 package com.caimi.service.repository;
 
-import com.caimi.service.BORepository;
-
 /**
  * 该接口是为了给ignite使用
  */

@@ -1,6 +1,5 @@
 package com.caimi.service.repository;
 
-import com.caimi.service.BORepository;
 import com.caimi.service.beans.BeansContainer;
 
 @SuppressWarnings("rawtypes") 
