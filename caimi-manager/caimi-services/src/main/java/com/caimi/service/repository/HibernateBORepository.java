@@ -62,4 +62,16 @@ public class HibernateBORepository extends AbstractBORepository implements BOEnt
         return 0;
     }
 
+    @Override
+    public BOEntityAccessor getAccessor(Class entityClass) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    protected BOEntityAccessor getDefaultEntityAccessor() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }

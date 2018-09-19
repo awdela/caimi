@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.locks.Lock;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
@@ -20,23 +22,24 @@ public class SpringJPABORepository extends AbstractBORepository implements BORep
 	private Executor asyncExecutor;
 
 	@Override
+    @PostConstruct
+    protected void init() {
+        super.init();
+    }
+
+    @Override
 	public void init(BOCacheContainer container) {
 		setBeansContainer(appContext.getBean(BeansContainer.class));
 		setExecutor(asyncExecutor);
 	}
 
-	@Override
-	public BOEntityAccessor getAccessor(Class entityClass) {
-		return null;
-	}
+    @Override
+    protected BOEntityAccessor getDefaultEntityAccessor() {
+        return this;
+    }
 
 	@Override
 	public <T> BOCacheKeeper<T> getCacheKeeper(Class<T> boClass) {
-		return null;
-	}
-
-	@Override
-	public Collection<Class> getBOClass() {
 		return null;
 	}
 
@@ -139,5 +142,10 @@ public class SpringJPABORepository extends AbstractBORepository implements BORep
 	public int removeAllEntites(Collection entityInstances) {
 		return 0;
 	}
+
+    @Override
+    public BOEntityAccessor getAccessor(Class entityClass) {
+        return null;
+    }
 
 }

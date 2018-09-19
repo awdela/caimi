@@ -16,11 +16,11 @@ public interface BORepository {
     /**
      * for hibernate
      */
-    public BOEntityAccessor getAccessor(Class entityClass);
+    // public BOEntityAccessor getAccessor(Class entityClass);
 
     public <T> BOCacheKeeper<T> getCacheKeeper(Class<T> boClass);
 
-    public Collection<Class> getBOClass();
+    public Collection<Class> getBOClasses();
 
     /**
      * 根据ID前缀返回Entity class, 需要在配置文件中指定idPrefix行
@@ -32,7 +32,22 @@ public interface BORepository {
      */
     public Lock getLock(Class boClass);
 
+    /**
+     * Get BO id by key <BR>
+     * 只从CacheKeeper获取
+     */
+    public <T> T getBy(Class<T> boClass, int key, Object keyId);
+
+    /**
+     * <BR>
+     * 只从CacheKeeper获取
+     */
     public <T> Object getIdBy(Class<T> boClass, int key, Object keyId);
+
+    /**
+     * get BO instance by id
+     */
+    public <T> T get(Class<T> boClass, Object keyId);
 
     public void save(Object entity);
 
@@ -63,5 +78,7 @@ public interface BORepository {
      * 重新加载数据，并发送Change Event，通知对应的Listener(利用观察者模式)
      */
     public <T> void registerChangeListener(Class<T> boClass, BORepositoryChangeListener<T> listener);
+
+    public <T> void deregisterChangeListener(Class<T> boClass, BORepositoryChangeListener<T> listener);
 
 }

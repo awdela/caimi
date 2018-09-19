@@ -1,4 +1,4 @@
-package com.caimi.service.cahce;
+package com.caimi.service.cache;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ import org.apache.ignite.cache.CacheAtomicityMode;
 import org.apache.ignite.cache.CacheMode;
 import org.apache.ignite.configuration.CacheConfiguration;
 
-import com.caimi.service.repository.entity.cache.UserEntity;
+import com.caimi.service.repository.entity.UserEntity;
 
 public class UserCacheKeeper extends IgniteBusinessEntityCacheKeeper<UserEntity>{
 

@@ -8,7 +8,7 @@ import com.caimi.service.repository.BORepository;
 import com.caimi.service.repository.entity.AbstractBusinessEntity;
 import com.caimi.service.repository.entity.Role;
 import com.caimi.service.repository.entity.User;
-import com.caimi.service.repository.entity.cache.UserEntity;
+import com.caimi.service.repository.entity.UserEntity;
 
 @Service
 public class UserDaoImpl implements UserDao{

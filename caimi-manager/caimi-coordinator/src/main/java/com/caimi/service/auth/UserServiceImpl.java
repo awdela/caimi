@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.caimi.service.dao.UserDao;
 import com.caimi.service.repository.entity.Role;
 import com.caimi.service.repository.entity.User;
-import com.caimi.service.repository.entity.cache.UserEntity;
+import com.caimi.service.repository.entity.UserEntity;
 import com.caimi.util.StringUtil;
 
 @Service

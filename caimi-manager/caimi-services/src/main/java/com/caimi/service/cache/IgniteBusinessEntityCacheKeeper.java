@@ -1,4 +1,4 @@
-package com.caimi.service.cahce;
+package com.caimi.service.cache;
 
 import java.util.List;
 
@@ -43,7 +43,7 @@ public abstract class IgniteBusinessEntityCacheKeeper<T extends AbstractBusiness
 
 	@Override
 	protected Object getId0(int key, Object keyId) {
-		AbstractBusinessEntity result = get(key, keyId);
+        AbstractBusinessEntity result = get(keyId);
 		if (result != null) {
 			return result;
 		}

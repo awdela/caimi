@@ -1,4 +1,4 @@
-package com.caimi.service.repository.entity.cache;
+package com.caimi.service.repository.entity;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,7 +20,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.caimi.service.repository.entity.AbstractBusinessEntity;
 import com.caimi.service.repository.entity.Role;
 import com.caimi.service.repository.entity.User;
 import com.caimi.util.StringUtil;

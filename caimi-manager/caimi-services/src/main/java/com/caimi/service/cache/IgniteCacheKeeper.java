@@ -1,4 +1,4 @@
-package com.caimi.service.cahce;
+package com.caimi.service.cache;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,37 +28,37 @@ import com.caimi.util.StringUtil;
 import com.caimi.util.SystemUtil;
 
 public abstract class IgniteCacheKeeper<T extends AbstractEntity> implements BOCacheKeeper<T>{
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(IgniteCacheKeeper.class);
-	
+
 	protected static final String INIT_LOCK_NAME = "caimi.repository.cache.initLock";
-	
+
 	protected BOCacheContainer container;
-	
+
 	protected BORepository repository;
-	
+
 	protected Class<T> mainCacheClass;
-	
+
 	protected IgniteClusterMgr clusterMgr;
-	
+
 	protected String keyCacheLoadNode;
-	
+
 	private String igniteLockName = null;
-	
+
 	private volatile IgniteLock igniteLock = null;
-	
+
 	protected abstract void initIgniteCache();
-	
+
 	protected abstract IgniteCache<Object, T> getMainCache();
-	
+
 	protected abstract T get0(int key, Object keyId);
-	
+
 	protected abstract Object getId0(int key, Object keyId);
-	
+
 	protected abstract void put0(T t);
 
 	protected abstract T remove0(Object boId);
-	
+
 	public IgniteCacheKeeper(Class<T> mainClasses, String keyCacheLoadNode, String igniteLockName) {
 		this.mainCacheClass = mainClasses;
 		this.keyCacheLoadNode = keyCacheLoadNode;
@@ -74,7 +74,7 @@ public abstract class IgniteCacheKeeper<T extends AbstractEntity> implements BOC
 		this.repository = container.getRepository();
 		clusterMgr = container.getBean(IgniteClusterMgr.class);
 		initAndLoadData();
-		return; 
+		return;
 	}
 
 	private void initAndLoadData() {
@@ -93,9 +93,9 @@ public abstract class IgniteCacheKeeper<T extends AbstractEntity> implements BOC
 		}finally {
 			lock.unlock();
 		}
-		
+
 	}
-	
+
 	private void cacheStateCheck() {
 		Cache<Object, T> mainCache = getMainCache();
 		boolean needInitCache = true;
@@ -111,13 +111,13 @@ public abstract class IgniteCacheKeeper<T extends AbstractEntity> implements BOC
 	}
 
 	@Override
-	public T get(int key, Object keyId) {
+    public T get(Object keyId) {
 		cacheStateCheck();
 		try{
-			return get0(key, keyId);
+            return get0(0, keyId);
 		}catch(java.lang.IllegalStateException ise) {
 			initAndLoadData();
-			return get0(key, keyId);
+            return get0(0, keyId);
 		}
 	}
 
@@ -210,7 +210,7 @@ public abstract class IgniteCacheKeeper<T extends AbstractEntity> implements BOC
 	protected void updateCacheLoadNodeName() {
 		Ignite ignite = clusterMgr.getIgnite();
 		IgniteCluster cluster = ignite.cluster();
-		
+
 		List<String> hostNames = new ArrayList<String>(cluster.localNode().hostNames());
 		String cacheLoadNodeName = hostNames.get(0);
 		for(String hostName: hostNames) {
@@ -222,7 +222,7 @@ public abstract class IgniteCacheKeeper<T extends AbstractEntity> implements BOC
 		}
 		clusterMgr.dput(keyCacheLoadNode, cacheLoadNodeName);
 	}
-	
+
 	@Override
 	public Lock getLock() {
 		if (igniteLock!=null) {
@@ -241,5 +241,5 @@ public abstract class IgniteCacheKeeper<T extends AbstractEntity> implements BOC
 		}
 		return igniteLock;
 	}
-	
+
 }
