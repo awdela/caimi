@@ -23,11 +23,12 @@ import com.caimi.service.cluster.IgniteClusterMgr;
 import com.caimi.service.repository.AbstractEntity;
 import com.caimi.service.repository.BOCacheContainer;
 import com.caimi.service.repository.BOCacheKeeper;
+import com.caimi.service.repository.BOCacheKeeperMetaData;
 import com.caimi.service.repository.BORepository;
 import com.caimi.util.StringUtil;
 import com.caimi.util.SystemUtil;
 
-public abstract class IgniteCacheKeeper<T extends AbstractEntity> implements BOCacheKeeper<T>{
+public abstract class IgniteCacheKeeper<T extends AbstractEntity> implements BOCacheKeeper<T>, BOCacheKeeperMetaData {
 
 	private static final Logger logger = LoggerFactory.getLogger(IgniteCacheKeeper.class);
 
@@ -241,5 +242,35 @@ public abstract class IgniteCacheKeeper<T extends AbstractEntity> implements BOC
 		}
 		return igniteLock;
 	}
+
+    @Override
+    public BOCacheKeeperMetaData getMetaData() {
+        return this;
+    }
+
+    @Override
+    public boolean supportsFullCache() {
+        return true;
+    }
+
+    @Override
+    public boolean supportsSearch() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsBOInstance() {
+        return true;
+    }
+
+    @Override
+    public boolean supportsReloadAll() {
+        return true;
+    }
+
+    @Override
+    public boolean supportsBOId() {
+        return true;
+    }
 
 }

@@ -13,11 +13,11 @@ import com.caimi.service.repository.entity.UserEntity;
 public class UserCacheKeeper extends IgniteBusinessEntityCacheKeeper<UserEntity>{
 
 	private static final String LOCK_NAME = "caimi.repository.user.lock";
-	
+
 	private static final String KEY_REPOSITORY_USER_CACHE_LOADNODE = "caimi.repository.user.cache.loadNode";
-	
+
 	private static final String KEY_REPOSITORY_USER_CACHE_BYID = "caimi.repository.user.cacheById";
-	
+
 	public UserCacheKeeper() {
 		super(UserEntity.class, KEY_REPOSITORY_USER_CACHE_LOADNODE, LOCK_NAME);
 	}
@@ -41,7 +41,7 @@ public class UserCacheKeeper extends IgniteBusinessEntityCacheKeeper<UserEntity>
 
 	@Override
 	public void destroy() {
-		
+
 	}
 
 	@Override
@@ -76,5 +76,6 @@ public class UserCacheKeeper extends IgniteBusinessEntityCacheKeeper<UserEntity>
 		UserEntity entity = users.getAndRemove(userId);
 		return entity;
 	}
+
 
 }

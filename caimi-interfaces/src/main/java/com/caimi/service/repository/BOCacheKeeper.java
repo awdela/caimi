@@ -10,6 +10,8 @@ public interface BOCacheKeeper<T> {
 
 	public static final int KEY_ID = BOEntity.KEY_ID;
 
+    public BOCacheKeeperMetaData getMetaData();
+
 	public void init(BOCacheContainer container);
 
 	public void destroy();

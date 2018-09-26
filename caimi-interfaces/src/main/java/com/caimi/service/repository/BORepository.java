@@ -55,12 +55,21 @@ public interface BORepository {
 
     public void remove(Object entity);
 
+    public void remove(Class boClass, Object boId);
+
+    public void removeAll(Class boClass, Collection<Object> boIds);
+
     public <T> List<T> search(Class<T> boClass, String searchExpr);
 
     /**
      * 返回查询指定字段(待实现)
      */
     public <T> List<Object[]> search(Class<T> boClass, String searchExpr, String[] fields);
+
+    /**
+     * 从缓存或数据库逐个遍历(待实现)
+     */
+    public <T> void traverse(Class<T> boClass, String searchExpr, BOEntityVisitor<T> visitor);
 
     public void beginTransaction(boolean readOnly);
 

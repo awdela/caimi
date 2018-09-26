@@ -269,6 +269,7 @@ public abstract class AbstractBORepository implements BORepository, BOCacheConta
         return result;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public <T> T get(Class<T> boClass, Object keyId) {
         EntityInfo entityInfo = getEntityInfo(boClass);
@@ -311,7 +312,7 @@ public abstract class AbstractBORepository implements BORepository, BOCacheConta
                 r.setRepository(this);
             }
             result = (T) r;
-        }else {
+        } else {
             result = (T) entityInfo.accessor.loadEntity(entityInfo.entityClass, keyId);
         }
         return result;
@@ -330,6 +331,7 @@ public abstract class AbstractBORepository implements BORepository, BOCacheConta
         return result;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void save(Object entity) {
         if (logger.isDebugEnabled()) {
@@ -349,44 +351,177 @@ public abstract class AbstractBORepository implements BORepository, BOCacheConta
                 Arrays.asList(new Object[] { boId }));
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void saveAll(List<Object> entities) {
-
+        if (logger.isDebugEnabled()) {
+            logger.debug("save : " + entities);
+        }
+        EntityInfo entityInfo = getEntityInfo(entities.get(0).getClass());
+        List<Object> entities0 = entityInfo.accessor.saveAllEntites(entities);
+        BOCacheKeeper cacheKeeper = entityInfo.cacheKeeper;
+        if (cacheKeeper != null) {
+            cacheKeeper.putAll(entities0);
+        }
+        List<Object> boIds = new ArrayList<>(entities.size());
+        for (Object boId : entities) {
+            boIds.add(boId);
+        }
+        publishChangeEvent(BORepositoryChangeListener.Operation.Update, entityInfo, boIds);
     }
 
     @Override
     public void remove(Object entity) {
+        if (logger.isDebugEnabled()) {
+            logger.debug("remove : " + entity);
+        }
+        EntityInfo entityInfo = getEntityInfo(entity.getClass());
+        Object boId = entityInfo.getEntityId(entity);
+        BOCacheKeeper cacheKeeper = entityInfo.cacheKeeper;
+        if (cacheKeeper != null) {
+            cacheKeeper.remove(boId);
+        }
+        try {
+            entity = entityInfo.accessor.removeEntity(entity);
+        } finally {
+            publishChangeEvent(BORepositoryChangeListener.Operation.Remove, entityInfo,
+                    Arrays.asList(new Object[] { boId }));
+        }
+    }
 
+    @Override
+    public void remove(Class boClass, Object boId) {
+        if (logger.isDebugEnabled()) {
+            logger.debug("remove : " + boClass.getName() + boId);
+        }
+        EntityInfo entityInfo = getEntityInfo(boClass);
+        BOCacheKeeper cacheKeeper = entityInfo.cacheKeeper;
+        Object entity = null;
+        if (cacheKeeper != null) {
+            entity = cacheKeeper.remove(boId);
+        }
+        try {
+            if (entity == null) {
+                entity = get(boClass, boId);
+            }
+            if (entity != null) {
+                entityInfo.accessor.removeEntity(entity);
+            }
+        } finally {
+            publishChangeEvent(BORepositoryChangeListener.Operation.Remove, entityInfo,
+                    Arrays.asList(new Object[] { boId }));
+        }
+    }
+
+    @Override
+    public void removeAll(Class boClass, Collection<Object> boIds) {
+        if (logger.isDebugEnabled()) {
+            logger.debug("remove : " + boClass.getName() + boIds);
+        }
+        EntityInfo entityInfo = getEntityInfo(boClass);
+        BOCacheKeeper cacheKeeper = entityInfo.cacheKeeper;
+        Object entity = null;
+        try {
+            for (Object boId : boIds) {
+                if (cacheKeeper != null) {
+                    entity = cacheKeeper.remove(boId);
+                }
+                if (entity == null) {
+                    entity = get(boClass, boId);
+                }
+                if (entity != null) {
+                    entityInfo.accessor.removeEntity(entity);
+                }
+            }
+        } finally {
+            publishChangeEvent(BORepositoryChangeListener.Operation.Remove, entityInfo, boIds);
+        }
     }
 
     @Override
     public <T> List<T> search(Class<T> boClass, String searchExpr) {
-        return null;
+        EntityInfo entityInfo = getEntityInfo(boClass);
+        BOCacheKeeper cacheKeeper = entityInfo.cacheKeeper;
+        if (cacheKeeper != null && cacheKeeper.getMetaData().supportsSearch()) {
+            return cacheKeeper.search(boClass, searchExpr);
+        }
+        return entityInfo.accessor.searchEntity(boClass, searchExpr);
     }
 
     @Override
     public <T> List<Object[]> search(Class<T> boClass, String searchExpr, String[] fields) {
-        return null;
+        EntityInfo entityInfo = getEntityInfo(boClass);
+        BOCacheKeeper cacheKeeper = entityInfo.cacheKeeper;
+        if (cacheKeeper != null && cacheKeeper.getMetaData().supportsSearch()) {
+            return cacheKeeper.search(boClass, searchExpr, fields);
+        }
+        return entityInfo.accessor.searchEntity(boClass, searchExpr, fields);
     }
 
-    @Override
-    public void beginTransaction(boolean readOnly) {
-
-    }
-
-    @Override
-    public void endTransaction(boolean commit) {
-
-    }
-
-    @Override
-    public void asyncUpdate(Runnable asyncTask) {
-
-    }
-
+    @SuppressWarnings("unchecked")
     @Override
     public <T> List<T> reloadAll(Class<T> boClass, List<Object> boIds) {
-        return null;
+        if (logger.isDebugEnabled()) {
+            logger.debug("reLoadAll " + boClass + " id: " + boIds);
+        }
+        if (boIds == null || boIds.isEmpty()) {
+            logger.debug("ids is empty or null");
+            return new ArrayList();
+        }
+        EntityInfo entityInfo = getEntityInfo(boClass);
+        BOCacheKeeper cacheKeeper = entityInfo.cacheKeeper;
+        List<T> data = new ArrayList<>();
+        boolean reloadAll = false;
+        if (boIds.contains(ID_STAR)) {
+            reloadAll = true;
+        }
+        // 没有被缓存的不需要reload
+        if (cacheKeeper != null) {
+            Class<T> entityClass = (Class<T>) entityInfo.entityClass;
+            if (reloadAll) {
+                if (!cacheKeeper.getMetaData().supportsReloadAll()) {
+                    throw new RuntimeException(
+                            entityInfo.interfacesClasses.getSimpleName() + " can not reload all at this time");
+                }
+                cacheKeeper.reloadAll();
+            } else {
+                // 根据EntityInfo信息，转换boId为正确类型
+                for (int index = 0; index < boIds.size(); index++) {
+                    boIds.set(index, convertId(entityInfo, boIds.get(index)));
+                }
+                data = entityInfo.accessor.loadAllEntities(entityClass, boIds);
+                cacheKeeper.reload(data);
+                List boIdsLoaded = new ArrayList();
+                for (T t : data) {
+                    if (t == null) {
+                        continue;
+                    }
+                    String id = ((BOEntity) t).getIdAsString();
+                    boIdsLoaded.add(id);
+                }
+                boIds = boIdsLoaded;
+            }
+        }
+        publishChangeEvent(reloadAll ? BORepositoryChangeListener.Operation.ReloadAll
+                : BORepositoryChangeListener.Operation.Update, entityInfo, boIds);
+        return data;
+    }
+
+    /**
+     * 待实现
+     */
+    @Override
+    public <T> void traverse(Class<T> boClass, String searchExpr, BOEntityVisitor<T> visitor) {
+    };
+
+    /**
+     * 未实现
+     */
+    @Override
+    public void asyncUpdate(Runnable asyncTask) {
+        asyncexecutor.execute(() -> {
+
+        });
     }
 
     @Override
@@ -421,7 +556,7 @@ public abstract class AbstractBORepository implements BORepository, BOCacheConta
             for (BORepositoryChangeListener listener : listeners) {
                 try {
                     listener.onChange(this, operation, entityInfo.entityClass, boIds);
-                }catch(Throwable t) {
+                } catch (Throwable t) {
                     logger.error("Notify repository listener " + listener + " operation " + operation + " bo ids: "
                             + boIds + " failed" + t);
                 }

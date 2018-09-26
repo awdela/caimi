@@ -74,4 +74,22 @@ public class HibernateBORepository extends AbstractBORepository implements BOEnt
         return null;
     }
 
+    @Override
+    public <T> void traverse(Class<T> boClass, String searchExpr, BOEntityVisitor<T> visitor) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void beginTransaction(boolean readOnly) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void endTransaction(boolean commit) {
+        // TODO Auto-generated method stub
+
+    }
+
 }

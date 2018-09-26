@@ -148,4 +148,10 @@ public class SpringJPABORepository extends AbstractBORepository implements BORep
         return null;
     }
 
+    @Override
+    public <T> void traverse(Class<T> boClass, String searchExpr, BOEntityVisitor<T> visitor) {
+        // TODO Auto-generated method stub
+
+    }
+
 }
