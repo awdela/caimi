@@ -1,29 +1,37 @@
 package com.caimi.service.repository.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "role")
-public class RoleEntity implements Role, Comparable<RoleEntity>{
+public class RoleEntity implements Role, Comparable<RoleEntity>, Serializable {
 
-	@Column(name = "role_id")
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+
+    @Column(name = "role_id")
 	private int roleId;
-	
+
 	@Column(name = "role_name")
 	private String roleName;
-	
+
 	@Column(name = "role_level")
 	private int roleLevel;
-	
+
 	@Column(name = "role_desc")
 	private String roleDesc;
-	
+
 	@Column(name = "menu_item")
 	private String menuItem;
 
-	public int getRoleId() {
+	@Override
+    public int getRoleId() {
 		return roleId;
 	}
 
@@ -31,7 +39,8 @@ public class RoleEntity implements Role, Comparable<RoleEntity>{
 		this.roleId = roleId;
 	}
 
-	public String getRoleName() {
+	@Override
+    public String getRoleName() {
 		return roleName;
 	}
 
@@ -39,7 +48,8 @@ public class RoleEntity implements Role, Comparable<RoleEntity>{
 		this.roleName = roleName;
 	}
 
-	public int getRoleLevel() {
+	@Override
+    public int getRoleLevel() {
 		return roleLevel;
 	}
 
@@ -47,7 +57,8 @@ public class RoleEntity implements Role, Comparable<RoleEntity>{
 		this.roleLevel = roleLevel;
 	}
 
-	public String getRoleDesc() {
+	@Override
+    public String getRoleDesc() {
 		return roleDesc;
 	}
 
@@ -55,7 +66,8 @@ public class RoleEntity implements Role, Comparable<RoleEntity>{
 		this.roleDesc = roleDesc;
 	}
 
-	public String getMenuItem() {
+	@Override
+    public String getMenuItem() {
 		return menuItem;
 	}
 
@@ -78,5 +90,5 @@ public class RoleEntity implements Role, Comparable<RoleEntity>{
 	public String toString() {
 		return super.toString();
 	}
-	
+
 }
