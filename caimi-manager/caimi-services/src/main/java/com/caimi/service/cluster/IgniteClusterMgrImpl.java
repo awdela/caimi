@@ -33,7 +33,7 @@ public class IgniteClusterMgrImpl implements IgniteClusterMgr {
     private volatile boolean stop;
     private volatile Cache<String, String> dmap;
 
-    @PostConstruct
+    //@PostConstruct
     public void init() {
         if (stop) {
             return;

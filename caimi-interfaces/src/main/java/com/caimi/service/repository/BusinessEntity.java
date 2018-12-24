@@ -1,8 +1,11 @@
 package com.caimi.service.repository;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 public interface BusinessEntity {
+	
+	public String setId(Serializable id);
 	
 	public String getId();
 	

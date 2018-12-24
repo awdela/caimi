@@ -21,7 +21,7 @@ public class UserChangedNotifyServiceImp {
     @Autowired
     private BORepository repository;
 
-    @PostConstruct
+    //@PostConstruct
     public void init() {
         repository.registerChangeListener(UserEntity.class, new BORepositoryChangeListener<UserEntity>() {
 

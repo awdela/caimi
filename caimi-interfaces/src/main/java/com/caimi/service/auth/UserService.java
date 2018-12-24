@@ -3,7 +3,7 @@ package com.caimi.service.auth;
 import com.caimi.service.repository.entity.User;
 
 public interface UserService {
-
+	
 	public int login(User user);
 	
 	public int regist(User user);

@@ -40,7 +40,8 @@ public class LoginRegController {
     /*
      * regist user
      */
-    @RequestMapping(path = URL_PREFIX + "/regist")
+    @RequestMapping(path = URL_PREFIX + "/regist", 
+    		method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public RespBean regist(UserEntity user) {
         int result = userService.regist(user);
         if (result == 0) {
@@ -55,7 +56,7 @@ public class LoginRegController {
 
     // login
     @RequestMapping(path = URL_PREFIX
-            + "/save", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+            + "/login", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public RespBean login(UserEntity user) {
         int result = userService.login(user);
         if (result == 0) {

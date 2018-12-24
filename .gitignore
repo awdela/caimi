@@ -46,3 +46,4 @@ caimi.common\target\surefire-reports\caimi.common.HttpUtilsTest.txt
 *.prefs
 *.prefs
 *.lst
+*.properties

@@ -26,7 +26,7 @@ public abstract class AbstractEntity implements BOEntity{
 		this.repository = repository;
 	}
 	
-	public abstract void setId(Serializable id);
+//	public abstract void setId(Serializable id);
 	
 	@Override
 	@Transient

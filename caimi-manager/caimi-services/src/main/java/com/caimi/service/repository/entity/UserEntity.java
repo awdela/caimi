@@ -29,7 +29,7 @@ import com.caimi.util.StringUtil;
 public class UserEntity extends AbstractBusinessEntity implements User, UserDetails, Binarylizable {
 
     /**
-     * 用户表实体
+             * 用户表实体
      */
     private static final long serialVersionUID = 1L;
 

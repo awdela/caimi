@@ -17,6 +17,7 @@ import com.caimi.service.repository.entity.Role;
 import com.caimi.service.repository.entity.User;
 import com.caimi.service.repository.entity.UserEntity;
 import com.caimi.util.StringUtil;
+import com.caimi.util.UUIDUtil;
 
 @Service
 @Transactional
@@ -69,6 +70,7 @@ public class UserServiceImpl implements UserService, UserDetailsService{
 		if(repeatUserName!=null) {
 			return 1;
 		}
+		user.setId(ID_PREFIX_USER+UUIDUtil.genId32());
 		//Digest the passwd
 		user.setPassword(StringUtil.md5(user.getPassword()));
 		userDao.save(user);

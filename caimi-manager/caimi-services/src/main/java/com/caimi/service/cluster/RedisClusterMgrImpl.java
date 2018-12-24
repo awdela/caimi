@@ -19,7 +19,7 @@ public class RedisClusterMgrImpl implements RedisClusterMgr, CaimiContants {
     private JedisCluster cluster;
     private volatile boolean stop;
 
-    @PostConstruct
+    //@PostConstruct
     public void init() {
         if (stop) {
             return;
