@@ -17,11 +17,8 @@ import org.apache.ignite.binary.BinaryWriter;
 import org.apache.ignite.binary.Binarylizable;
 import org.json.JSONObject;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.caimi.service.repository.entity.Role;
-import com.caimi.service.repository.entity.User;
 import com.caimi.util.StringUtil;
 
 @Entity
@@ -51,13 +48,13 @@ public class UserEntity extends AbstractBusinessEntity implements User, UserDeta
     @ManyToMany(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
     private List<Role> roles;
 
-    public List<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List<Role> roles) {
-        this.roles = roles;
-    }
+    // public List<Role> getRoles() {
+    // return roles;
+    // }
+    //
+    // public void setRoles(List<Role> roles) {
+    // this.roles = roles;
+    // }
 
     @Override
     public void setPassword(String passwd) {
@@ -138,10 +135,10 @@ public class UserEntity extends AbstractBusinessEntity implements User, UserDeta
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-        List<Role> roles = this.getRoles();
-        for (Role role : roles) {
-            authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
-        }
+//        List<Role> roles = this.getRoles();
+//        for (Role role : roles) {
+//            authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
+//        }
         return authorities;
     }
 
@@ -207,6 +204,16 @@ public class UserEntity extends AbstractBusinessEntity implements User, UserDeta
 
     @Override
     public void setAttr(String attr, String value) {
+
+    }
+
+    @Override
+    public Role getRole() {
+        return null;
+    }
+
+    @Override
+    public void setRole(Role role) {
 
     }
 

@@ -4,11 +4,14 @@ import java.time.LocalDateTime;
 
 import com.caimi.service.repository.BOEntity;
 
+/**
+ * 实现此接口的entity互相有从属关系
+ */
 public interface BusinessEntity extends BOEntity{
 
 	public static final int KEY_NAME    = 1;
     public static final int KEY_NO      = 2;
-    
+
     public String getId();
 
     public String getName();
@@ -35,5 +38,5 @@ public interface BusinessEntity extends BOEntity{
 
     public LocalDateTime touchActivityTime();
 
-    
+
 }
