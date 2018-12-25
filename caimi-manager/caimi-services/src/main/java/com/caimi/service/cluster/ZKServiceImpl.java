@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.apache.curator.framework.CuratorFramework;
@@ -52,7 +51,7 @@ public class ZKServiceImpl implements ZKService, ConnectionStateListener {
     // distribute lock
     private InterProcessMutex lock;
 
-    //@PostConstruct
+    // @PostConstruct
     public void init() throws IOException {
         zkConnStr = "192.168.3.86:2181,192.168.3.87:2181,192.168.3.88:2181";
         logger.info("Zookeeper connection String: " + zkConnStr);

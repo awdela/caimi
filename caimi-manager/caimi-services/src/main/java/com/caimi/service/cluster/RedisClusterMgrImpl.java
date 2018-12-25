@@ -3,8 +3,6 @@ package com.caimi.service.cluster;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.annotation.PostConstruct;
-
 import org.springframework.stereotype.Service;
 
 import com.caimi.service.CaimiContants;
@@ -19,7 +17,7 @@ public class RedisClusterMgrImpl implements RedisClusterMgr, CaimiContants {
     private JedisCluster cluster;
     private volatile boolean stop;
 
-    //@PostConstruct
+    // @PostConstruct
     public void init() {
         if (stop) {
             return;

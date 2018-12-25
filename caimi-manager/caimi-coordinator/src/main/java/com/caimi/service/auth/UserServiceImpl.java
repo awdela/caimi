@@ -22,10 +22,10 @@ import com.caimi.util.UUIDUtil;
 @Service
 @Transactional
 public class UserServiceImpl implements UserService, UserDetailsService{
-	
+
 	@Autowired
 	private UserDao userDao;
-	
+
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		UserEntity user = (UserEntity) userDao.getByName(username);
@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService, UserDetailsService{
 		authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
 		return user;
 	}
-	
+
 	/**
 	 * @param user
 	 * @return 0 success
@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService, UserDetailsService{
 		}
 		return 2;
 	}
-	
+
 	/**
 	 * @param user
 	 * @return 0 success
@@ -65,13 +65,13 @@ public class UserServiceImpl implements UserService, UserDetailsService{
 	 * @return 2 failed
 	 */
 	@Override
-	public int regist(User user) {
+    public int regist(User user) {
 		User repeatUserName = userDao.getByName(user.getName());
 		if(repeatUserName!=null) {
 			return 1;
 		}
-		user.setId(ID_PREFIX_USER+UUIDUtil.genId32());
 		//Digest the passwd
+        user.setId(ID_PREFIX_USER + UUIDUtil.genId());
 		user.setPassword(StringUtil.md5(user.getPassword()));
 		userDao.save(user);
 		return 0;
@@ -82,13 +82,15 @@ public class UserServiceImpl implements UserService, UserDetailsService{
 		userDao.delete(uid);
 		return 0;
 	}
-	
-	public User getUserById(@Param("id") String id) {
+
+	@Override
+    public User getUserById(@Param("id") String id) {
 		return userDao.getById(id);
 	}
-	
-	public User getUserByName(@Param("name") String name) {
+
+	@Override
+    public User getUserByName(@Param("name") String name) {
 		return userDao.getByName(name);
 	}
-	
+
 }
