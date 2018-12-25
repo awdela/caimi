@@ -1,4 +1,4 @@
-package com.caimi.service.cluster;
+package com.caimi.service.repository.cache;
 
 import javax.annotation.PostConstruct;
 
@@ -6,6 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.caimi.service.cluster.RedisSingleMgr;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
