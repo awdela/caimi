@@ -1,4 +1,0 @@
-com\caimi\service\elasticsearch\ElasticSearchIndexCreator.class
-com\caimi\service\elasticsearch\ElasticSearchServiceImpl.class
-com\caimi\api\v1\ElasticSearchController.class
-com\caimi\service\util\ESConnector.class

@@ -17,10 +17,8 @@ import org.eclipse.jetty.util.thread.ExecutorThreadPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.embedded.jetty.JettyEmbeddedServletContainerFactory;
 import org.springframework.boot.web.servlet.ServletComponentScan;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -65,16 +63,12 @@ import com.caimi.util.concurrent.SequentialThreadedProcessor;
 import com.caimi.util.concurrent.SequentialThreadedProcessorImpl;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
-import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.JedisPoolConfig;
-
 @Configuration
 @EnableScheduling
 @EnableTransactionManagement
 @EnableLoadTimeWeaving
 @EnableJpaRepositories(basePackages = { "caimi.web.repository.entity" })
 @EnableAsync
-@EnableCaching
 @ServletComponentScan(value = { "com.caimi.api.v1" })
 @ComponentScan(value = { "com.caimi.api.v1", "caimi.web.service", "com.caimi.service.elasticsearch" })
 // @EnableAspectJAutoProxy(proxyTargetClass = true)
@@ -82,45 +76,6 @@ public class CaimiConfiguration
         implements WebMvcConfigurer, SchedulingConfigurer, AsyncConfigurer, AsyncUncaughtExceptionHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(CaimiConfiguration.class);
-
-    @Value("${server.host}")
-    private String host;
-
-    @Value("${server.port}")
-    private int server_port;
-
-    @Value("${database.user}")
-    private String database_user;
-
-    @Value("${database.password}")
-    private String database_password;
-
-    @Value("${database.pool.min}")
-    private int database_pool_min;
-
-    @Value("${database.pool.max}")
-    private int database_pool_max;
-
-    @Value("${database.pool.max-idle}")
-    private int database_pool_max_idle;
-
-    @Value("${redis.port}")
-    private int redis_port;
-
-    @Value("${redis.pool.max-active}")
-    private int redis_pool_max_active;
-
-    @Value("${redis.pool.max-wait}")
-    private int redis_pool_max_wait;
-
-    @Value("${redis.pool.max-idle}")
-    private int redis_pool_max_idle;
-
-    @Value("${redis.pool.min-idle}")
-    private int redis_pool_min_idle;
-
-    @Value("${redis.timeout}")
-    private int redis_timeout;
 
     private ScheduledThreadPoolExecutor taskScheduler;
     private ThreadPoolExecutor asyncExecutor;
@@ -135,7 +90,7 @@ public class CaimiConfiguration
     @Bean
     public JettyEmbeddedServletContainerFactory jettyEmbeddedServletContainerFactory() {
         JettyEmbeddedServletContainerFactory jettyContainer = new JettyEmbeddedServletContainerFactory();
-        jettyContainer.setPort(server_port);
+        jettyContainer.setPort(10080);
         jettyContainer.setSelectors(2);
         jettyContainer.setAcceptors(1);
         jettyContainer.setThreadPool(new ExecutorThreadPool(executorService()));
@@ -148,11 +103,11 @@ public class CaimiConfiguration
         ds.setDriverClass("com.mysql.cj.jdbc.Driver");
         ds.setJdbcUrl(
                 "jdbc:mysql://127.0.0.1:3306/caimi?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=GMT%2b08%3a00");
-        ds.setUser(database_user);
-        ds.setPassword(database_password);
-        ds.setMinPoolSize(database_pool_min);
-        ds.setMaxPoolSize(database_pool_max);
-        ds.setMaxIdleTime(database_pool_max_idle);
+        ds.setUser("root");
+        ds.setPassword("Admin@123");
+        ds.setMinPoolSize(3);
+        ds.setMaxPoolSize(10);
+        ds.setMaxIdleTime(120);
         return ds;
     }
 
@@ -204,18 +159,6 @@ public class CaimiConfiguration
         return threadedProcessor;
     }
 
-    @Bean
-    public JedisPool jedisPoolFactory() {
-        logger.info("redisPool config: " + host + " " + redis_port);
-        JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
-        jedisPoolConfig.setMaxIdle(redis_pool_max_idle);
-        jedisPoolConfig.setMaxWaitMillis(redis_pool_max_wait);
-
-        JedisPool jedisPool = new JedisPool(jedisPoolConfig, host, redis_port, redis_timeout);
-
-        return jedisPool;
-    }
-
     private void creatThreadPools() {
         taskScheduler = new ScheduledThreadPoolExecutor(5, new DefaultThreadFactory("scheduler"));
         asyncExecutor = new ThreadPoolExecutor(1000, Integer.MAX_VALUE, 60, TimeUnit.SECONDS,
@@ -227,6 +170,7 @@ public class CaimiConfiguration
 
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+        // ��Ϣת����
         // http
         @SuppressWarnings("rawtypes")
         HttpMessageConverter converter = new StringHttpMessageConverter();

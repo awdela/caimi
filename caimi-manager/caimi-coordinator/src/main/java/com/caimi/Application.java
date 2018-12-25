@@ -35,7 +35,7 @@ public class Application implements ConfigConstants {
             PID_FILE.deleteOnExit();
         } catch (IOException e) {
         }
-        logger.info("caimi web is starting...");
+        logger.info("caimi web is startting...");
         initServices();
         final SpringApplication app = new SpringApplication(Application.class);
         app.addListeners(new ApplicationListener<ApplicationReadyEvent>() {

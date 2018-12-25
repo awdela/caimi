@@ -1,0 +1,49 @@
+# Compiled class file
+*.class
+
+# Log file
+*.log
+*settings
+*target
+*.classpath
+*.project
+# BlueJ files
+*.ctxt
+*.jar
+*.original
+*.properties
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+*.gitignore
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+/.metadata/
+*.recommenders
+*.settings
+*target\
+*.classpath
+*.project
+*.xml
+caimi.common\target\surefire-reports\caimi.common.HttpUtilsTest.txt
+
+*.swo
+*.lst
+*.swp
+*.lst
+*.prefs
+*.prefs
+*.sh
+*.prefs
+*.prefs
+*.lst
+*.properties
