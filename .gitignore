@@ -35,3 +35,13 @@ hs_err_pid*
 *.project
 caimi.common\target\surefire-reports\caimi.common.HttpUtilsTest.txt
 
+*.swo
+*.lst
+*.swp
+*.lst
+*.prefs
+*.prefs
+*.sh
+*.prefs
+*.prefs
+*.lst
