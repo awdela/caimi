@@ -1,6 +1,5 @@
 package com.caimi.service.cluster;
 
-import javax.annotation.PostConstruct;
 import javax.cache.Cache;
 
 import org.apache.ignite.Ignite;
@@ -33,7 +32,7 @@ public class IgniteClusterMgrImpl implements IgniteClusterMgr {
     private volatile boolean stop;
     private volatile Cache<String, String> dmap;
 
-    @PostConstruct
+    // @PostConstruct
     public void init() {
         if (stop) {
             return;
