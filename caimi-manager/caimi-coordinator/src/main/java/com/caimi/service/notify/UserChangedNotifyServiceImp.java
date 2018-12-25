@@ -2,8 +2,6 @@ package com.caimi.service.notify;
 
 import java.util.Collection;
 
-import javax.annotation.PostConstruct;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +19,7 @@ public class UserChangedNotifyServiceImp {
     @Autowired
     private BORepository repository;
 
-    @PostConstruct
+    // @PostConstruct
     public void init() {
         repository.registerChangeListener(UserEntity.class, new BORepositoryChangeListener<UserEntity>() {
 
