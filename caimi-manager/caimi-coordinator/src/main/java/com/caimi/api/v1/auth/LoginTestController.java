@@ -1,4 +1,4 @@
-package com.caimi.api.v1;
+package com.caimi.api.v1.auth;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

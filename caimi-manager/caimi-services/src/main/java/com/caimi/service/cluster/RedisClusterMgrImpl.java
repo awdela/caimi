@@ -1,8 +1,11 @@
 package com.caimi.service.cluster;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.caimi.service.CaimiContants;
@@ -13,6 +16,8 @@ import redis.clients.jedis.JedisPoolConfig;
 
 @Service
 public class RedisClusterMgrImpl implements RedisClusterMgr, CaimiContants {
+
+    private static final Logger logger = LoggerFactory.getLogger(RedisClusterMgrImpl.class);
 
     private JedisCluster cluster;
     private volatile boolean stop;
@@ -56,7 +61,11 @@ public class RedisClusterMgrImpl implements RedisClusterMgr, CaimiContants {
     public void destroy() {
         stop = true;
         if (cluster != null) {
-            cluster.close();
+            try {
+                cluster.close();
+            } catch (IOException e) {
+                logger.error(e.getMessage());
+            }
             cluster = null;
         }
     }

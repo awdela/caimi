@@ -49,3 +49,6 @@ caimi.common\target\surefire-reports\caimi.common.HttpUtilsTest.txt
 *.properties
 caimi-kafka/.classpath
 caimi-kafka/.classpath
+*.lst
+*.prefs
+*.prefs

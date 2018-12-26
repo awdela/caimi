@@ -1,4 +1,4 @@
-package com.caimi.api.v1;
+package com.caimi.api.v1.auth;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.caimi.api.v1.RestControllerConstants;
 import com.caimi.service.auth.UserService;
 import com.caimi.service.beans.RespBean;
 import com.caimi.service.repository.entity.UserEntity;
@@ -58,7 +59,7 @@ public class LoginRegController {
     // login
     @RequestMapping(path = URL_PREFIX
             + "/login", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public RespBean login(UserEntity user) {
+    public RespBean login(@RequestBody UserEntity user) {
         int result = userService.login(user);
         if (result == 0) {
             // success
