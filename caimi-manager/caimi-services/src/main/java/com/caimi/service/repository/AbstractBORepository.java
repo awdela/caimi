@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -76,6 +77,7 @@ public abstract class AbstractBORepository implements BORepository, BOCacheConta
     protected ReentrantLock updateLock = new ReentrantLock();
     private BeansContainer beansContainer;
     private Executor asyncexecutor;
+    private ExecutorService executorService;
 
     public AbstractBORepository() {
 
@@ -89,6 +91,14 @@ public abstract class AbstractBORepository implements BORepository, BOCacheConta
 
     public void setExecutor(Executor asyncExecutor) {
         this.asyncexecutor = asyncExecutor;
+    }
+    
+    public ExecutorService getExecutorService() {
+        return executorService;
+    }
+
+    public void setExecutorService(ExecutorService executorService) {
+        this.executorService = executorService;
     }
 
     protected void init() {

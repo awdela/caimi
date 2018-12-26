@@ -9,8 +9,6 @@ import java.util.List;
 @SuppressWarnings("rawtypes") 
 public interface BOEntityAccessor {
 	
-	public void init(BOCacheContainer container);
-	
 	public<T> T loadEntity(Class<T> entityClass, Object boId);
 	
 	public<T> List<T> loadAllEntities(Class<T> entityClass, List boIds);

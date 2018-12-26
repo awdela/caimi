@@ -73,7 +73,7 @@ public interface BORepository {
 
     public void beginTransaction(boolean readOnly);
 
-    public void endTransaction(boolean commit);
+    public boolean endTransaction(boolean commit);
 
     /**
      * 异步更新 Repository. <BR>
