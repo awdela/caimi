@@ -32,7 +32,13 @@ public class UserDaoImpl implements UserDao{
 
 	@Override
 	public void save(User user) {
-		repository.save(user);
+		repository.beginTransaction(false);
+		try {
+			repository.save(user);
+		}catch(Exception e) {}
+		finally {
+			repository.endTransaction(true);
+		}
 	}
 
 	@Override

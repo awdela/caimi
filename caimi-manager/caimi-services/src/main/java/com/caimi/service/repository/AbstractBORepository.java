@@ -297,7 +297,7 @@ public abstract class AbstractBORepository implements BORepository, BOCacheConta
             // 从缓存中查询
             AbstractEntity r = (AbstractEntity) cacheKeeper.get(keyId);
             if (r != null) {
-                r.setRepository(this);
+                r.setBORepository(this);
             }
             result = (T) r;
             if (result == null) {
