@@ -92,7 +92,7 @@ public abstract class AbstractBORepository implements BORepository, BOCacheConta
     public void setExecutor(Executor asyncExecutor) {
         this.asyncexecutor = asyncExecutor;
     }
-    
+
     public ExecutorService getExecutorService() {
         return executorService;
     }
@@ -222,10 +222,14 @@ public abstract class AbstractBORepository implements BORepository, BOCacheConta
         return this;
     }
 
-    // @Override
-    // public BOEntityAccessor getAccessor(Class entityClass) {
-    // return null;
-    // }
+    @Override
+    public BOEntityAccessor getAccessor(Class entityClass) {
+        EntityInfo entityInfo = getEntityInfo(entityClass);
+        if (entityInfo == null) {
+            return null;
+        }
+        return entityInfo.accessor;
+    }
 
     @SuppressWarnings("unchecked")
     @Override

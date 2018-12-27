@@ -21,7 +21,7 @@ public abstract class AbstractEntity implements BOEntity{
 		return repository;
 	}
 
-	public void setRepository(BORepository repository) {
+    public void setBORepository(BORepository repository) {
 		this.repository = repository;
 	}
 
