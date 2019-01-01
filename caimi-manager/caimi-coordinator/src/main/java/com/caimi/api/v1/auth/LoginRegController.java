@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.caimi.api.v1.RestControllerConstants;
 import com.caimi.service.auth.UserService;
-import com.caimi.service.beans.RespBean;
 import com.caimi.service.repository.entity.UserEntity;
+import com.caimi.util.beans.RespBean;
 
 @RestController
 public class LoginRegController {

@@ -72,11 +72,11 @@ import redis.clients.jedis.JedisPoolConfig;
 @EnableScheduling
 @EnableTransactionManagement
 @EnableLoadTimeWeaving
-@EnableJpaRepositories(basePackages = { "caimi.web.repository.entity" })
+@EnableJpaRepositories(basePackages = { "com.caimi.service.repository.entity" })
 @EnableAsync
 @EnableCaching
 @ServletComponentScan(value = { "com.caimi.api.v1" })
-@ComponentScan(value = { "com.caimi.api.v1", "caimi.web.service", "com.caimi.service.elasticsearch" })
+@ComponentScan(value = { "com.caimi.api.v1", "com.caimi.service", "com.caimi.service.elasticsearch" })
 // @EnableAspectJAutoProxy(proxyTargetClass = true)
 public class CaimiConfiguration
         implements WebMvcConfigurer, SchedulingConfigurer, AsyncConfigurer, AsyncUncaughtExceptionHandler {
@@ -160,7 +160,7 @@ public class CaimiConfiguration
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() throws Exception {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource());
-        em.setPackagesToScan(new String[] { "caimi.web.repository.entity" });
+        em.setPackagesToScan(new String[] { "com.caimi.service.repository.entity" });
 
         JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         em.setJpaVendorAdapter(vendorAdapter);

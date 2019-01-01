@@ -16,19 +16,25 @@ public interface BusinessEntity extends BOEntity{
 
     public String getName();
 
-    public String getDesc();
-
     public void setName(String name);
-
+    
+    public String getDesc();
+    
     public String getLabels();
 
     public String getNo();
+    
+    public String getGroup();
 
-    public void setNo(String no);
+	public String getAttrs();
+	
+    public String getAttr(String attr);
+
+    public void setAttr(String attr, String value);
+    
+    public String getAttr();
 
     public int getStatus();
-
-    public void setStatus(int status);
 
     public LocalDateTime getCreationTime();
 
@@ -37,6 +43,5 @@ public interface BusinessEntity extends BOEntity{
     public LocalDateTime getLastActivityTime();
 
     public LocalDateTime touchActivityTime();
-
 
 }

@@ -26,15 +26,15 @@ import com.caimi.util.StringUtil;
 public class UserEntity extends AbstractBusinessEntity implements User, UserDetails, Binarylizable {
 
     /**
-     * 用户表实体
+             * 用户表实体
      */
     private static final long serialVersionUID = 1L;
 
-    @Column(name = "user_passwd")
+    @Column(name = "user_password")
     private String passwd;
-
-    @Column(name = "ug_id")
-    private String departmentId;
+    
+    @Column(name = "user_role")
+    private String role;
 
     @Column(name = "user_title")
     private String title;
@@ -45,8 +45,8 @@ public class UserEntity extends AbstractBusinessEntity implements User, UserDeta
     @Column(name = "user_phone")
     private String phone;
 
-    @ManyToMany(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
-    private List<Role> roles;
+//    @ManyToMany(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
+//    private List<Role> roles;
 
     // public List<Role> getRoles() {
     // return roles;
@@ -59,15 +59,6 @@ public class UserEntity extends AbstractBusinessEntity implements User, UserDeta
     @Override
     public void setPassword(String passwd) {
         this.passwd = passwd;
-    }
-
-    public void setDepartmentId(String departmentId) {
-        this.departmentId = departmentId;
-    }
-
-    @Override
-    public String getDepartmentId() {
-        return departmentId;
     }
 
     public void setTitle(String title) {
@@ -87,6 +78,18 @@ public class UserEntity extends AbstractBusinessEntity implements User, UserDeta
     public String getEmail() {
         return email;
     }
+    
+
+	@Override
+	public String getRole() {
+		return role;
+	}
+
+	@Override
+	public void setRole(String role) {
+		this.role = role;
+	}
+
 
     public void setPhone(String phone) {
         this.phone = phone;
@@ -109,7 +112,7 @@ public class UserEntity extends AbstractBusinessEntity implements User, UserDeta
     @Override
     public JSONObject toJSON() {
         JSONObject json = super.toJSON();
-        json.put("departmentId", getDepartmentId()).put("title", title).put("email", email).put("phone", phone);
+        json.put("title", title).put("email", email).put("phone", phone);
 
         return json;
     }
@@ -117,7 +120,6 @@ public class UserEntity extends AbstractBusinessEntity implements User, UserDeta
     @Override
     public void writeBinary(BinaryWriter writer) throws BinaryObjectException {
         super.writeBinary(writer);
-        writer.writeString("departmentId", departmentId);
         writer.writeString("title", title);
         writer.writeString("email", email);
         writer.writeString("phone", phone);
@@ -126,7 +128,6 @@ public class UserEntity extends AbstractBusinessEntity implements User, UserDeta
     @Override
     public void readBinary(BinaryReader reader) throws BinaryObjectException {
         super.readBinary(reader);
-        departmentId = reader.readString("departmentId");
         title = reader.readString("title");
         email = reader.readString("email");
         phone = reader.readString("phone");
@@ -170,51 +171,6 @@ public class UserEntity extends AbstractBusinessEntity implements User, UserDeta
     @Override
     public boolean isEnabled() {
         return true;
-    }
-
-    @Override
-    public String getLables() {
-        return null;
-    }
-
-    @Override
-    public void setLables(String lables) {
-
-    }
-
-    @Override
-    public String getGroup() {
-        return null;
-    }
-
-    @Override
-    public void setGroup(String group) {
-
-    }
-
-    @Override
-    public String getAttrs() {
-        return null;
-    }
-
-    @Override
-    public String getAttr(String attr) {
-        return null;
-    }
-
-    @Override
-    public void setAttr(String attr, String value) {
-
-    }
-
-    @Override
-    public Role getRole() {
-        return null;
-    }
-
-    @Override
-    public void setRole(Role role) {
-
     }
 
 }

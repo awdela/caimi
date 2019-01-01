@@ -51,10 +51,18 @@ public abstract class AbstractBusinessEntity extends AbstractEntity implements B
     @QuerySqlField
     protected String parentId;
 
+    @Column(name = "entity_groups")
+    @QuerySqlField
+    protected String group;
+    
     @Column(name = "entity_labels")
     @QuerySqlField
     protected String labels;
-
+    
+    @Column(name = "entity_attrs")
+    @QuerySqlField
+    protected String attrs;
+    
     @Column(name = "entity_creation_time", columnDefinition = "TIMESTAMP")
     @QuerySqlField
     protected LocalDateTime creationTime;
@@ -152,17 +160,24 @@ public abstract class AbstractBusinessEntity extends AbstractEntity implements B
         return no;
     }
 
-    @Override
     public void setNo(String no) {
         this.no = no;
     }
 
     @Override
+    public String getAttr() {
+    	return attrs;
+    }
+    
+    public void setAttrs(String attrs) {
+    	this.attrs = attrs;
+    }
+    
+    @Override
     public int getStatus() {
         return status;
     }
 
-    @Override
     public void setStatus(int status) {
         this.status = status;
     }
@@ -179,6 +194,21 @@ public abstract class AbstractBusinessEntity extends AbstractEntity implements B
         return parentId;
     }
 
+    @Override
+	public String getAttrs() {
+		return attrs;
+	}
+    
+	@Override
+	public String getAttr(String attr) {
+		return null;
+	}
+
+	@Override
+	public void setAttr(String attr, String value) {
+		
+	}
+
     public void setParentId(String parentId) {
         this.parentId = parentId;
     }
@@ -191,6 +221,16 @@ public abstract class AbstractBusinessEntity extends AbstractEntity implements B
     public void setLabels(String labels) {
         this.labels = labels;
     }
+    
+    @Override
+    public String getGroup() {
+        return group;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
+    }
+
 
     @Override
     public LocalDateTime getCreationTime() {

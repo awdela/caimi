@@ -2,12 +2,14 @@ package com.caimi.service.repository.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "role_user")
 public class RoleUserEntity implements RoleUser{
 
+	@Id
 	@Column(name = "role_user_id")
 	private String roleUserId;
 	

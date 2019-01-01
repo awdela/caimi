@@ -106,33 +106,34 @@ public abstract class AbstractBORepository implements BORepository, BOCacheConta
         initEntityClasses();
     }
 
-    private void initEntityClasses() {
+    public void initEntityClasses() {
         try {
             List<String> packages = new ArrayList<>();
             packages.add("com.caimi.service.repository.entity");
             packages.add("com.caimi.service.repository.entity.cache");
             packages.add("com.caimi.service.repository.entity.accessor");
             // List<Map<String, String>> info = new ArrayList<>();
-            EntityInfo entityInfo = loadEntityClassInfo(packages, "USER", UserService.ID_PREFIX_USER);
+            EntityInfo entityInfo = loadEntityClassInfo(packages, "User", UserService.ID_PREFIX_USER);
             entityInfos.put(entityInfo.entityClass, entityInfo);
         } catch (Exception e) {
+        	logger.error("init entity error: " + e.getMessage());
         }
     }
-
+    
     @SuppressWarnings("unchecked")
     private EntityInfo loadEntityClassInfo(List<String> packages, String InterfaceClassName, String ipPrefix)
             throws Exception {
         EntityInfo entityInfo = new EntityInfo();
         // user entityInfo
         String entityClass = InterfaceClassName + ENTITY_SUFFIX;
-        String entityCacheKeeper = InterfaceClassName + CACHEKEEPER_SUFFIX;
+        //String entityCacheKeeper = InterfaceClassName + CACHEKEEPER_SUFFIX;
         ClassLoader classLoader = getClass().getClassLoader();
         entityInfo.entityClass = loadClass(packages, entityClass, classLoader);
-        Class entityCacheClass = loadClass(packages, entityCacheKeeper, classLoader);
-        entityInfo.cacheKeeper = (BOCacheKeeper) entityCacheClass.newInstance();
-        if (entityInfo.cacheKeeper instanceof BORepositoryChangeListener) {
-            entityInfo.changeListeners.add((BORepositoryChangeListener) entityInfo.cacheKeeper);
-        }
+        //Class entityCacheClass = loadClass(packages, entityCacheKeeper, classLoader);
+        //entityInfo.cacheKeeper = (BOCacheKeeper) entityCacheClass.newInstance();
+        //if (entityInfo.cacheKeeper instanceof BORepositoryChangeListener) {
+        //    entityInfo.changeListeners.add((BORepositoryChangeListener) entityInfo.cacheKeeper);
+        //}
         Class entityIdGenerator = loadClass(packages, IDGENERATOR_SUFFIX, classLoader);
         if (entityIdGenerator != null) {
             entityInfo.idGenerator = (BOEntityIdGenerator) entityIdGenerator.newInstance();

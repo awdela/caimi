@@ -1,10 +1,10 @@
+com\caimi\api\v1\auth\LoginTestController.class
 com\caimi\Application.class
+com\caimi\api\v1\auth\LoginRegController.class
 com\caimi\service\auth\UserServiceImpl.class
 com\caimi\service\notify\UserChangedNotifyServiceImp$1.class
 com\caimi\api\v1\FileExcuteController.class
 com\caimi\CaimiConfiguration.class
-com\caimi\api\v1\LoginRegController.class
-com\caimi\api\v1\LoginTestController.class
 com\caimi\Application$1.class
-com\caimi\service\beans\RespBean.class
+com\caimi\api\v1\cache\RedisTestController.class
 com\caimi\service\notify\UserChangedNotifyServiceImp.class

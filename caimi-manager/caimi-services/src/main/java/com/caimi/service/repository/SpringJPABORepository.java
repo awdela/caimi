@@ -46,7 +46,7 @@ public class SpringJPABORepository extends AbstractBORepository implements BORep
 
     @Override
     @PostConstruct
-    protected void init() {
+    public void init() {
         setExecutor(appContext.getBean(Executor.class));
         setBeansContainer(appContext.getBean(BeansContainer.class));
         setExecutorService(asyncExecutor);
