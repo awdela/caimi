@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -236,6 +237,11 @@ public abstract class AbstractBORepository implements BORepository, BOCacheConta
     public <T> BOCacheKeeper<T> getCacheKeeper(Class<T> boClass) {
         EntityInfo entityInfo = getEntityInfo(boClass);
         return entityInfo.cacheKeeper;
+    }
+    
+    public Collection<BOCacheKeeper<? extends AbstractEntity>> getCacheKeepers(){
+    	Collection<BOCacheKeeper<? extends AbstractEntity>> cacheKeepers = new HashSet<>();
+    	return cacheKeepers;
     }
 
     @Override

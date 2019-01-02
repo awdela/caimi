@@ -21,6 +21,9 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import com.caimi.service.beans.BeansContainer;
 import com.caimi.util.StringUtil;
 
+/**
+ * Business Object Repository
+ */
 @Service
 public class SpringJPABORepository extends AbstractBORepository implements BORepository, BOEntityAccessor {
 
@@ -51,9 +54,15 @@ public class SpringJPABORepository extends AbstractBORepository implements BORep
         setBeansContainer(appContext.getBean(BeansContainer.class));
         setExecutorService(asyncExecutor);
         super.init();
+        getCacheKeepers();
     }
 
     @Override
+    public Collection<BOCacheKeeper<? extends AbstractEntity>> getCacheKeepers() {
+		return null;
+	}
+
+	@Override
     protected BOEntityAccessor getDefaultEntityAccessor() {
         return this;
     }

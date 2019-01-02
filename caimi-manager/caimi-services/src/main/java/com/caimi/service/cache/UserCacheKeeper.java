@@ -1,4 +1,4 @@
-package com.caimi.service.cache;
+ package com.caimi.service.cache;
 
 import java.util.List;
 
@@ -26,6 +26,7 @@ public class UserCacheKeeper extends IgniteBusinessEntityCacheKeeper<UserEntity>
 	 * User Id -> Object
 	 */
 	private IgniteCache<String, UserEntity> users;
+	
 	@Override
 	protected void initIgniteCache() {
 		Ignite ignite = clusterMgr.getIgnite();
@@ -76,6 +77,5 @@ public class UserCacheKeeper extends IgniteBusinessEntityCacheKeeper<UserEntity>
 		UserEntity entity = users.getAndRemove(userId);
 		return entity;
 	}
-
 
 }

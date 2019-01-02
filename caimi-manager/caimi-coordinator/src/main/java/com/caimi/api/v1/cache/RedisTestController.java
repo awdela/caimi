@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.caimi.api.v1.RestControllerConstants;
-import com.caimi.service.cluster.RedisSingleMgr;
+import com.caimi.service.cache.RedisSingleMgr;
 
 @RestController
 public class RedisTestController {

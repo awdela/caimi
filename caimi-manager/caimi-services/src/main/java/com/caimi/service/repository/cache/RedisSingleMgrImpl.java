@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.caimi.service.cluster.RedisSingleMgr;
+import com.caimi.service.cache.RedisSingleMgr;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;

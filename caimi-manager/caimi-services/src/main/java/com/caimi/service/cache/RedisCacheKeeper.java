@@ -3,6 +3,9 @@ package com.caimi.service.cache;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.caimi.service.cluster.RedisClusterMgr;
 import com.caimi.service.repository.AbstractEntity;
 import com.caimi.service.repository.BOCacheContainer;
@@ -11,13 +14,17 @@ import com.caimi.service.repository.BORepository;
 
 public abstract class RedisCacheKeeper<T extends AbstractEntity> implements BOCacheKeeper<T>{
 
+	private static final Logger logger = LoggerFactory.getLogger(RedisCacheKeeper.class);
+	
     protected Class<T> mainCacheClass;
 
     protected BOCacheContainer container;
 
     protected BORepository repository;
 
-    protected RedisClusterMgr clusterMgr;
+//    protected RedisClusterMgr clusterMgr;
+    
+    protected RedisSingleMgr redisMgr;
 
     protected abstract T get0();
 
@@ -29,7 +36,7 @@ public abstract class RedisCacheKeeper<T extends AbstractEntity> implements BOCa
 	public void init(BOCacheContainer container) {
         this.container = container;
         this.repository = container.getRepository();
-        clusterMgr = container.getBean(RedisClusterMgr.class);
+        this.redisMgr = container.getBean(RedisSingleMgr.class);
 	}
 
 	@Override

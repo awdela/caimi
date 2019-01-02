@@ -1,4 +1,4 @@
-package com.caimi.service.cluster;
+package com.caimi.service.cache;
 
 /**
  * Redis单机版
