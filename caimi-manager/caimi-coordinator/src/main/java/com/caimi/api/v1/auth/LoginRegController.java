@@ -71,4 +71,30 @@ public class LoginRegController {
         }
     }
 
+    @RequestMapping(path = URL_PREFIX
+            + "/logout", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public RespBean logout(@RequestBody UserEntity user) {
+        int result = userService.deleteUser(user);
+        if (result == 0) {
+            // success
+            return new RespBean("success", "logout caimi!");
+        } else if (result == 1) {
+            return new RespBean("error", "change your username!");
+        } else {
+            return new RespBean("error", "need to regist or login!");
+        }
+    }
+
+    @RequestMapping(path = URL_PREFIX
+            + "/update", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public RespBean update(@RequestBody UserEntity user) {
+        int result = userService.updateUser(user);
+        if (result == 0) {
+            // success
+            return new RespBean("success", "update done");
+        } else {
+            return new RespBean("error", "update error");
+        }
+    }
+
 }

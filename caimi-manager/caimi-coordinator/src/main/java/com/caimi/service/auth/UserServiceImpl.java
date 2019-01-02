@@ -17,7 +17,6 @@ import com.caimi.service.repository.entity.Role;
 import com.caimi.service.repository.entity.User;
 import com.caimi.service.repository.entity.UserEntity;
 import com.caimi.util.StringUtil;
-import com.caimi.util.UUIDUtil;
 
 @Service
 @Transactional
@@ -45,14 +44,14 @@ public class UserServiceImpl implements UserService, UserDetailsService{
 	 * @return 1 username not exist
 	 * @return 2 failed
 	 */
-	@SuppressWarnings("null")
 	@Override
 	public int login(User user) {
 		User userEntity = userDao.getByName(user.getName());
-		if(userEntity!=null) {
+        if (userEntity == null) {
 			return 1;
 		}
-		if (userEntity.getPassword().equals(user.getPassword())) {
+        String passWord = StringUtil.md5(user.getPassword());
+        if (passWord.equals(userEntity.getPassword())) {
 			return 0;
 		}
 		return 2;
@@ -70,18 +69,29 @@ public class UserServiceImpl implements UserService, UserDetailsService{
 		if(repeatUserName!=null) {
 			return 1;
 		}
-		//Digest the passwd
-        user.setId(ID_PREFIX_USER + UUIDUtil.genId());
-		user.setPassword(StringUtil.md5(user.getPassword()));
 		userDao.save(user);
 		return 0;
 	}
 
 	@Override
-	public int deleteUserById(String uid) {
-		userDao.delete(uid);
-		return 0;
+    public int deleteUser(User user) {
+        User existUser = userDao.getByName(user.getName());
+        if (null != existUser) {
+            userDao.delete(existUser);
+            return 0;
+        }
+        return 1;
 	}
+
+    @Override
+    public int updateUser(User user) {
+        User updateUser = userDao.update(user);
+        if (null != updateUser) {
+            return 0;
+        }
+        return 1;
+    }
+
 
 	@Override
     public User getUserById(@Param("id") String id) {

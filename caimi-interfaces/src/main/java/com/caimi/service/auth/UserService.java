@@ -4,13 +4,13 @@ import com.caimi.service.repository.entity.User;
 
 public interface UserService {
 
-    public static final String ID_PREFIX_USER = "usr_";
-
 	public int login(User user);
 
 	public int regist(User user);
 
-	public int deleteUserById(String uid);
+    public int deleteUser(User user);
+
+    public int updateUser(User user);
 
 	public User getUserById(String id);
 

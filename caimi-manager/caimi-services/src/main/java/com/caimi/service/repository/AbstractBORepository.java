@@ -22,7 +22,6 @@ import javax.persistence.Id;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.caimi.service.auth.UserService;
 import com.caimi.service.beans.BeansContainer;
 import com.caimi.service.repository.BORepositoryChangeListener.Operation;
 import com.caimi.service.repository.entity.AbstarctEntity;
@@ -113,13 +112,13 @@ public abstract class AbstractBORepository implements BORepository, BOCacheConta
             packages.add("com.caimi.service.repository.entity.cache");
             packages.add("com.caimi.service.repository.entity.accessor");
             // List<Map<String, String>> info = new ArrayList<>();
-            EntityInfo entityInfo = loadEntityClassInfo(packages, "User", UserService.ID_PREFIX_USER);
+            EntityInfo entityInfo = loadEntityClassInfo(packages, "User", BOEntity.ID_PREFIX_USER);
             entityInfos.put(entityInfo.entityClass, entityInfo);
         } catch (Exception e) {
         	logger.error("init entity error: " + e.getMessage());
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     private EntityInfo loadEntityClassInfo(List<String> packages, String InterfaceClassName, String ipPrefix)
             throws Exception {

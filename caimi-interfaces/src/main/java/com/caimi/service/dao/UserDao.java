@@ -6,13 +6,15 @@ import com.caimi.service.repository.entity.User;
 public interface UserDao {
 
 	User getById(String id);
-	
+
 	User getByName(String userName);
-	
-	void save(User user);
-	
-	void delete(String id);
-	
+
+    User save(User user);
+
+    User update(User user);
+
+    User delete(User user);
+
 	Role getRole(String id);
-	
+
 }

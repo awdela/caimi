@@ -108,9 +108,11 @@ public class SpringJPABORepository extends AbstractBORepository implements BORep
     @Override
     public <T> T saveEntity(T entity) {
         if (((AbstractEntity) entity).getIdAsString() == null) {
+            // insert
             em.persist(entity);
         } else {
             try {
+                // update
                 entity = em.merge(entity);
             } catch (Exception e) {
                 em.persist(entity);
