@@ -20,7 +20,7 @@ import com.caimi.service.repository.AbstractEntity;
 import com.caimi.util.StringUtil;
 
 @MappedSuperclass
-public abstract class AbstractBusinessEntity extends AbstractEntity implements BusinessEntity, Binarylizable {
+public abstract class AbstractBusinessEntity extends AbstractEntity implements BusinessEntity{
 
     @Id
     @Column(name = "entity_id", nullable = false)
@@ -71,33 +71,33 @@ public abstract class AbstractBusinessEntity extends AbstractEntity implements B
     @QuerySqlField
     protected LocalDateTime lastActivityTime;
 
-    @Override
-    public void readBinary(BinaryReader reader) throws BinaryObjectException {
-        id = reader.readString("id");
-        name = reader.readString("name");
-        desc = reader.readString("desc");
-        no = reader.readString("no");
-        status = reader.readInt("status");
-        ownerId = reader.readObject("ownerId");
-        parentId = reader.readString("parentId");
-        creationTime = reader.readObject("creationTime");
-        lastActivityTime = reader.readObject("lastActivityTime");
-        labels = reader.readString("labels");
-    }
+//    @Override
+//    public void readBinary(BinaryReader reader) throws BinaryObjectException {
+//        id = reader.readString("id");
+//        name = reader.readString("name");
+//        desc = reader.readString("desc");
+//        no = reader.readString("no");
+//        status = reader.readInt("status");
+//        ownerId = reader.readObject("ownerId");
+//        parentId = reader.readString("parentId");
+//        creationTime = reader.readObject("creationTime");
+//        lastActivityTime = reader.readObject("lastActivityTime");
+//        labels = reader.readString("labels");
+//    }
 
-    @Override
-    public void writeBinary(BinaryWriter writer) throws BinaryObjectException {
-        writer.writeString("id", id);
-        writer.writeString("name", name);
-        writer.writeString("desc", desc);
-        writer.writeString("no", no);
-        writer.writeInt("status", status);
-        writer.writeObject("ownerId", ownerId);
-        writer.writeString("parentId", parentId);
-        writer.writeString("labels", labels);
-        writer.writeObject("creationTime", creationTime);
-        writer.writeObject("lastActivityTime", lastActivityTime);
-    }
+//    @Override
+//    public void writeBinary(BinaryWriter writer) throws BinaryObjectException {
+//        writer.writeString("id", id);
+//        writer.writeString("name", name);
+//        writer.writeString("desc", desc);
+//        writer.writeString("no", no);
+//        writer.writeInt("status", status);
+//        writer.writeObject("ownerId", ownerId);
+//        writer.writeString("parentId", parentId);
+//        writer.writeString("labels", labels);
+//        writer.writeObject("creationTime", creationTime);
+//        writer.writeObject("lastActivityTime", lastActivityTime);
+//    }
 
     @Override
     @Transient

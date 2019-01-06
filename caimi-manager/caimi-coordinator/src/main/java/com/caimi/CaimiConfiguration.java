@@ -28,6 +28,10 @@ import org.springframework.context.annotation.EnableLoadTimeWeaving;
 import org.springframework.context.annotation.Primary;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.http.converter.FormHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -60,6 +64,7 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import com.caimi.service.repository.AbstractEntity;
 import com.caimi.util.concurrent.DefaultThreadFactory;
 import com.caimi.util.concurrent.SequentialThreadedProcessor;
 import com.caimi.util.concurrent.SequentialThreadedProcessorImpl;
@@ -205,15 +210,42 @@ public class CaimiConfiguration
     }
 
     @Bean
-    public JedisPool jedisPoolFactory() {
+    public JedisPoolConfig jedisPoolFactory() {
         logger.info("redisPool config: " + host + " " + redis_port);
         JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
+        // 最大空闲数
         jedisPoolConfig.setMaxIdle(redis_pool_max_idle);
+        // 最大建立连接等待时间
         jedisPoolConfig.setMaxWaitMillis(redis_pool_max_wait);
-
-        JedisPool jedisPool = new JedisPool(jedisPoolConfig, host, redis_port, redis_timeout);
-
-        return jedisPool;
+        return jedisPoolConfig;
+    }
+    
+    /**
+     * 单机版
+     * TODO:集群版
+     */
+    @Bean
+    public JedisConnectionFactory jedisConnectFactory(JedisPoolConfig poolConfig) {
+    	// 连接池
+    	JedisConnectionFactory jedisConnectFactory = new JedisConnectionFactory(poolConfig);
+    	jedisConnectFactory.setHostName(host);
+    	jedisConnectFactory.setPort(redis_port);
+    	jedisConnectFactory.setTimeout(redis_timeout);
+    	return jedisConnectFactory;
+    }
+    
+    @Bean
+    public RedisTemplate<String, AbstractEntity> redisTemplate(JedisConnectionFactory jedisConnectFactory){
+    	RedisTemplate<String, AbstractEntity> redisTemplate = new RedisTemplate<>();
+    	// 设置数据存入redis的序列化方式
+    	redisTemplate.setKeySerializer(new StringRedisSerializer());
+    	redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+    	redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+    	redisTemplate.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());
+    	// 开启事务
+    	redisTemplate.setEnableTransactionSupport(true);
+    	redisTemplate.setConnectionFactory(jedisConnectFactory);
+    	return redisTemplate;
     }
 
     private void creatThreadPools() {

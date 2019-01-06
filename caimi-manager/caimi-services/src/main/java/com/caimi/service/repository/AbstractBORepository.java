@@ -463,7 +463,7 @@ public abstract class AbstractBORepository implements BORepository, BOCacheConta
     public <T> List<T> search(Class<T> boClass, String searchExpr) {
         EntityInfo entityInfo = getEntityInfo(boClass);
         BOCacheKeeper cacheKeeper = entityInfo.cacheKeeper;
-        if (cacheKeeper != null && cacheKeeper.getMetaData().supportsSearch()) {
+        if (cacheKeeper != null) {
             return cacheKeeper.search(boClass, searchExpr);
         }
         return entityInfo.accessor.searchEntity(boClass, searchExpr);
@@ -473,7 +473,7 @@ public abstract class AbstractBORepository implements BORepository, BOCacheConta
     public <T> List<Object[]> search(Class<T> boClass, String searchExpr, String[] fields) {
         EntityInfo entityInfo = getEntityInfo(boClass);
         BOCacheKeeper cacheKeeper = entityInfo.cacheKeeper;
-        if (cacheKeeper != null && cacheKeeper.getMetaData().supportsSearch()) {
+        if (cacheKeeper != null) {
             return cacheKeeper.search(boClass, searchExpr, fields);
         }
         return entityInfo.accessor.searchEntity(boClass, searchExpr, fields);
@@ -500,10 +500,6 @@ public abstract class AbstractBORepository implements BORepository, BOCacheConta
         if (cacheKeeper != null) {
             Class<T> entityClass = (Class<T>) entityInfo.entityClass;
             if (reloadAll) {
-                if (!cacheKeeper.getMetaData().supportsReloadAll()) {
-                    throw new RuntimeException(
-                            entityInfo.interfacesClasses.getSimpleName() + " can not reload all at this time");
-                }
                 cacheKeeper.reloadAll();
             } else {
                 // 根据EntityInfo信息，转换boId为正确类型

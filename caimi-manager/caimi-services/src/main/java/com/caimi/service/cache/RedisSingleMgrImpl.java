@@ -1,10 +1,11 @@
-package com.caimi.service.repository.cache;
+package com.caimi.service.cache;
 
 import javax.annotation.PostConstruct;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import com.caimi.service.cache.RedisSingleMgr;
@@ -17,6 +18,7 @@ public class RedisSingleMgrImpl implements RedisSingleMgr {
 
     private static final Logger logger = LoggerFactory.getLogger(RedisSingleMgrImpl.class);
 
+    
     @Autowired
     private JedisPool jedisPool;
 

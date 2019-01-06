@@ -54,13 +54,14 @@ public class SpringJPABORepository extends AbstractBORepository implements BORep
         setBeansContainer(appContext.getBean(BeansContainer.class));
         setExecutorService(asyncExecutor);
         super.init();
-        getCacheKeepers();
+        for(BOCacheKeeper<? extends AbstractEntity> cacheKeeper : getCacheKeepers()) {
+        	try {
+        		cacheKeeper.init(this);
+        	}catch(Throwable t) {
+        		logger.error("Init cache keeper "+cacheKeeper+" failed",t);
+        	}
+        }
     }
-
-    @Override
-    public Collection<BOCacheKeeper<? extends AbstractEntity>> getCacheKeepers() {
-		return null;
-	}
 
 	@Override
     protected BOEntityAccessor getDefaultEntityAccessor() {
