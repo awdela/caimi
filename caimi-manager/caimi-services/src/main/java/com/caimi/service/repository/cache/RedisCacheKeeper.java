@@ -5,10 +5,8 @@ import java.util.concurrent.locks.Lock;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.redis.cache.RedisCache;
 
-import com.caimi.service.cache.RedisSingleMgr;
-import com.caimi.service.cluster.RedisClusterMgr;
+import com.caimi.service.cache.RedisCacheManager;
 import com.caimi.service.repository.AbstractEntity;
 import com.caimi.service.repository.BOCacheContainer;
 import com.caimi.service.repository.BOCacheKeeper;
@@ -26,21 +24,17 @@ public abstract class RedisCacheKeeper<T extends AbstractEntity> implements BOCa
 
 //    protected RedisClusterMgr clusterMgr;
     
-    protected RedisSingleMgr redisMgr;
-    
-    protected abstract void put0(T bo);
+    protected RedisCacheManager redisMgr;
     
     // 缓存单个键
-    protected abstract T get0(String key);
+    protected abstract void put0(Object key, T bo);
     
     /* 可以缓存多个key
      * TODO
      */
-    protected abstract T get0(int key, Object keyId);
+    protected abstract T get0(Object key);
     
-    protected abstract Object getId0(int key, Object keyId);
-    
-    protected abstract T remove0(T bo);
+    protected abstract void remove0(Object key);
 
     public RedisCacheKeeper(Class<T> mainClasses) {
         this.mainCacheClass = mainClasses;
@@ -50,7 +44,7 @@ public abstract class RedisCacheKeeper<T extends AbstractEntity> implements BOCa
 	public void init(BOCacheContainer container) {
         this.container = container;
         this.repository = container.getRepository();
-        this.redisMgr = container.getBean(RedisSingleMgr.class);
+        this.redisMgr = container.getBean(RedisCacheManager.class);
 	}
 
 	@Override
@@ -60,8 +54,7 @@ public abstract class RedisCacheKeeper<T extends AbstractEntity> implements BOCa
 
 	@Override
     public T get(Object keyId) {
-        String key = mainCacheClass.getSimpleName() + "_" + String.valueOf(keyId);
-		return null;
+		return get0(keyId);
 	}
 
 	@Override
@@ -69,6 +62,10 @@ public abstract class RedisCacheKeeper<T extends AbstractEntity> implements BOCa
 		return null;
 	}
 
+	/**
+	 * redis不支持
+	 * ignite支持
+	 */
 	@Override
 	public List<T> search(Class<T> boClass, String searchExpr) {
 		return null;
@@ -80,17 +77,17 @@ public abstract class RedisCacheKeeper<T extends AbstractEntity> implements BOCa
 	}
 
 	@Override
-	public void put(T t) {
+	public void put(Object key, T t) {
 		if (t==null) {
 			return;
 		}
-		put0(t);
+		put0(key, t);
 	}
 
 	@Override
-	public void putAll(List<T> list) {
+	public void putAll(Object key, List<T> list) {
 		for(T t:list) {
-			put(t);
+			put(key, t);
 		}
 	}
 

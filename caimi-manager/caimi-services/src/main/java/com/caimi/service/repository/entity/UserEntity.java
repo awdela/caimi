@@ -23,7 +23,7 @@ import com.caimi.util.StringUtil;
 
 @Entity
 @Table(name = "user")
-public class UserEntity extends AbstractBusinessEntity implements User, UserDetails, Binarylizable {
+public class UserEntity extends AbstractBusinessEntity implements User, UserDetails {
 
     /**
      * 用户表实体
@@ -117,21 +117,21 @@ public class UserEntity extends AbstractBusinessEntity implements User, UserDeta
         return json;
     }
 
-    @Override
-    public void writeBinary(BinaryWriter writer) throws BinaryObjectException {
-        super.writeBinary(writer);
-        writer.writeString("title", title);
-        writer.writeString("email", email);
-        writer.writeString("phone", phone);
-    }
+//    @Override
+//    public void writeBinary(BinaryWriter writer) throws BinaryObjectException {
+//        super.writeBinary(writer);
+//        writer.writeString("title", title);
+//        writer.writeString("email", email);
+//        writer.writeString("phone", phone);
+//    }
 
-    @Override
-    public void readBinary(BinaryReader reader) throws BinaryObjectException {
-        super.readBinary(reader);
-        title = reader.readString("title");
-        email = reader.readString("email");
-        phone = reader.readString("phone");
-    }
+//    @Override
+//    public void readBinary(BinaryReader reader) throws BinaryObjectException {
+//        super.readBinary(reader);
+//        title = reader.readString("title");
+//        email = reader.readString("email");
+//        phone = reader.readString("phone");
+//    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

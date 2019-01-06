@@ -8,16 +8,16 @@ public abstract class RedisBusinessEntityCacheKeeper<T extends AbstractBusinessE
 		super(mainClasses);
 	}
 
-	@Override
-	protected T get0(int key, Object keyId) {
-		switch(key) {
-		case KEY_ID:
-		{
+//	@Override
+//	protected T get0(int key, Object keyId) {
+//		switch(key) {
+//		case KEY_ID:
+//		{
 //			T result = getM
-		}
-		}
-		return null;
-	}
+//		}
+//		}
+//		return null;
+//	}
 
 	@Override
 	public Object getId(int key, Object keyId) {

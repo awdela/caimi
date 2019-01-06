@@ -175,22 +175,22 @@ public abstract class IgniteCacheKeeper<T extends AbstractEntity> implements BOC
 		return result;
 	}
 
-	@Override
-	public void put(T t) {
-		if (t == null) {
-			return;
-		}
-		cacheStateCheck();
-		put0(t);
-	}
-
-	@Override
-	public void putAll(List<T> list) {
-		cacheStateCheck();
-		for(T t:list) {
-			put(t);
-		}
-	}
+//	@Override
+//	public void put(T t) {
+//		if (t == null) {
+//			return;
+//		}
+//		cacheStateCheck();
+//		put0(t);
+//	}
+//
+//	@Override
+//	public void putAll(List<T> list) {
+//		cacheStateCheck();
+//		for(T t:list) {
+//			put(t);
+//		}
+//	}
 
 	@Override
 	public T remove(Object boId) {
@@ -198,11 +198,11 @@ public abstract class IgniteCacheKeeper<T extends AbstractEntity> implements BOC
 		return remove0(boId);
 	}
 
-	@Override
-	public int reload(List<T> list) {
-		putAll(list);
-		return list.size();
-	}
+//	@Override
+//	public int reload(List<T> list) {
+//		putAll(list);
+//		return list.size();
+//	}
 
 	/**
 	 * 同步Ignite集群数据

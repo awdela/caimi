@@ -36,9 +36,13 @@ public interface BOCacheKeeper<T> {
 
 	public List<Object[]> search(Class<T> boClass, String searchExpr, String[] fields);
 
-	public void put(T t);
+	public void put(T t); 
+	
+	public void put(Object key, T t);
 
 	public void putAll(List<T> list);
+	
+	public void putAll(Object key, List<T> list);
 
 	public T remove(Object boId);
 
