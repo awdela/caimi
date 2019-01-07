@@ -1,4 +1,4 @@
- package com.caimi.service.repository.cache;
+ package com.caimi.service.repository.cache.ignite;
 
 import java.util.List;
 
@@ -27,7 +27,7 @@ public class UserCacheKeeper0 extends IgniteBusinessEntityCacheKeeper<UserEntity
 	 * User Id -> Object
 	 */
 	private IgniteCache<String, UserEntity> users;
-	
+
 	@Override
 	protected void initIgniteCache() {
 		Ignite ignite = clusterMgr.getIgnite();
@@ -80,21 +80,27 @@ public class UserCacheKeeper0 extends IgniteBusinessEntityCacheKeeper<UserEntity
 	}
 
 	@Override
-	public void put(Object key, UserEntity t) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void putAll(Object key, List<UserEntity> list) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public int reload(List<UserEntity> list) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
+    @Override
+    public void put(UserEntity t) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void putAll(List<UserEntity> list) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public List<UserEntity> search(String searchExpr) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
 }

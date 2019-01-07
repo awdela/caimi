@@ -1,4 +1,4 @@
-package com.caimi.service.repository.cache;
+package com.caimi.service.repository.cache.redis;
 
 import com.caimi.service.repository.entity.AbstractBusinessEntity;
 

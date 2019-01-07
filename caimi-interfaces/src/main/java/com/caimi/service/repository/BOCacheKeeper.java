@@ -28,23 +28,19 @@ public interface BOCacheKeeper<T> {
 	 */
 	public Object getId(int key, Object keyId);
 
+    public void put(T t);
+
+    public void putAll(List<T> list);
+
+    public T remove(Object boId);
+
 	/**
-	 * CRUD
-	 */
+     * CRUD
+     */
+    public List<T> search(Class<T> boClass, String searchExpr);
 
-	public List<T> search(Class<T> boClass, String searchExpr);
-
+    // redis cache not support
 	public List<Object[]> search(Class<T> boClass, String searchExpr, String[] fields);
-
-	public void put(T t); 
-	
-	public void put(Object key, T t);
-
-	public void putAll(List<T> list);
-	
-	public void putAll(Object key, List<T> list);
-
-	public T remove(Object boId);
 
 	/**
 	 * 清除并重新加载所有数据

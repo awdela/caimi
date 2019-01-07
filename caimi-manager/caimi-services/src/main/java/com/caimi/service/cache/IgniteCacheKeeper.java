@@ -133,7 +133,6 @@ public abstract class IgniteCacheKeeper<T extends AbstractEntity> implements BOC
 	}
 
 	@SuppressWarnings("rawtypes")
-	@Override
 	public List<T> search(Class boClass, String searchExpr) {
 		cacheStateCheck();
 		if (StringUtil.isEmpty(searchExpr)) {

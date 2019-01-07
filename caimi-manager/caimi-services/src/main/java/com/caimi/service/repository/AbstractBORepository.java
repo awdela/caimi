@@ -238,7 +238,7 @@ public abstract class AbstractBORepository implements BORepository, BOCacheConta
         EntityInfo entityInfo = getEntityInfo(boClass);
         return entityInfo.cacheKeeper;
     }
-    
+
     public Collection<BOCacheKeeper<? extends AbstractEntity>> getCacheKeepers(){
     	Collection<BOCacheKeeper<? extends AbstractEntity>> cacheKeepers = new HashSet<>();
     	return cacheKeepers;

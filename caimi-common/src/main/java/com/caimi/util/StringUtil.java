@@ -3,6 +3,8 @@ package com.caimi.util;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
+import java.util.ArrayList;
+import java.util.List;
 
 public class StringUtil {
 
@@ -58,6 +60,36 @@ public class StringUtil {
             return false;
         }
         return str1.equals(str2);
+    }
+
+    public static String[] split(String str, String regex) {
+        if (isEmpty(str)) {
+            return new String[] {};
+        }
+        List<String> result = new ArrayList<>();
+        for (String elem : str.split(regex)) {
+            elem = elem.trim();
+            if (!isEmpty(elem)) {
+                result.add(elem);
+            }
+        }
+        return result.toArray(new String[result.size()]);
+    }
+
+    public static List<String[]> splitKVs(String str) {
+        List<String[]> result = new ArrayList<>();
+        for (String p0 : str.split("(,|;)\\s*")) {
+            String kv[] = p0.split("\\s*(:|=)\\s*");
+            result.add(kv);
+        }
+        return result;
+    }
+
+    // 首字母大写
+    public static String upperFirstString(String str) {
+        char[] ca = str.toCharArray();
+        ca[0] -= 32;
+        return String.valueOf(ca);
     }
 
 }

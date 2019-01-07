@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.caimi.api.v1.RestControllerConstants;
-import com.caimi.service.cache.RedisSingleMgr;
+import com.caimi.service.cache.RedisCacheManager;
 
 @RestController
 public class RedisTestController {
 
     @Autowired
-    private RedisSingleMgr redisClient;
+    private RedisCacheManager redisClient;
 
     private static final String URL_PREFIX = RestControllerConstants.URI_Cache;
 
@@ -29,7 +29,11 @@ public class RedisTestController {
         JSONObject json = new JSONObject(jsonData);
         String key = json.getString("key");
         String value = json.getString("value");
-        String result = redisClient.set(key, value);
-        return ResponseEntity.ok(result.toString());
+        boolean b = redisClient.set(key, value, -1);
+        if (b) {
+            return ResponseEntity.ok("success");
+        } else {
+            return ResponseEntity.ok("fail");
+        }
     }
 }

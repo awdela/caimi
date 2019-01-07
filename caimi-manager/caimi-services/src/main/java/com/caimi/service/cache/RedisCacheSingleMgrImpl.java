@@ -1,5 +1,6 @@
 package com.caimi.service.cache;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
@@ -16,14 +17,14 @@ import com.caimi.service.repository.AbstractEntity;
 public class RedisCacheSingleMgrImpl implements RedisCacheManager<String, AbstractEntity> {
 
     private static final Logger logger = LoggerFactory.getLogger(RedisCacheSingleMgrImpl.class);
-    
+
     @Autowired
     private RedisTemplate<String, AbstractEntity> redisTemplate;
 
     @PostConstruct
     public void init() {
     }
-    
+
     @Override
 	public boolean expire(String key, long time) {
     	try {
@@ -42,7 +43,7 @@ public class RedisCacheSingleMgrImpl implements RedisCacheManager<String, Abstra
 	public boolean hset(String hkey, String key, AbstractEntity entity) {
 		return hset(hkey, key, entity, -1);
 	}
-	
+
 	public boolean hset(String hkey, String key, AbstractEntity entity, long time) {
 		try {
 			redisTemplate.opsForHash().put(hkey, key, entity);
@@ -60,7 +61,12 @@ public class RedisCacheSingleMgrImpl implements RedisCacheManager<String, Abstra
 	public AbstractEntity hget(String hkey, String key) {
 		return (AbstractEntity) redisTemplate.opsForHash().get(hkey, key);
 	}
-	
+
+    @Override
+    public List<Object> hvals(String hkey) {
+        return redisTemplate.opsForHash().values(hkey);
+    }
+
 	@Override
 	public void hdel(String hkey, String key) {
 		redisTemplate.opsForHash().delete(hkey, key);
@@ -70,7 +76,7 @@ public class RedisCacheSingleMgrImpl implements RedisCacheManager<String, Abstra
 	public boolean hHasKey(String hkey, String key) {
 		return redisTemplate.opsForHash().hasKey(hkey, key);
 	}
-	
+
 	@Override
 	public void del(String key) {
 		redisTemplate.opsForHash().delete(key);
@@ -85,7 +91,7 @@ public class RedisCacheSingleMgrImpl implements RedisCacheManager<String, Abstra
 	public long incr(String key) {
 		return 0;
 	}
-	
+
 	@Override
 	public boolean set(String key, AbstractEntity entity) {
 		return false;
