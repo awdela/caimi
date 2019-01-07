@@ -1,11 +1,14 @@
 package com.caimi.service.repository.cache.redis;
 
+import java.lang.reflect.Method;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.caimi.service.repository.entity.UserEntity;
+import com.caimi.util.StringUtil;
 
 public class UserCacheKeeper extends RedisCacheKeeper<UserEntity>{
 
@@ -54,6 +57,37 @@ public class UserCacheKeeper extends RedisCacheKeeper<UserEntity>{
     @Override
     public int reload(List<UserEntity> list) {
         return super.reload(list);
+    }
+
+    /**
+     * 使用反射实现,不建议使用此方法
+     */
+    @SuppressWarnings({ "unchecked" })
+    @Override
+    protected List<UserEntity> search0(String searchExpr) {
+        List<String[]> searchExps = StringUtil.splitKVs(searchExpr);
+        // get all userentity
+        List<UserEntity> result = new LinkedList<>();
+        List<UserEntity> entities = redisMgr.hvals(className);
+        try {
+            for (UserEntity entity : entities) {
+                boolean flag = true;
+                for (String[] searchExp : searchExps) {
+                    Method m = UserEntity.class.getMethod("get" + StringUtil.upperFirstString(searchExp[0]));
+                    Object value = m.invoke(entity);
+                    if (!StringUtil.equals(searchExp[1], (String) value)) {
+                        flag = false;
+                        break;
+                    }
+                }
+                if (flag) {
+                    result.add(entity);
+                }
+            }
+        } catch (Exception e) {
+            logger.error(className + " search content " + searchExpr + " has error: ", e.getMessage());
+        }
+        return result;
     }
 
 }

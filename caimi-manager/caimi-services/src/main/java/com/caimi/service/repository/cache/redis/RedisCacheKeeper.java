@@ -1,7 +1,5 @@
 package com.caimi.service.repository.cache.redis;
 
-import java.lang.reflect.Method;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 
@@ -13,7 +11,6 @@ import com.caimi.service.repository.AbstractEntity;
 import com.caimi.service.repository.BOCacheContainer;
 import com.caimi.service.repository.BOCacheKeeper;
 import com.caimi.service.repository.BORepository;
-import com.caimi.util.StringUtil;
 
 public abstract class RedisCacheKeeper<T extends AbstractEntity> implements BOCacheKeeper<T>{
 
@@ -39,6 +36,8 @@ public abstract class RedisCacheKeeper<T extends AbstractEntity> implements BOCa
 
     protected abstract T remove0(Object key);
 
+    protected abstract List<T> search0(String searchExpr);
+
     public RedisCacheKeeper(Class<T> mainClasses) {
         this.mainCacheClass = mainClasses;
     }
@@ -48,11 +47,6 @@ public abstract class RedisCacheKeeper<T extends AbstractEntity> implements BOCa
         this.container = container;
         this.repository = container.getRepository();
         this.redisMgr = container.getBean(RedisCacheManager.class);
-	}
-
-	@Override
-	public void destroy() {
-
 	}
 
     @Override
@@ -83,34 +77,9 @@ public abstract class RedisCacheKeeper<T extends AbstractEntity> implements BOCa
     /**
      * "key=value,key0=value0"
      */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
     public List<T> search(Class boClass, String searchExpr) {
-        List<String[]> searchExps = StringUtil.splitKVs(searchExpr);
-        // get all userentity
-        List<T> result = new LinkedList<>();
-        List<T> entities = redisMgr.hvals(boClass.getSimpleName());
-        try {
-            // get entity name
-            Class<?> clz = Class.forName(boClass.getName());
-            Object o = clz.newInstance();
-            for (T entity : entities) {
-                boolean flag = false;
-                for (String[] searchExp : searchExps) {
-                    Method m = boClass.getMethod("get" + StringUtil.upperFirstString(searchExp[0]), String.class);
-                    Object value = m.invoke(o);
-                    if (StringUtil.equals(searchExp[1], (String) value)) {
-                        flag = true;
-                    }
-                }
-                if (flag) {
-                    result.add(entity);
-                }
-            }
-        } catch (Exception e) {
-            logger.error(boClass.getSimpleName() + " search content " + searchExpr + " has error: ", e.getMessage());
-        }
-        return result;
+        return search0(searchExpr);
 	}
 
     // not support

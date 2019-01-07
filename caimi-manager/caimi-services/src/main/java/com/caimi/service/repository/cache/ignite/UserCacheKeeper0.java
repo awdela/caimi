@@ -42,11 +42,6 @@ public class UserCacheKeeper0 extends IgniteBusinessEntityCacheKeeper<UserEntity
 	}
 
 	@Override
-	public void destroy() {
-
-	}
-
-	@Override
 	public int reloadAll() {
 		initIgniteCache();
 		users.clear();
@@ -95,12 +90,6 @@ public class UserCacheKeeper0 extends IgniteBusinessEntityCacheKeeper<UserEntity
     public void putAll(List<UserEntity> list) {
         // TODO Auto-generated method stub
 
-    }
-
-    @Override
-    public List<UserEntity> search(String searchExpr) {
-        // TODO Auto-generated method stub
-        return null;
     }
 
 }

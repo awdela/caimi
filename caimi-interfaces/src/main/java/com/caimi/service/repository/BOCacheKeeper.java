@@ -12,8 +12,6 @@ public interface BOCacheKeeper<T> {
 
 	public void init(BOCacheContainer container);
 
-	public void destroy();
-
 	/**
      * 直接根据id查缓存
      */
