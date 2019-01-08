@@ -12,6 +12,10 @@ import com.caimi.service.repository.BOCacheContainer;
 import com.caimi.service.repository.BOCacheKeeper;
 import com.caimi.service.repository.BORepository;
 
+/*
+ * 单节点,所有修改不涉及分布式锁问题
+ */
+
 public abstract class RedisCacheKeeper<T extends AbstractEntity> implements BOCacheKeeper<T>{
 
 	private static final Logger logger = LoggerFactory.getLogger(RedisCacheKeeper.class);
@@ -29,8 +33,8 @@ public abstract class RedisCacheKeeper<T extends AbstractEntity> implements BOCa
     // 缓存单个键
     protected abstract void put0(T bo);
 
-    /* 可以缓存多个key
-     * TODO
+    /*
+     * TODO 可以缓存多个key
      */
     protected abstract T get0(Object key);
 
@@ -54,6 +58,20 @@ public abstract class RedisCacheKeeper<T extends AbstractEntity> implements BOCa
         if (t != null) {
             put0(t);
         }
+    }
+
+    /**
+     * TODO 检查redis状态,必要时重连
+     */
+    private void cacheStateCheck() {
+        boolean cacheStatus = redisMgr.getStatus();
+        if (!cacheStatus) {
+            restartRedisCache();
+        }
+    }
+
+    private void restartRedisCache() {
+        // client not support
     }
 
     @Override

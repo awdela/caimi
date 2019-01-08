@@ -54,11 +54,6 @@ public class UserCacheKeeper extends RedisCacheKeeper<UserEntity>{
         return entities.size();
     }
 
-    @Override
-    public int reload(List<UserEntity> list) {
-        return super.reload(list);
-    }
-
     /**
      * 使用反射实现,不建议使用此方法
      */

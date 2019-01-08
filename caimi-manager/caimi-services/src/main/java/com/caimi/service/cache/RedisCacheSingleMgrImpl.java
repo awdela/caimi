@@ -8,6 +8,9 @@ import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.connection.RedisConnection;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.RedisConnectionUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -86,6 +89,21 @@ public class RedisCacheSingleMgrImpl implements RedisCacheManager<String, Abstra
 	public long decr(String key, long delta) {
 		return 0;
 	}
+
+    @Override
+    public boolean getStatus() {
+        boolean live = true;
+        RedisConnectionFactory factory = redisTemplate.getConnectionFactory();
+        RedisConnection conn = null;
+        try {
+            conn = RedisConnectionUtils.getConnection(factory);
+            live = conn == null || conn.isClosed();
+        } catch (Exception e) {
+            live = false;
+            logger.error("Check cache state failed", e);
+        }
+        return live;
+    }
 
 	@Override
 	public long incr(String key) {

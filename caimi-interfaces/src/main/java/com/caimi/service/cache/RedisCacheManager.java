@@ -39,4 +39,6 @@ public interface RedisCacheManager<K, V> {
     // 判断hash表中是否有该项的值
     public boolean hHasKey(K hkey, K key);
 
+    public boolean getStatus();
+
 }
