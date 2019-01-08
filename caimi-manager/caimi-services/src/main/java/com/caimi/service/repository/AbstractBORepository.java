@@ -110,8 +110,9 @@ public abstract class AbstractBORepository implements BORepository, BOCacheConta
         try {
             List<String> packages = new ArrayList<>();
             packages.add("com.caimi.service.repository.entity");
-            packages.add("com.caimi.service.repository.entity.cache");
+            packages.add("com.caimi.service.repository.cache.redis");
             packages.add("com.caimi.service.repository.entity.accessor");
+
             // List<Map<String, String>> info = new ArrayList<>();
             EntityInfo entityInfo = loadEntityClassInfo(packages, "User", BOEntity.ID_PREFIX_USER);
             entityInfos.put(entityInfo.entityClass, entityInfo);
@@ -126,14 +127,17 @@ public abstract class AbstractBORepository implements BORepository, BOCacheConta
         EntityInfo entityInfo = new EntityInfo();
         // user entityInfo
         String entityClass = InterfaceClassName + ENTITY_SUFFIX;
-        //String entityCacheKeeper = InterfaceClassName + CACHEKEEPER_SUFFIX;
+        String entityCacheKeeper = InterfaceClassName + CACHEKEEPER_SUFFIX;
         ClassLoader classLoader = getClass().getClassLoader();
         entityInfo.entityClass = loadClass(packages, entityClass, classLoader);
-        //Class entityCacheClass = loadClass(packages, entityCacheKeeper, classLoader);
-        //entityInfo.cacheKeeper = (BOCacheKeeper) entityCacheClass.newInstance();
-        //if (entityInfo.cacheKeeper instanceof BORepositoryChangeListener) {
-        //    entityInfo.changeListeners.add((BORepositoryChangeListener) entityInfo.cacheKeeper);
-        //}
+        Class entityCacheClass = loadClass(packages, entityCacheKeeper, classLoader);
+        if (entityCacheClass != null) {
+            entityInfo.cacheKeeper = (BOCacheKeeper) entityCacheClass.newInstance();
+            if (entityInfo.cacheKeeper instanceof BORepositoryChangeListener) {
+                entityInfo.changeListeners.add((BORepositoryChangeListener) entityInfo.cacheKeeper);
+            }
+        }
+
         Class entityIdGenerator = loadClass(packages, IDGENERATOR_SUFFIX, classLoader);
         if (entityIdGenerator != null) {
             entityInfo.idGenerator = (BOEntityIdGenerator) entityIdGenerator.newInstance();
@@ -589,12 +593,10 @@ public abstract class AbstractBORepository implements BORepository, BOCacheConta
             return Class.forName(className, true, classLoader);
         } catch (ClassNotFoundException e) {
         }
-        try {
-            for (String package0 : packages) {
+        for (String package0 : packages) {
+            try {
                 return Class.forName(package0.trim() + "." + className, true, classLoader);
-            }
-        } catch (ClassNotFoundException e) {
-
+            } catch (Throwable t) {}
         }
         throw new Exception("Repository class " + className + " is not found");
     }

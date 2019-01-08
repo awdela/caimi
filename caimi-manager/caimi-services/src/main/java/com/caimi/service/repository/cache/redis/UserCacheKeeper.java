@@ -16,8 +16,8 @@ public class UserCacheKeeper extends RedisCacheKeeper<UserEntity>{
 
     private static final String className = UserCacheKeeper.class.getSimpleName();
 
-	public UserCacheKeeper(Class<UserEntity> mainClasses) {
-		super(mainClasses);
+    public UserCacheKeeper() {
+        super(UserEntity.class);
 	}
 
 	@SuppressWarnings("unchecked")
