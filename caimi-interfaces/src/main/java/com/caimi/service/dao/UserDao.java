@@ -7,7 +7,7 @@ public interface UserDao {
 
 	User getById(String id);
 
-	User getByName(String userName);
+    User getByName(String username);
 
     User save(User user);
 

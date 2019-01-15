@@ -7,8 +7,8 @@ import java.io.Serializable;
  */
 public interface BOEntity {
 
-	public static final String ID_PREFIX_USER = "usr__";
-	
+    public static final String ID_PREFIX_USER = "usr_";
+
     public static final String ID_PREFIX_ARTICLE = "atc_";
 
     public static final int KEY_ID = 0;

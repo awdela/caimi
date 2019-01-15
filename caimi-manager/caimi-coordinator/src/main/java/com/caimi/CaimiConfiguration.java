@@ -70,7 +70,6 @@ import com.caimi.util.concurrent.SequentialThreadedProcessor;
 import com.caimi.util.concurrent.SequentialThreadedProcessorImpl;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
-import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
 @Configuration
@@ -219,7 +218,7 @@ public class CaimiConfiguration
         jedisPoolConfig.setMaxWaitMillis(redis_pool_max_wait);
         return jedisPoolConfig;
     }
-    
+
     /**
      * 单机版
      * TODO:集群版
@@ -233,15 +232,15 @@ public class CaimiConfiguration
     	jedisConnectFactory.setTimeout(redis_timeout);
     	return jedisConnectFactory;
     }
-    
+
     @Bean
     public RedisTemplate<String, AbstractEntity> redisTemplate(JedisConnectionFactory jedisConnectFactory){
     	RedisTemplate<String, AbstractEntity> redisTemplate = new RedisTemplate<>();
     	// 设置数据存入redis的序列化方式
     	redisTemplate.setKeySerializer(new StringRedisSerializer());
-    	redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+        redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
     	redisTemplate.setHashKeySerializer(new StringRedisSerializer());
-    	redisTemplate.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());
+        redisTemplate.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());
     	// 开启事务
     	redisTemplate.setEnableTransactionSupport(true);
     	redisTemplate.setConnectionFactory(jedisConnectFactory);

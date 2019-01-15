@@ -34,8 +34,10 @@ public abstract class RedisCacheKeeper<T extends AbstractEntity> implements BOCa
     protected abstract void put0(T bo);
 
     /*
-     * TODO 可以缓存多个key
+     * TODO 可以缓存多个key 目前只能缓存id
      */
+    protected abstract T get0(Object keyId, Object key);
+
     protected abstract T get0(Object key);
 
     protected abstract T remove0(Object key);

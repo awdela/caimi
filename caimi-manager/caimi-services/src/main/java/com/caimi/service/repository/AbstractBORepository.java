@@ -25,7 +25,6 @@ import org.slf4j.LoggerFactory;
 
 import com.caimi.service.beans.BeansContainer;
 import com.caimi.service.repository.BORepositoryChangeListener.Operation;
-import com.caimi.service.repository.entity.AbstarctEntity;
 
 @SuppressWarnings("rawtypes")
 public abstract class AbstractBORepository implements BORepository, BOCacheContainer {
@@ -243,8 +242,14 @@ public abstract class AbstractBORepository implements BORepository, BOCacheConta
         return entityInfo.cacheKeeper;
     }
 
+    @SuppressWarnings("unchecked")
     public Collection<BOCacheKeeper<? extends AbstractEntity>> getCacheKeepers(){
     	Collection<BOCacheKeeper<? extends AbstractEntity>> cacheKeepers = new HashSet<>();
+        for (EntityInfo entityInfo : entityInfos.values()) {
+            if (entityInfo.cacheKeeper != null) {
+                cacheKeepers.add(entityInfo.cacheKeeper);
+            }
+        }
     	return cacheKeepers;
     }
 
@@ -325,34 +330,37 @@ public abstract class AbstractBORepository implements BORepository, BOCacheConta
         return result;
     }
 
+    // TODO
     @SuppressWarnings("unchecked")
     @Override
     public <T> T getBy(Class<T> boClass, int key, Object keyId) {
         T result = null;
-        EntityInfo entityInfo = getEntityInfo(boClass);
-        BOCacheKeeper cacheKeeper = getCacheKeeper(boClass);
-        if (cacheKeeper != null) {
-            AbstarctEntity r = (AbstarctEntity) cacheKeeper.get(keyId);
-            if (r != null) {
-                r.setRepository(this);
-            }
-            result = (T) r;
-        } else {
-            result = (T) entityInfo.accessor.loadEntity(entityInfo.entityClass, keyId);
-        }
+        // EntityInfo entityInfo = getEntityInfo(boClass);
+        // BOCacheKeeper cacheKeeper = getCacheKeeper(boClass);
+        // if (cacheKeeper != null) {
+        // AbstarctEntity r = (AbstarctEntity) cacheKeeper.get(keyId);
+        // if (r != null) {
+        // r.setRepository(this);
+        // }
+        // result = (T) r;
+        // } else {
+        // result = (T) entityInfo.accessor.loadEntity(entityInfo.entityClass, keyId);
+        // }
         return result;
     }
 
+    // TODO
     @Override
     public <T> Object getIdBy(Class<T> boClass, int key, Object keyId) {
         Object result = null;
-        BOCacheKeeper cacheKeeper = getCacheKeeper(boClass);
-        if (cacheKeeper != null) {
-            result = cacheKeeper.getId(key, keyId);
-        }
-        if (logger.isDebugEnabled()) {
-            logger.debug("getIdBy: " + boClass.getName() + " key " + key + " keyId " + keyId + " returns " + result);
-        }
+        // BOCacheKeeper cacheKeeper = getCacheKeeper(boClass);
+        // if (cacheKeeper != null) {
+        // result = cacheKeeper.getId(key, keyId);
+        // }
+        // if (logger.isDebugEnabled()) {
+        // logger.debug("getIdBy: " + boClass.getName() + " key " + key + " keyId " +
+        // keyId + " returns " + result);
+        // }
         return result;
     }
 

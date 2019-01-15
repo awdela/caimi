@@ -1,15 +1,15 @@
 package com.caimi.util.beans;
 
 public class RespBean {
-	
+
 	private String status;
-	private String msg;
-	
+    private Object msg;
+
 	public RespBean() {
-		
+
 	}
-	
-	public RespBean(String status, String msg) {
+
+    public RespBean(String status, Object msg) {
 		super();
 		this.status = status;
 		this.msg = msg;
@@ -23,7 +23,7 @@ public class RespBean {
 		this.status = status;
 	}
 
-	public String getMsg() {
+    public Object getMsg() {
 		return msg;
 	}
 

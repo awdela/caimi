@@ -1,42 +1,43 @@
 package com.caimi.service.auth;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.caimi.service.cache.RedisCacheManager;
 import com.caimi.service.dao.UserDao;
-import com.caimi.service.repository.entity.Role;
+import com.caimi.service.repository.AbstractEntity;
 import com.caimi.service.repository.entity.User;
 import com.caimi.service.repository.entity.UserEntity;
 import com.caimi.util.StringUtil;
+import com.caimi.util.UUIDUtil;
+import com.caimi.util.beans.RespBean;
 
 @Service
 @Transactional
-public class UserServiceImpl implements UserService, UserDetailsService{
+public class UserServiceImpl implements UserService {// , UserDetailsService
 
 	@Autowired
 	private UserDao userDao;
 
-	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		UserEntity user = (UserEntity) userDao.getByName(username);
-		if (user == null) {
-			throw new UsernameNotFoundException("用户名不存在");
-		}
-		Role role = userDao.getRole(user.getId());
-		//用于添加用户的权限,只要把用户权限添加到authorities
-		List<SimpleGrantedAuthority> authorities = new ArrayList<SimpleGrantedAuthority>();
-		authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
-		return user;
-	}
+    @Autowired
+    private RedisCacheManager<String, AbstractEntity> redis;
+
+    // @Override
+    // public UserDetails loadUserByUsername(String username) throws
+    // UsernameNotFoundException {
+    // UserEntity user = (UserEntity) userDao.getByName(username);
+    // if (user == null) {
+    // throw new UsernameNotFoundException("用户名不存在");
+    // }
+    // Role role = userDao.getRole(user.getId());
+    // //用于添加用户的权限,只要把用户权限添加到authorities
+    // List<SimpleGrantedAuthority> authorities = new
+    // ArrayList<SimpleGrantedAuthority>();
+    // authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
+    // return user;
+    // }
 
 	/**
 	 * @param user
@@ -45,16 +46,20 @@ public class UserServiceImpl implements UserService, UserDetailsService{
 	 * @return 2 failed
 	 */
 	@Override
-	public int login(User user) {
+    public RespBean login(User user) {
 		User userEntity = userDao.getByName(user.getName());
         if (userEntity == null) {
-			return 1;
+            return new RespBean("error", "change your username!");
 		}
         String passWord = StringUtil.md5(user.getPassword());
         if (passWord.equals(userEntity.getPassword())) {
-			return 0;
+            // creat token
+            String token = TOKEN_PREFIX + UUIDUtil.genId();
+            redis.hset(REDIS_USER_SESSION_KEY, token, (UserEntity) userEntity);
+            redis.expire(token, REDIS_USER_SESSION_EXPIRE);
+            return new RespBean("success", "token");
 		}
-		return 2;
+        return new RespBean("error", "need to regist or login!");
 	}
 
 	/**
@@ -64,32 +69,32 @@ public class UserServiceImpl implements UserService, UserDetailsService{
 	 * @return 2 failed
 	 */
 	@Override
-    public int regist(User user) {
+    public RespBean regist(User user) {
 		User repeatUserName = userDao.getByName(user.getName());
 		if(repeatUserName!=null) {
-			return 1;
+            return new RespBean("error", "change your username!");
 		}
 		userDao.save(user);
-		return 0;
+        return new RespBean("success", "welcome to caimi!");
 	}
 
 	@Override
-    public int deleteUser(User user) {
+    public RespBean deleteUser(User user) {
         User existUser = userDao.getByName(user.getName());
         if (null != existUser) {
             userDao.delete(existUser);
-            return 0;
+            return new RespBean("success", "logout caimi!");
         }
-        return 1;
+        return new RespBean("error", "need to regist or login!");
 	}
 
     @Override
-    public int updateUser(User user) {
+    public RespBean updateUser(User user) {
         User updateUser = userDao.update(user);
         if (null != updateUser) {
-            return 0;
+            return new RespBean("success", "update done");
         }
-        return 1;
+        return new RespBean("error", "update error");
     }
 
 

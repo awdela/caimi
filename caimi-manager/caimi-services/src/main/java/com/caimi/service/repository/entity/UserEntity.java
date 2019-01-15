@@ -1,38 +1,20 @@
 package com.caimi.service.repository.entity;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
-import org.apache.ignite.binary.BinaryObjectException;
-import org.apache.ignite.binary.BinaryReader;
-import org.apache.ignite.binary.BinaryWriter;
-import org.apache.ignite.binary.Binarylizable;
 import org.json.JSONObject;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import com.caimi.util.StringUtil;
 
 @Entity
 @Table(name = "user")
-public class UserEntity extends AbstractBusinessEntity implements User, UserDetails {
-
-    /**
-     * 用户表实体
-     */
-    private static final long serialVersionUID = 1L;
+public class UserEntity extends AbstractBusinessEntity implements User {// UserDetails
 
     @Column(name = "user_password")
     private String passwd;
-    
+
     @Column(name = "user_role")
     private String role;
 
@@ -78,7 +60,7 @@ public class UserEntity extends AbstractBusinessEntity implements User, UserDeta
     public String getEmail() {
         return email;
     }
-    
+
 
 	@Override
 	public String getRole() {
@@ -117,6 +99,11 @@ public class UserEntity extends AbstractBusinessEntity implements User, UserDeta
         return json;
     }
 
+    @Override
+    public String getPassword() {
+        return passwd;
+    }
+
 //    @Override
 //    public void writeBinary(BinaryWriter writer) throws BinaryObjectException {
 //        super.writeBinary(writer);
@@ -133,44 +120,44 @@ public class UserEntity extends AbstractBusinessEntity implements User, UserDeta
 //        phone = reader.readString("phone");
 //    }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+    // @Override
+    // public Collection<? extends GrantedAuthority> getAuthorities() {
+    // List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 //        List<Role> roles = this.getRoles();
 //        for (Role role : roles) {
 //            authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
 //        }
-        return authorities;
-    }
+    // return authorities;
+    // }
 
-    @Override
-    public String getPassword() {
-        return passwd;
-    }
-
-    @Override
-    public String getUsername() {
-        return name;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
+    // @Override
+    // public String getPassword() {
+    // return passwd;
+    // }
+    //
+    // @Override
+    // public String getUsername() {
+    // return name;
+    // }
+    //
+    // @Override
+    // public boolean isAccountNonExpired() {
+    // return true;
+    // }
+    //
+    // @Override
+    // public boolean isAccountNonLocked() {
+    // return true;
+    // }
+    //
+    // @Override
+    // public boolean isCredentialsNonExpired() {
+    // return true;
+    // }
+    //
+    // @Override
+    // public boolean isEnabled() {
+    // return true;
+    // }
 
 }

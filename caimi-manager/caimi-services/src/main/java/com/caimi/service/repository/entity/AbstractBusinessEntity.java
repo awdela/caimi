@@ -8,10 +8,6 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 
-import org.apache.ignite.binary.BinaryObjectException;
-import org.apache.ignite.binary.BinaryReader;
-import org.apache.ignite.binary.BinaryWriter;
-import org.apache.ignite.binary.Binarylizable;
 import org.apache.ignite.cache.query.annotations.QuerySqlField;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -164,11 +160,6 @@ public abstract class AbstractBusinessEntity extends AbstractEntity implements B
         this.no = no;
     }
 
-    @Override
-    public String getAttr() {
-    	return attrs;
-    }
-    
     public void setAttrs(String attrs) {
     	this.attrs = attrs;
     }
@@ -199,16 +190,6 @@ public abstract class AbstractBusinessEntity extends AbstractEntity implements B
 		return attrs;
 	}
     
-	@Override
-	public String getAttr(String attr) {
-		return null;
-	}
-
-	@Override
-	public void setAttr(String attr, String value) {
-		
-	}
-
     public void setParentId(String parentId) {
         this.parentId = parentId;
     }
@@ -230,7 +211,6 @@ public abstract class AbstractBusinessEntity extends AbstractEntity implements B
     public void setGroup(String group) {
         this.group = group;
     }
-
 
     @Override
     public LocalDateTime getCreationTime() {

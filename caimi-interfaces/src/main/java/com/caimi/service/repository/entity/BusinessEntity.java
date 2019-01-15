@@ -28,12 +28,6 @@ public interface BusinessEntity extends BOEntity{
 
 	public String getAttrs();
 	
-    public String getAttr(String attr);
-
-    public void setAttr(String attr, String value);
-    
-    public String getAttr();
-
     public int getStatus();
 
     public LocalDateTime getCreationTime();

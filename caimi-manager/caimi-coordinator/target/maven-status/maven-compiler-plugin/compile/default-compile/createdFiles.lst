@@ -1,4 +1,3 @@
-com\caimi\api\v1\auth\LoginTestController.class
 com\caimi\Application.class
 com\caimi\api\v1\auth\LoginRegController.class
 com\caimi\service\auth\UserServiceImpl.class

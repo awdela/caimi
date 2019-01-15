@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import com.caimi.service.repository.entity.UserEntity;
 import com.caimi.util.StringUtil;
 
-public class UserCacheKeeper extends RedisCacheKeeper<UserEntity>{
+public class UserCacheKeeper extends RedisCacheKeeper<UserEntity> {
 
     private static final Logger logger = LoggerFactory.getLogger(UserCacheKeeper.class);
 
@@ -18,30 +18,29 @@ public class UserCacheKeeper extends RedisCacheKeeper<UserEntity>{
 
     public UserCacheKeeper() {
         super(UserEntity.class);
-	}
+    }
 
-	@SuppressWarnings("unchecked")
-	@Override
+    @SuppressWarnings("unchecked")
+    @Override
     protected void put0(UserEntity bo) {
-        String key = bo.getName();
-//		// 用户表中缓存用户名称
-		redisMgr.hset(className, key, bo);
-	}
+        String keyId = bo.getId();
+        // 用户表中缓存用户名称
+        redisMgr.hset(className, keyId, bo);
+    }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    protected UserEntity get0(Object keyId) {
+        return (UserEntity) redisMgr.hget(className, keyId);
+    }
 
-	@SuppressWarnings("unchecked")
-	@Override
-	protected UserEntity get0(Object key) {
-		return (UserEntity) redisMgr.hget(className, key);
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-    protected UserEntity remove0(Object key) {
-        UserEntity entity = get0(key);
-        redisMgr.hdel(className, key);
+    @SuppressWarnings("unchecked")
+    @Override
+    protected UserEntity remove0(Object keyId) {
+        UserEntity entity = get0(keyId);
+        redisMgr.hdel(className, keyId);
         return entity;
-	}
+    }
 
     @SuppressWarnings("unchecked")
     @Override
@@ -83,6 +82,11 @@ public class UserCacheKeeper extends RedisCacheKeeper<UserEntity>{
             logger.error(className + " search content " + searchExpr + " has error: ", e.getMessage());
         }
         return result;
+    }
+
+    @Override
+    protected UserEntity get0(Object keyIdId, Object keyId) {
+        return null;
     }
 
 }

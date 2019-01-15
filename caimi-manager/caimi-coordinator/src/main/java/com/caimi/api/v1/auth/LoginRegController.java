@@ -39,62 +39,46 @@ public class LoginRegController {
         return new RespBean("error", "need to regist or login!");
     }
 
+    @RequestMapping(path = URL_PREFIX
+            + "/info", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public RespBean info(@RequestBody String id) {
+        UserEntity user = (UserEntity) userService.getUserById(id);
+        if (user != null) {
+            // success
+            return new RespBean("success", user);
+        } else {
+            return new RespBean("error", "need to regist or login!");
+        }
+    }
+
     /*
      * regist user
      */
     @RequestMapping(path = URL_PREFIX
             + "/regist", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public RespBean regist(@RequestBody UserEntity user) {
-        int result = userService.regist(user);
-        if (result == 0) {
-            // success
-            return new RespBean("success", "welcome to caimi!");
-        } else if (result == 1) {
-            return new RespBean("error", "change your username!");
-        } else {
-            return new RespBean("error", "need to regist or login!");
-        }
+        return userService.regist(user);
     }
 
     // login
     @RequestMapping(path = URL_PREFIX
             + "/login", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public RespBean login(@RequestBody UserEntity user) {
-        int result = userService.login(user);
-        if (result == 0) {
-            // success
-            return new RespBean("success", "welcome to caimi!");
-        } else if (result == 1) {
-            return new RespBean("error", "change your username!");
-        } else {
-            return new RespBean("error", "need to regist or login!");
-        }
+        return userService.login(user);
+
     }
 
     @RequestMapping(path = URL_PREFIX
             + "/logout", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public RespBean logout(@RequestBody UserEntity user) {
-        int result = userService.deleteUser(user);
-        if (result == 0) {
-            // success
-            return new RespBean("success", "logout caimi!");
-        } else if (result == 1) {
-            return new RespBean("error", "change your username!");
-        } else {
-            return new RespBean("error", "need to regist or login!");
-        }
+        return userService.deleteUser(user);
+
     }
 
     @RequestMapping(path = URL_PREFIX
             + "/update", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public RespBean update(@RequestBody UserEntity user) {
-        int result = userService.updateUser(user);
-        if (result == 0) {
-            // success
-            return new RespBean("success", "update done");
-        } else {
-            return new RespBean("error", "update error");
-        }
+        return userService.updateUser(user);
     }
 
 }

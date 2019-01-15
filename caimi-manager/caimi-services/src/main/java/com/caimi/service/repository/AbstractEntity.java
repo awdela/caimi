@@ -5,9 +5,9 @@ import javax.persistence.Transient;
 /**
  * 继承的entity相互没有从属关系
  */
-public abstract class AbstractEntity implements BOEntity{
+public abstract class AbstractEntity implements BOEntity {
 
-	@Transient
+    @Transient
 	protected BORepository repository;
 
 	public AbstractEntity() {}

@@ -1,16 +1,23 @@
 package com.caimi.service.auth;
 
 import com.caimi.service.repository.entity.User;
+import com.caimi.util.beans.RespBean;
 
 public interface UserService {
 
-	public int login(User user);
+    public static final String TOKEN_PREFIX = "tkn_";
 
-	public int regist(User user);
+    public static final String REDIS_USER_SESSION_KEY = "redis_session";
 
-    public int deleteUser(User user);
+    public static final long REDIS_USER_SESSION_EXPIRE = 1000;
 
-    public int updateUser(User user);
+    public RespBean login(User user);
+
+    public RespBean regist(User user);
+
+    public RespBean deleteUser(User user);
+
+    public RespBean updateUser(User user);
 
 	public User getUserById(String id);
 

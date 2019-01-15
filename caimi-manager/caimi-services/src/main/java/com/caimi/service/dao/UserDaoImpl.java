@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.caimi.service.repository.BOEntity;
 import com.caimi.service.repository.BORepository;
 import com.caimi.service.repository.entity.Role;
 import com.caimi.service.repository.entity.User;
@@ -27,17 +26,18 @@ public class UserDaoImpl implements UserDao{
 
 	@Override
 	public User getById(String id) {
-		UserEntity entity = (UserEntity) repository.getIdBy(UserEntity.class, BOEntity.KEY_ID, id);
+        UserEntity entity = repository.get(UserEntity.class, id);
 		return entity;
 	}
 
 	@Override
 	public User getByName(String userName) {
-        List<UserEntity> entities = repository.search(UserEntity.class, "name = '" + userName + "'");
-        if (entities.isEmpty()) {
-            return null;
+        // search from database
+        List<UserEntity> entities = repository.search(UserEntity.class, "name = " + userName);
+        if (!entities.isEmpty()) {
+            return entities.get(0);
         }
-        return entities.get(0);
+        return null;
 	}
 
 	@Override
@@ -85,7 +85,7 @@ public class UserDaoImpl implements UserDao{
     @Override
     public User update(User user) {
         // 根据用户名来更新
-        User user0 = getByName(user.getName());
+        User user0 = getById(user.getId());
         user.setId(user0.getId());
         return save(user);
     }
